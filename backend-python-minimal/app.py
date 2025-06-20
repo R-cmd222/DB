@@ -9,7 +9,7 @@ import json
 
 # 简单的内存数据存储（实际项目中应使用数据库）
 products_db = [
-    {"id": 1, "name": "苹果", "price": 5.99, "stock": 100, "category": "水果"},
+    {"id": 1, "name": "苹果", "price": 1223.99, "stock": 100, "category": "水果"},
     {"id": 2, "name": "牛奶", "price": 8.50, "stock": 50, "category": "乳制品"},
     {"id": 3, "name": "面包", "price": 3.99, "stock": 30, "category": "烘焙"},
 ]
