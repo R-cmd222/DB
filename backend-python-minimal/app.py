@@ -7,7 +7,13 @@ import uvicorn
 from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
+import logging
+import traceback
 from models import SessionLocal, Category, Product, Employee, Guest, Bill, BillItem
+
+# 配置日志
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # 依赖项
 def get_db():
@@ -155,5 +161,116 @@ def get_stats(db: Session = Depends(get_db)):
         "low_stock_products": low_stock_products
     }
 
+# 订单相关模型
+class BillItemBase(BaseModel):
+    ProductID: int
+    Quantity: int
+    Price: float
+
+    class Config:
+        from_attributes = True
+
+class BillItemResponse(BillItemBase):
+    BillItemID: int
+    BillID: int
+
+    class Config:
+        from_attributes = True
+
+class BillBase(BaseModel):
+    GuestID: Optional[int] = None
+    EmployeeID: int
+    TotalAmount: float
+    PaymentMethod: str = '现金'
+    Status: Optional[str] = '已完成'
+
+    class Config:
+        from_attributes = True
+
+class BillCreate(BillBase):
+    items: List[BillItemBase]
+
+class BillResponse(BillBase):
+    BillID: int
+    BillDate: datetime
+    items: List[BillItemResponse]
+
+    class Config:
+        from_attributes = True
+
+# 订单管理API
+@app.get("/bills", response_model=List[BillResponse])
+def get_bills(db: Session = Depends(get_db)):
+    """获取所有订单"""
+    try:
+        logger.info("正在获取订单列表...")
+        bills = db.query(Bill).order_by(Bill.BillDate.desc()).all()
+        logger.info(f"成功获取到 {len(bills)} 个订单")
+        return bills
+    except Exception as e:
+        logger.error(f"获取订单列表时出错: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"获取订单列表时出错: {str(e)}")
+
+@app.get("/bills/{bill_id}", response_model=BillResponse)
+def get_bill(bill_id: int, db: Session = Depends(get_db)):
+    """根据ID获取订单"""
+    try:
+        logger.info(f"正在获取订单 {bill_id}...")
+        bill = db.query(Bill).filter(Bill.BillID == bill_id).first()
+        if not bill:
+            logger.warning(f"订单 {bill_id} 不存在")
+            raise HTTPException(status_code=404, detail="订单不存在")
+        logger.info(f"成功获取订单 {bill_id}")
+        return bill
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"获取订单 {bill_id} 时出错: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"获取订单时出错: {str(e)}")
+
+@app.post("/bills", response_model=BillResponse)
+def create_bill(
+    bill: BillCreate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """创建新订单"""
+    try:
+        logger.info("正在创建新订单...")
+        # 创建订单
+        db_bill = Bill(
+            GuestID=bill.GuestID,
+            EmployeeID=bill.EmployeeID,
+            TotalAmount=bill.TotalAmount,
+            PaymentMethod=bill.PaymentMethod,
+            Status=bill.Status,
+            BillDate=datetime.now()
+        )
+        db.add(db_bill)
+        db.commit()
+        db.refresh(db_bill)
+        
+        logger.info(f"订单 {db_bill.BillID} 创建成功，正在添加订单项...")
+        # 创建订单项
+        for item in bill.items:
+            db_item = BillItem(
+                BillID=db_bill.BillID,
+                ProductID=item.ProductID,
+                Quantity=item.Quantity,
+                Price=item.Price
+            )
+            db.add(db_item)
+        
+        db.commit()
+        logger.info(f"订单 {db_bill.BillID} 及其订单项创建完成")
+        return db_bill
+    except Exception as e:
+        logger.error(f"创建订单时出错: {str(e)}")
+        logger.error(traceback.format_exc())
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"创建订单时出错: {str(e)}")
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
+    uvicorn.run(app, host="0.0.0.0", port=9527) 

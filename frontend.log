@@ -87,26 +87,27 @@
 [2K[1A[2K[G[10%] building 
 [2K[1A[2K[G[10%] building (0/0 modules)
 [2K[1A[2K[G[10%] building (import loader vue-loader/dist/index.js)
-[2K[1A[2K[G[10%] building (5/17 modules)
-[2K[1A[2K[G[24%] building (7/19 modules)
+[2K[1A[2K[G[10%] building (0/18 modules)
+[2K[1A[2K[G[24%] building (4/27 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/pitcher.js)
-[2K[1A[2K[G[24%] building (12/297 modules)
+[2K[1A[2K[G[24%] building (7/268 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/templateLoader.js)
-[2K[1A[2K[G[24%] building (12/297 modules)
+[2K[1A[2K[G[24%] building (7/268 modules)
 [2K[1A[2K[G[24%] building (import loader vue-style-loader/index.js)
 [2K[1A[2K[G[24%] building (import loader css-loader/dist/cjs.js)
 [2K[1A[2K[G[24%] building (import loader postcss-loader/dist/cjs.js)
-[2K[1A[2K[G[24%] building (12/297 modules)
-[2K[1A[2K[G[24%] building (52/498 modules)
-[2K[1A[2K[G[38%] building (68/539 modules)
+[2K[1A[2K[G[24%] building (7/268 modules)
+[2K[1A[2K[G[24%] building (51/480 modules)
+[2K[1A[2K[G[38%] building (75/544 modules)
 [2K[1A[2K[G[38%] building (import loader vue-loader/dist/stylePostLoader.js)
-[2K[1A[2K[G[38%] building (117/630 modules)
-[2K[1A[2K[G[51%] building (193/687 modules)
-[2K[1A[2K[G[51%] building (423/810 modules)
-[2K[1A[2K[G[51%] building (661/1471 modules)
-[2K[1A[2K[G[51%] building (676/1575 modules)
-[2K[1A[2K[G[51%] building (930/1901 modules)
-[2K[1A[2K[G[51%] building (1400/2058 modules)
+[2K[1A[2K[G[38%] building (107/603 modules)
+[2K[1A[2K[G[38%] building (190/679 modules)
+[2K[1A[2K[G[51%] building (229/756 modules)
+[2K[1A[2K[G[51%] building (465/1000 modules)
+[2K[1A[2K[G[51%] building (671/1477 modules)
+[2K[1A[2K[G[51%] building (702/1650 modules)
+[2K[1A[2K[G[51%] building (1004/1904 modules)
+[2K[1A[2K[G[51%] building (1398/2056 modules)
 [2K[1A[2K[G[65%] building (2124/2124 modules)
 [2K[1A[2K[G[65%] building 
 [2K[1A[2K[G[69%] building (finish)
@@ -187,33 +188,37 @@ onPlugin)
 [2K[1A[2K[G[94%] sealing (after seal)
 [2K[1A[2K[G[95%] emitting (emit)
 [2K[1A[2K[G[98%] emitting (after emit)
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[G DONE  Compiled successfully in 7548ms14:50:07
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[G WARNING  Compiled with 1 warning21:36:45
 
-Build finished at 14:50:07 by 0.000s
+ warning  in ./src/views/Cashier.vue?vue&type=script&setup=true&lang=js
+
+export 'orderAPI' (imported as 'orderAPI') was not found in '../api' (possible exports: billAPI, categoryAPI, default, productAPI, statsAPI, systemAPI)
+
+Build finished at 21:36:45 by 0.000s
 [2K[1A[2K[G
   App running at:
-  - Local:   http://localhost:8080/ 
+  - Local:   http://localhost:9528/ 
   - Network: unavailable
 
   Note that the development build is not optimized.
   To create a production build, run npm run build.
 
-Build finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[GBuild finished at 14:50:07 by 0.000s
-[2K[1A[2K[G(node:68992) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+Build finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[GBuild finished at 21:36:45 by 0.000s
+[2K[1A[2K[G(node:57368) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-ÖÕÖ¹Åú´¦Àí²Ù×÷Âð(Y/N)? Build finished at 16:04:46 by 0.000s
-[2K[1A[2K[GBuild finished at 16:04:46 by 0.000s
-[2K[1A[2K[GBuild finished at 16:04:46 by 0.000s
-[2K[1A[2K[GBuild finished at 16:04:46 by 0.000s
-[2K[1A[2K[GBuild finished at 16:04:46 by 0.000s
-[2K[1A[2K[G
+Build finished at 21:37:05 by 0.000s
+[2K[1A[2K[GBuild finished at 21:37:05 by 0.000s
+[2K[1A[2K[GBuild finished at 21:37:05 by 0.000s
+[2K[1A[2K[GBuild finished at 21:37:05 by 0.000s
+[2K[1A[2K[GBuild finished at 21:37:05 by 0.000s
+[2K[1A[2K[GÖÕÖ¹Åú´¦Àí²Ù×÷Âð(Y/N)? 

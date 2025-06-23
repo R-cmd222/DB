@@ -90,6 +90,7 @@ class Bill(Base):
     BillID = Column(Integer, primary_key=True)
     TotalAmount = Column(DECIMAL(10, 2), nullable=False)
     Status = Column(String(20))
+    PaymentMethod = Column(String(20), nullable=False, default='现金')
     BillDate = Column(DateTime, default=datetime.utcnow)
     EmployeeID = Column(Integer, ForeignKey("Employees.EmployeeID"), nullable=False)
     GuestID = Column(Integer, ForeignKey("Guests.GuestID"))

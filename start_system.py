@@ -107,7 +107,7 @@ def start_backend():
         
         # 检查服务器是否成功启动
         if process.poll() is None:
-            print(f"✅ 后端服务器启动成功 (http://localhost:8000)")
+            print(f"✅ 后端服务器启动成功 (http://localhost:9527)")
             print(f"   日志文件: {log_file_path.absolute()}")
             return process, log_file
         else:
@@ -148,7 +148,7 @@ def start_vue_frontend():
         
         # 检查服务器是否成功启动
         if process.poll() is None:
-            print("✅ Vue 前端开发服务器启动成功 (http://localhost:8080)")
+            print("✅ Vue 前端开发服务器启动成功 (http://localhost:9528)")
             print(f"   日志文件: {log_file_path.absolute()}")
             return process, log_file
         else:
@@ -164,7 +164,7 @@ def open_browser():
     """延迟打开浏览器"""
     time.sleep(8)  # 等待前端服务器完全启动
     try:
-        webbrowser.open("http://localhost:8080")
+        webbrowser.open("http://localhost:9528")
         print("✅ 浏览器已自动打开前端页面")
     except Exception as e:
         print(f"打开浏览器时出错: {e}")
@@ -215,9 +215,9 @@ def main():
     
     print("\n🎉 系统启动完成！")
     print("=" * 60)
-    print("📱 前端页面：http://localhost:8080")
-    print("🔧 后端API：http://localhost:8000")
-    print("📚 API文档：http://localhost:8000/docs")
+    print("📱 前端页面：http://localhost:9528")
+    print("🔧 后端API：http://localhost:9527")
+    print("📚 API文档：http://localhost:9527/docs")
     print("=" * 60)
     print("💡 提示：")
     print("   - 前端支持热重载，修改代码后会自动刷新")

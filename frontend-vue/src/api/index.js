@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 创建 axios 实例
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? '/api' : 'http://localhost:8000',
+  baseURL: process.env.NODE_ENV === 'development' ? '/api' : 'http://localhost:9527',
   timeout: 10000,
   headers: { 
     'Content-Type': 'application/json',
@@ -97,6 +97,24 @@ export const systemAPI = {
   // 健康检查
   healthCheck() {
     return api.get('/health')
+  }
+}
+
+// 订单相关 API
+export const billAPI = {
+  // 获取所有订单
+  getBills() {
+    return api.get('/bills')
+  },
+  
+  // 获取单个订单
+  getBill(id) {
+    return api.get(`/bills/${id}`)
+  },
+  
+  // 创建订单
+  createBill(bill) {
+    return api.post('/bills', bill)
   }
 }
 
