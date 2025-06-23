@@ -48,12 +48,26 @@ export const productAPI = {
   
   // 创建商品
   createProduct(product) {
-    return api.post('/products', product)
+    const productData = {
+      Name: product.name,
+      Price: product.price,
+      Stock: product.stock,
+      CategoryID: product.categoryId,
+      Unit: product.unit
+    }
+    return api.post('/products', productData)
   },
   
   // 更新商品
   updateProduct(id, product) {
-    return api.put(`/products/${id}`, product)
+    const productData = {
+      Name: product.name,
+      Price: product.price,
+      Stock: product.stock,
+      CategoryID: product.categoryId,
+      Unit: product.unit
+    }
+    return api.put(`/products/${id}`, productData)
   },
   
   // 删除商品
@@ -62,16 +76,11 @@ export const productAPI = {
   }
 }
 
-// 订单相关 API
-export const orderAPI = {
-  // 获取所有订单
-  getOrders() {
-    return api.get('/orders')
-  },
-  
-  // 创建订单
-  createOrder(order) {
-    return api.post('/orders', order)
+// 类别相关 API
+export const categoryAPI = {
+  // 获取所有类别
+  getCategories() {
+    return api.get('/categories')
   }
 }
 
