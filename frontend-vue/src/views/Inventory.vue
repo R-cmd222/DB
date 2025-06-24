@@ -7,9 +7,6 @@
           <el-button @click="loadProducts" :loading="loading" size="small">
             刷新
           </el-button>
-          <el-button type="primary" @click="showStockAdjust = true" size="small">
-            调整库存
-          </el-button>
         </div>
       </div>
     </template>
@@ -157,11 +154,16 @@ async function confirmStockAdjust() {
     }
     
     // 更新商品库存
-    const product = products.value.find(p => p.id === stockForm.value.id)
+    const product = products.value.find(p => p.ProductID === stockForm.value.id)
     if (product) {
-      product.Stock = newStock
-      await productAPI.updateProduct(stockForm.value.id, product)
-      
+      const updateData = {
+        Name: product.Name,
+        Price: product.Price,
+        Stock: newStock,
+        CategoryID: product.CategoryID,
+        Unit: product.Unit
+      }
+      await productAPI.updateProduct(stockForm.value.id, updateData)
       ElMessage.success('库存调整成功')
       showStockAdjust.value = false
       await loadProducts()

@@ -196,6 +196,8 @@ class BillResponse(BillBase):
     BillID: int
     BillDate: datetime
     items: List[BillItemResponse]
+    guest_name: Optional[str] = None
+    employee_name: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -208,7 +210,15 @@ def get_bills(db: Session = Depends(get_db)):
         logger.info("正在获取订单列表...")
         bills = db.query(Bill).order_by(Bill.BillDate.desc()).all()
         logger.info(f"成功获取到 {len(bills)} 个订单")
-        return bills
+        result = []
+        for bill in bills:
+            result.append({
+                **bill.__dict__,
+                "guest_name": bill.guest.Name if bill.guest else "散客",
+                "employee_name": bill.employee.Name if bill.employee else "",
+                "items": bill.items
+            })
+        return result
     except Exception as e:
         logger.error(f"获取订单列表时出错: {str(e)}")
         logger.error(traceback.format_exc())
@@ -224,7 +234,12 @@ def get_bill(bill_id: int, db: Session = Depends(get_db)):
             logger.warning(f"订单 {bill_id} 不存在")
             raise HTTPException(status_code=404, detail="订单不存在")
         logger.info(f"成功获取订单 {bill_id}")
-        return bill
+        return {
+            **bill.__dict__,
+            "guest_name": bill.guest.Name if bill.guest else "散客",
+            "employee_name": bill.employee.Name if bill.employee else "",
+            "items": bill.items
+        }
     except HTTPException:
         raise
     except Exception as e:
@@ -453,6 +468,37 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
             {"name": r[0], "sales": int(r[1])} for r in top_products
         ]
     }
+
+# 客户管理API
+@app.get("/guests")
+def get_guests(db: Session = Depends(get_db)):
+    """获取所有客户详细信息"""
+    guests = db.query(Guest).all()
+    result = []
+    for g in guests:
+        bills = list(getattr(g, 'bills', []))
+        order_count = len(bills)
+        last_order_date = None
+        if bills:
+            bill_dates = [b.BillDate for b in bills if hasattr(b, 'BillDate') and b.BillDate]
+            if bill_dates:
+                last_order_date = max(bill_dates)
+        result.append({
+            "id": g.GuestID,
+            "name": g.Name,
+            "membershipID": getattr(g, 'MembershipID', None),
+            "points": getattr(g, 'Points', 0),
+            "orderCount": order_count,
+            "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
+            # 下面字段如有可补充
+            "phone": None,
+            "email": None,
+            "level": "normal",
+            "createdAt": None,
+            "address": None,
+            "notes": None
+        })
+    return result
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9527) 

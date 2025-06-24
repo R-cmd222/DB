@@ -23,30 +23,49 @@ IF OBJECT_ID('dbo.Guests', 'U') IS NOT NULL DROP TABLE dbo.Guests;
 IF OBJECT_ID('dbo.Employees', 'U') IS NOT NULL DROP TABLE dbo.Employees;
 
 CREATE TABLE Employees (
-    EmployeeID INT IDENTITY(1,1) PRIMARY KEY, Name NVARCHAR(100) NOT NULL, Gender NVARCHAR(4), 
-    BirthDate DATE NOT NULL, Position NVARCHAR(50) NOT NULL, Phone NVARCHAR(20) UNIQUE
+    EmployeeID INT IDENTITY(1,1) PRIMARY KEY, 
+	Name NVARCHAR(100) NOT NULL, 
+	Gender NVARCHAR(4), 
+    BirthDate DATE NOT NULL, 
+	Position NVARCHAR(50) NOT NULL, 
+	Phone NVARCHAR(20) UNIQUE
 );
 CREATE TABLE Guests (
-    GuestID INT IDENTITY(1,1) PRIMARY KEY, Name NVARCHAR(100) NOT NULL, 
-    MembershipID NVARCHAR(50), Points INT DEFAULT 0
-);
-CREATE TABLE Categories (
-    CategoryID INT IDENTITY(1,1) PRIMARY KEY, Name NVARCHAR(100) NOT NULL UNIQUE
+    GuestID INT IDENTITY(1,1) PRIMARY KEY, 
+	Name NVARCHAR(100) NOT NULL, 
+    MembershipID NVARCHAR(50), 
+	Points INT DEFAULT 0
 );
 CREATE TABLE Products (
-    ProductID INT IDENTITY(1,1) PRIMARY KEY, Name NVARCHAR(100) NOT NULL, Price DECIMAL(10, 2) NOT NULL,
-    Stock INT DEFAULT 0, Unit NVARCHAR(10), LastInDate DATETIME,
-    CategoryID INT NOT NULL, FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+    ProductID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    Stock INT DEFAULT 0,
+    Unit NVARCHAR(10),
+    LastInDate DATETIME,
+    Category NVARCHAR(50) NOT NULL  
 );
 CREATE TABLE Bills (
-    BillID INT IDENTITY(1,1) PRIMARY KEY, TotalAmount DECIMAL(10, 2) NOT NULL, Status NVARCHAR(20),
-    BillDate DATETIME DEFAULT GETDATE(), EmployeeID INT NOT NULL, GuestID INT,
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID), FOREIGN KEY (GuestID) REFERENCES Guests(GuestID)
+    BillID INT IDENTITY(1,1) PRIMARY KEY, 
+	TotalAmount DECIMAL(10, 2) NOT NULL, 
+	Status NVARCHAR(20) NOT NULL DEFAULT '未结账'
+	CONSTRAINT CK_Bills_Status CHECK (Status IN ('已结账', '未结账')),
+    BillDate DATETIME DEFAULT GETDATE(), 
+	EmployeeID INT NOT NULL, 
+	GuestID INT,
+	PaymentMethod NVARCHAR(20) NOT NULL DEFAULT '现金'
+	CONSTRAINT CK_Bills_PaymentMethod CHECK (PaymentMethod IN ('现金', '银行卡', '微信支付', '支付宝')),
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID), 
+	FOREIGN KEY (GuestID) REFERENCES Guests(GuestID)
 );
 CREATE TABLE BillItems (
-    BillItemID INT IDENTITY(1,1) PRIMARY KEY, BillID INT NOT NULL, ProductID INT NOT NULL,
-    Quantity INT NOT NULL, Price DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (BillID) REFERENCES Bills(BillID), FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    BillItemID INT IDENTITY(1,1) PRIMARY KEY, 
+	BillID INT NOT NULL, 
+	ProductID INT NOT NULL,
+    Quantity INT NOT NULL, 
+	Price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (BillID) REFERENCES Bills(BillID), 
+	FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 PRINT '>>> 表结构已准备就绪。';
 GO
@@ -57,10 +76,10 @@ PRINT '>>> 步骤 3: 插入丰富后的基础数据...';
 
 -- 插入员工和管理员数据
 INSERT INTO Employees (Name, Gender, BirthDate, Position, Phone) VALUES
-(N'张三', N'男', '1990-05-15', N'收银主管', '13800138001'), -- ID=1
-(N'李四', N'女', '1988-10-20', N'理货员', '13900139002'), -- ID=2
-(N'王芳', N'女', '1995-03-12', N'收银员', '13700137003'), -- ID=3
-(N'刘军', N'男', '1985-07-05', N'仓管员', '13600136004'), -- ID=4
+(N'张三', N'男', '1990-05-15', N'收银员', '13800138001'), -- ID=1                    // 【收银员】特有页面“收银台”“订单管理”
+(N'李四', N'女', '1988-10-20', N'理货员', '13900139002'), -- ID=2                    // 【理货员】特有页面“商品管理”
+(N'王芳', N'女', '1995-03-12', N'收银员', '13700137003'), -- ID=3                    // 【仓管员】特有页面“库存管理”
+(N'刘军', N'男', '1985-07-05', N'仓管员', '13600136004'), -- ID=4                    // 【管理员】特有页面“客户管理”“员工管理”“报表统计”，并拥有其它全部页面
 (N'张建军', N'男', '1980-01-01', N'管理员', '13900000001'), -- ID=5
 (N'李海燕', N'女', '1982-02-02', N'管理员', '13900000002'); -- ID=6
 
@@ -73,26 +92,22 @@ INSERT INTO Guests (Name, MembershipID, Points) VALUES
 (N'孙颖', 'V000006', 750),    -- ID=5
 (N'黄丽', NULL, 0);          -- ID=6 (非会员)
 
--- 插入商品分类数据
-INSERT INTO Categories (Name) VALUES 
-(N'水果'), (N'饮品'), (N'零食'), (N'食品'), (N'日化'), (N'生鲜'), (N'粮食');
-
 -- 插入商品数据
-INSERT INTO Products (Name, CategoryID, Price, Stock, Unit) VALUES
-(N'苹果', 1, 6.50, 120, N'箱'),     -- CategoryID=1
-(N'香蕉', 1, 3.99, 150, N'把'),     -- CategoryID=1
-(N'牛奶', 2, 4.50, 250, N'箱'),     -- CategoryID=2
-(N'可乐', 2, 3.00, 300, N'罐'),     -- CategoryID=2
-(N'薯片', 3, 5.20, 220, N'袋'),     -- CategoryID=3
-(N'面包', 4, 6.80, 80, N'袋'),      -- CategoryID=4
-(N'鸡蛋', 4, 8.90, 180, N'盒'),      -- CategoryID=4
-(N'洗发水', 5, 29.90, 95, N'瓶'),    -- CategoryID=5
-(N'香皂', 5, 3.50, 160, N'块'),     -- CategoryID=5
-(N'卫生纸', 5, 15.80, 110, N'提'),    -- CategoryID=5
-(N'牙膏', 5, 12.80, 120, N'支'),    -- CategoryID=5
-(N'牛肉', 6, 49.90, 75, N'公斤'),   -- CategoryID=6
-(N'大米', 7, 35.90, 60, N'袋'),     -- CategoryID=7
-(N'面粉', 7, 22.50, 40, N'袋');     -- CategoryID=7
+INSERT INTO Products (Name, Category, Price, Stock, Unit) VALUES
+(N'苹果', N'水果', 6.50, 120, N'箱'),
+(N'香蕉', N'水果', 3.99, 150, N'把'),
+(N'牛奶', N'饮品', 4.50, 250, N'箱'),
+(N'可乐', N'饮品', 3.00, 300, N'罐'),
+(N'薯片', N'零食', 5.20, 220, N'袋'),
+(N'面包', N'食品', 6.80, 80, N'袋'),
+(N'鸡蛋', N'食品', 8.90, 180, N'盒'),
+(N'洗发水', N'日用品', 29.90, 95, N'瓶'),
+(N'香皂', N'日用品', 3.50, 160, N'块'),
+(N'卫生纸', N'日用品', 15.80, 110, N'提'),
+(N'牙膏', N'日用品', 12.80, 120, N'支'),
+(N'牛肉', N'生鲜', 49.90, 75, N'公斤'),
+(N'大米', N'粮食', 35.90, 60, N'袋'),
+(N'面粉', N'粮食', 22.50, 40, N'袋');
 
 PRINT '>>> 基础数据插入完毕。';
 GO
@@ -159,7 +174,6 @@ GO
 PRINT '>>> 步骤 5: 验证所有数据插入结果...';
 SELECT '员工表' as 表名, * FROM Employees;
 SELECT '顾客表' as 表名, * FROM Guests;
-SELECT '商品分类表' as 表名, * FROM Categories;
 SELECT '商品表' as 表名, * FROM Products;
 SELECT '账单主表' as 表名, * FROM Bills;
 SELECT '账单明细表' as 表名, * FROM BillItems;

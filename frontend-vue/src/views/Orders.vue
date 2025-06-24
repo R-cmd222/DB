@@ -11,12 +11,8 @@
     
     <el-table :data="orders" style="width: 100%" v-loading="loading">
       <el-table-column prop="BillID" label="订单ID" width="80"/>
-      <el-table-column prop="GuestID" label="客户ID" width="80">
-        <template #default="scope">
-          {{ scope.row.GuestID || '散客' }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="EmployeeID" label="员工ID" width="80"/>
+      <el-table-column prop="guest_name" label="客户姓名" width="120"/>
+      <el-table-column prop="employee_name" label="员工姓名" width="120"/>
       <el-table-column prop="TotalAmount" label="总价" width="100">
         <template #default="scope">
           ¥{{ scope.row.TotalAmount ? scope.row.TotalAmount.toFixed(2) : '0.00' }}
@@ -49,8 +45,8 @@
       <div v-if="selectedOrder">
         <el-descriptions :column="2" border>
           <el-descriptions-item label="订单ID">{{ selectedOrder.BillID }}</el-descriptions-item>
-          <el-descriptions-item label="客户ID">{{ selectedOrder.GuestID || '散客' }}</el-descriptions-item>
-          <el-descriptions-item label="员工ID">{{ selectedOrder.EmployeeID }}</el-descriptions-item>
+          <el-descriptions-item label="客户姓名">{{ selectedOrder.guest_name }}</el-descriptions-item>
+          <el-descriptions-item label="员工姓名">{{ selectedOrder.employee_name }}</el-descriptions-item>
           <el-descriptions-item label="总价">¥{{ selectedOrder.TotalAmount.toFixed(2) }}</el-descriptions-item>
           <el-descriptions-item label="支付方式">{{ selectedOrder.PaymentMethod }}</el-descriptions-item>
           <el-descriptions-item label="状态">{{ selectedOrder.Status }}</el-descriptions-item>

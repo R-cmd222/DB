@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column prop="totalSpent" label="累计消费" width="120">
         <template #default="scope">
-          ¥{{ scope.row.totalSpent.toFixed(2) }}
+          ¥{{ Number(scope.row.totalSpent ?? 0).toFixed(2) }}
         </template>
       </el-table-column>
       <el-table-column prop="orderCount" label="订单数" width="100"/>
@@ -145,7 +145,7 @@
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="注册时间">{{ formatDate(selectedCustomer.createdAt) }}</el-descriptions-item>
-          <el-descriptions-item label="累计消费">¥{{ selectedCustomer.totalSpent.toFixed(2) }}</el-descriptions-item>
+          <el-descriptions-item label="累计消费">¥{{ Number(selectedCustomer.totalSpent ?? 0).toFixed(2) }}</el-descriptions-item>
           <el-descriptions-item label="订单数量">{{ selectedCustomer.orderCount }}</el-descriptions-item>
           <el-descriptions-item label="最后购买">{{ formatDate(selectedCustomer.lastOrderDate) }}</el-descriptions-item>
           <el-descriptions-item label="地址" :span="2">{{ selectedCustomer.address || '未填写' }}</el-descriptions-item>
@@ -159,7 +159,7 @@
             <el-table-column prop="id" label="订单ID" width="100"/>
             <el-table-column prop="total" label="订单金额" width="120">
               <template #default="scope">
-                ¥{{ scope.row.total.toFixed(2) }}
+                ¥{{ Number(scope.row.total ?? 0).toFixed(2) }}
               </template>
             </el-table-column>
             <el-table-column prop="status" label="状态" width="100">
@@ -190,6 +190,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
+import api, { billAPI } from '../api'
 
 // 响应式数据
 const customers = ref([])
@@ -239,27 +240,23 @@ const rules = {
 
 // 计算属性
 const filteredCustomers = computed(() => {
-  let result = customers.value
-  
+  let result = Array.isArray(customers.value) ? customers.value : []
   if (searchForm.value.name) {
     result = result.filter(customer => 
-      customer.name.toLowerCase().includes(searchForm.value.name.toLowerCase())
+      (customer.name || '').toLowerCase().includes(searchForm.value.name.toLowerCase())
     )
   }
-  
   if (searchForm.value.phone) {
     result = result.filter(customer => 
-      customer.phone.includes(searchForm.value.phone)
+      (customer.phone || '').includes(searchForm.value.phone)
     )
   }
-  
   if (searchForm.value.level) {
     result = result.filter(customer => 
       customer.level === searchForm.value.level
     )
   }
-  
-  return result
+  return Array.isArray(result) ? result : []
 })
 
 // 方法
@@ -307,56 +304,12 @@ function getOrderStatusText(status) {
 async function loadCustomers() {
   loading.value = true
   try {
-    // 这里应该调用实际的API
-    // const response = await customerAPI.getCustomers()
-    // customers.value = response.data
-    
-    // 模拟数据
-    customers.value = [
-      {
-        id: 1,
-        name: '张三',
-        phone: '13800138001',
-        email: 'zhangsan@example.com',
-        level: 'vip',
-        totalSpent: 1250.50,
-        orderCount: 8,
-        lastOrderDate: '2024-01-15T10:30:00',
-        createdAt: '2023-06-01T09:00:00',
-        address: '北京市朝阳区xxx街道',
-        notes: '经常购买水果'
-      },
-      {
-        id: 2,
-        name: '李四',
-        phone: '13800138002',
-        email: 'lisi@example.com',
-        level: 'normal',
-        totalSpent: 350.00,
-        orderCount: 3,
-        lastOrderDate: '2024-01-10T14:20:00',
-        createdAt: '2023-12-01T10:00:00',
-        address: '上海市浦东新区xxx路',
-        notes: ''
-      },
-      {
-        id: 3,
-        name: '王五',
-        phone: '13800138003',
-        email: 'wangwu@example.com',
-        level: 'diamond',
-        totalSpent: 5200.00,
-        orderCount: 15,
-        lastOrderDate: '2024-01-18T16:45:00',
-        createdAt: '2023-03-01T08:30:00',
-        address: '广州市天河区xxx大道',
-        notes: 'VIP客户，享受特殊优惠'
-      }
-    ]
-    
+    const res = await api.get('/guests')
+    customers.value = Array.isArray(res.data) ? res.data : []
     ElMessage.success('客户列表加载成功')
   } catch (error) {
     console.error('加载客户失败:', error)
+    customers.value = []
     ElMessage.error('加载客户失败: ' + (error.response?.data?.detail || error.message))
   } finally {
     loading.value = false
@@ -389,31 +342,16 @@ function viewDetails(customer) {
 
 async function loadCustomerOrders(customerId) {
   try {
-    // 这里应该调用实际的API
-    // const response = await orderAPI.getCustomerOrders(customerId)
-    // customerOrders.value = response.data
-    
-    // 模拟订单数据
-    customerOrders.value = [
-      {
-        id: 1001,
-        total: 150.50,
-        status: 'completed',
-        createdAt: '2024-01-15T10:30:00'
-      },
-      {
-        id: 1002,
-        total: 89.00,
-        status: 'completed',
-        createdAt: '2024-01-10T14:20:00'
-      },
-      {
-        id: 1003,
-        total: 200.00,
-        status: 'pending',
-        createdAt: '2024-01-18T16:45:00'
-      }
-    ]
+    // 获取所有订单，前端过滤出该客户的订单
+    const res = await billAPI.getBills()
+    customerOrders.value = res.data
+      .filter(order => order.GuestID === customerId)
+      .map(order => ({
+        id: order.BillID,
+        total: order.TotalAmount,
+        status: order.Status,
+        createdAt: order.BillDate
+      }))
   } catch (error) {
     console.error('加载订单失败:', error)
     ElMessage.error('加载订单失败')

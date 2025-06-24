@@ -178,7 +178,6 @@
         :data="searchResults"
         style="width: 100%"
         v-loading="searching"
-        @row-click="selectProduct"
       >
         <el-table-column prop="id" label="编号" width="80" />
         <el-table-column prop="name" label="商品名称" />
@@ -224,7 +223,7 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import { productAPI, orderAPI } from '../api'
+import { productAPI, orderAPI, billAPI } from '../api'
 
 // 响应式数据
 const scanCode = ref('')
@@ -266,27 +265,35 @@ const finalTotal = computed(() => {
 })
 
 // 方法
-function scanProduct() {
+async function scanProduct() {
   if (!scanCode.value.trim()) {
     ElMessage.warning('请输入商品条码')
     return
   }
-  
   scanning.value = true
-  // 模拟扫描过程
-  setTimeout(() => {
-    addProductToCart({
-      id: scanCode.value,
-      name: scanCode.value,
-      price: Math.random() * 100 + 10,
-      stock: Math.floor(Math.random() * 50) + 10
-    })
+  try {
+    // 通过API查找商品
+    const res = await productAPI.getProduct(scanCode.value.trim())
+    const product = res.data
+    if (!product || !product.ProductID) {
+      ElMessage.error('未找到该商品')
+    } else {
+      addProductToCart({
+        id: product.ProductID,
+        name: product.Name,
+        price: product.Price,
+        stock: product.Stock
+      })
+    }
+  } catch (error) {
+    ElMessage.error('未找到该商品')
+  } finally {
     scanCode.value = ''
     scanning.value = false
     nextTick(() => {
       scanInputRef.value?.focus()
     })
-  }, 500)
+  }
 }
 
 function addProductToCart(product) {
@@ -339,22 +346,20 @@ async function searchProducts() {
     ElMessage.warning('请输入搜索关键词')
     return
   }
-  
   searching.value = true
   try {
-    // 这里应该调用实际的API
-    // const response = await productAPI.searchProducts(searchKeyword.value)
-    // searchResults.value = response.data
-    
-    // 模拟搜索结果
-    searchResults.value = [
-      { id: '001', name: '苹果', price: 5.99, stock: 100 },
-      { id: '002', name: '香蕉', price: 3.99, stock: 50 },
-      { id: '003', name: '橙子', price: 4.99, stock: 80 }
-    ].filter(item => 
-      item.name.includes(searchKeyword.value) || 
-      item.id.includes(searchKeyword.value)
-    )
+    // 通过API搜索商品
+    const res = await productAPI.getProducts()
+    // 支持名称或编号模糊搜索
+    searchResults.value = res.data.filter(item =>
+      (item.Name && item.Name.includes(searchKeyword.value)) ||
+      (item.ProductID && item.ProductID.toString().includes(searchKeyword.value))
+    ).map(item => ({
+      id: item.ProductID,
+      name: item.Name,
+      price: item.Price,
+      stock: item.Stock
+    }))
   } catch (error) {
     ElMessage.error('搜索失败')
   } finally {
@@ -408,7 +413,7 @@ async function confirmPayment() {
     }
     
     // 提交订单
-    // await orderAPI.createOrder(orderData)
+    await billAPI.createBill(orderData)
     
     // 模拟支付过程
     await new Promise(resolve => setTimeout(resolve, 2000))
