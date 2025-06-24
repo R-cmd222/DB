@@ -45,6 +45,9 @@ class Employee(Base):
     BirthDate = Column(Date, nullable=False)
     Position = Column(String(50), nullable=False)
     Phone = Column(String(20), unique=True)
+    username = Column(String(50), unique=True, nullable=False)
+    password = Column(String(128), nullable=False)
+    role = Column(String(20), nullable=False, default='cashier')
     
     bills = relationship("Bill", back_populates="employee")
 
@@ -66,7 +69,7 @@ class Category(Base):
     CategoryID = Column(Integer, primary_key=True)
     Name = Column(String(100), nullable=False, unique=True)
     
-    products = relationship("Product", back_populates="category")
+    # products = relationship("Product", back_populates="category")  # 已无外键，注释掉
 
 # 商品模型
 class Product(Base):
@@ -78,9 +81,9 @@ class Product(Base):
     Stock = Column(Integer, default=0)
     Unit = Column(String(10))
     LastInDate = Column(DateTime)
-    CategoryID = Column(Integer, ForeignKey("Categories.CategoryID"), nullable=False)
+    Category = Column(String(50), nullable=False)
     
-    category = relationship("Category", back_populates="products")
+    # category = relationship("Category", back_populates="products")
     bill_items = relationship("BillItem", back_populates="product")
 
 # 账单模型

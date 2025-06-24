@@ -24,11 +24,14 @@ IF OBJECT_ID('dbo.Employees', 'U') IS NOT NULL DROP TABLE dbo.Employees;
 
 CREATE TABLE Employees (
     EmployeeID INT IDENTITY(1,1) PRIMARY KEY, 
-	Name NVARCHAR(100) NOT NULL, 
-	Gender NVARCHAR(4), 
+    Name NVARCHAR(100) NOT NULL, 
+    Gender NVARCHAR(4), 
     BirthDate DATE NOT NULL, 
-	Position NVARCHAR(50) NOT NULL, 
-	Phone NVARCHAR(20) UNIQUE
+    Position NVARCHAR(50) NOT NULL, 
+    Phone NVARCHAR(20) UNIQUE,
+    username NVARCHAR(50) NOT NULL UNIQUE,
+    password NVARCHAR(128) NOT NULL,
+    role NVARCHAR(20) NOT NULL DEFAULT 'cashier'
 );
 CREATE TABLE Guests (
     GuestID INT IDENTITY(1,1) PRIMARY KEY, 
@@ -74,14 +77,13 @@ GO
 -- --------------------------------------------------------------------
 PRINT '>>> 步骤 3: 插入丰富后的基础数据...';
 
--- 插入员工和管理员数据
-INSERT INTO Employees (Name, Gender, BirthDate, Position, Phone) VALUES
-(N'张三', N'男', '1990-05-15', N'收银员', '13800138001'), -- ID=1                    // 【收银员】特有页面“收银台”“订单管理”
-(N'李四', N'女', '1988-10-20', N'理货员', '13900139002'), -- ID=2                    // 【理货员】特有页面“商品管理”
-(N'王芳', N'女', '1995-03-12', N'收银员', '13700137003'), -- ID=3                    // 【仓管员】特有页面“库存管理”
-(N'刘军', N'男', '1985-07-05', N'仓管员', '13600136004'), -- ID=4                    // 【管理员】特有页面“客户管理”“员工管理”“报表统计”，并拥有其它全部页面
-(N'张建军', N'男', '1980-01-01', N'管理员', '13900000001'), -- ID=5
-(N'李海燕', N'女', '1982-02-02', N'管理员', '13900000002'); -- ID=6
+INSERT INTO Employees (Name, Gender, BirthDate, Position, Phone, username, password, role) VALUES
+(N'张三', N'男', '1990-05-15', N'收银员', '13800138001', 'cashier1', 'cashier123', 'cashier'),      -- 【收银员】特有页面“收银台”“订单管理”
+(N'李四', N'女', '1988-10-20', N'理货员', '13900139002', 'stocker1', 'stocker123', 'stocker'),        -- 【理货员】特有页面“商品管理”
+(N'王芳', N'女', '1995-03-12', N'仓管员', '13700137003', 'warehouse1', 'warehouse123', 'warehouse'),  -- 【仓管员】特有页面“库存管理”
+(N'刘军', N'男', '1985-07-05', N'管理员', '13600136004', 'admin1', 'admin123', 'admin'),              -- 【管理员】拥有全部页面
+(N'张建军', N'男', '1980-01-01', N'管理员', '13900000001', 'admin2', 'admin123', 'admin'),             -- 管理员
+(N'李海燕', N'女', '1982-02-02', N'管理员', '13900000002', 'admin3', 'admin123', 'admin');             -- 管理员
 
 -- 插入顾客数据
 INSERT INTO Guests (Name, MembershipID, Points) VALUES

@@ -1,60 +1,48 @@
 <template>
   <el-menu :default-active="activeMenu" class="sidebar-menu" router>
-    <el-menu-item index="/">
-      <i class="fas fa-tachometer-alt"></i>
-      <span>仪表板</span>
-    </el-menu-item>
-    <el-menu-item index="/cashier">
-      <i class="fas fa-cash-register"></i>
-      <span>收银台</span>
-    </el-menu-item>
-    <el-menu-item index="/products">
-      <i class="fas fa-box"></i>
-      <span>商品管理</span>
-    </el-menu-item>
-    <el-menu-item index="/inventory">
-      <i class="fas fa-warehouse"></i>
-      <span>库存管理</span>
-    </el-menu-item>
-    <el-menu-item index="/orders">
-      <i class="fas fa-file-invoice-dollar"></i>
-      <span>订单管理</span>
-    </el-menu-item>
-    <el-menu-item index="/customers">
-      <i class="fas fa-id-card"></i>
-      <span>客户管理</span>
-    </el-menu-item>
-    <el-menu-item index="/reports">
-      <i class="fas fa-chart-bar"></i>
-      <span>报表统计</span>
-    </el-menu-item>
-    <el-menu-item index="/settings">
-      <i class="fas fa-cog"></i>
-      <span>系统设置</span>
+    <el-menu-item v-for="item in visibleMenus" :key="item.path" :index="item.path" @click="go(item.path)">
+      <i :class="['fa', item.icon]"></i>
+      <span>{{ item.label }}</span>
     </el-menu-item>
   </el-menu>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const activeMenu = ref(route.path)
 
-// 监听路由变化，更新活动菜单项
+const employee = ref(JSON.parse(sessionStorage.getItem('employee') || '{}'))
+
 watch(
   () => route.path,
   (newPath) => {
     activeMenu.value = newPath
+    // 每次路由变化都可能意味着登录状态改变，重新读取
+    employee.value = JSON.parse(sessionStorage.getItem('employee') || '{}')
   },
   { immediate: true }
 )
 
-function onSelect(index) {
-  router.push(index)
-}
+const menus = [
+  { path: '/', label: '仪表盘', icon: 'fa-home', roles: ['cashier','stocker','warehouse','admin'] },
+  { path: '/cashier', label: '收银台', icon: 'fa-cash-register', roles: ['cashier','admin'] },
+  { path: '/orders', label: '订单管理', icon: 'fa-list', roles: ['cashier','admin'] },
+  { path: '/products', label: '商品管理', icon: 'fa-box', roles: ['stocker','admin'] },
+  { path: '/inventory', label: '库存管理', icon: 'fa-warehouse', roles: ['warehouse','admin'] },
+  { path: '/settings', label: '系统设置', icon: 'fa-cog', roles: ['cashier','stocker','warehouse','admin'] }
+]
+
+const visibleMenus = computed(() => {
+  const userRole = employee.value?.role
+  if (!userRole) return []
+  return menus.filter(m => m.roles.includes(userRole))
+})
+
+function go(path) { router.push(path) }
 </script>
 
 <style scoped>

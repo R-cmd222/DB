@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Query
+from fastapi import FastAPI, HTTPException, Depends, Query, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -135,7 +135,7 @@ def delete_product(
     db_product = db.query(Product).filter(Product.ProductID == product_id).first()
     if not db_product:
         raise HTTPException(status_code=404, detail="商品不存在")
-    
+
     db.delete(db_product)
     db.commit()
     return {"message": "商品删除成功"}
@@ -155,7 +155,6 @@ def get_stats(db: Session = Depends(get_db)):
     total_orders = db.query(Bill).count()
     total_stock = db.query(Product).with_entities(func.sum(Product.Stock)).scalar() or 0
     low_stock_products = db.query(Product).filter(Product.Stock < 10).count()
-    
     return {
         "total_products": total_products,
         "total_orders": total_orders,
@@ -448,7 +447,7 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
     active_products = total_products
     avg_price = sum(float(p.Price) for p in products) / total_products if total_products else 0
     # 类别数
-    category_count = len(set(p.CategoryID for p in products))
+    category_count = len(set(p.Category for p in products))
     # 销量排行
     top_products = db.query(
         Product.Name,
@@ -499,6 +498,36 @@ def get_guests(db: Session = Depends(get_db)):
             "notes": None
         })
     return result
+
+class ChangePasswordRequest(BaseModel):
+    id: int
+    newPwd: str
+
+@app.post("/change_password")
+def change_password(data: ChangePasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(Employee).filter(Employee.EmployeeID == data.id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="员工不存在")
+    user.password = data.newPwd
+    db.commit()
+    return {"message": "密码修改成功"}
+
+@app.post("/login")
+def login(data: dict = Body(...), db: Session = Depends(get_db)):
+    username = data.get("username")
+    password = data.get("password")
+    user = db.query(Employee).filter(Employee.username == username).first()
+    if not user or user.password != password:
+        raise HTTPException(status_code=401, detail="用户名或密码错误")
+    return {
+        "token": "admin123",
+        "employee": {
+            "id": user.EmployeeID,
+            "name": user.Name,
+            "role": getattr(user, 'role', ''),
+            "position": user.Position
+        }
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9527) 
