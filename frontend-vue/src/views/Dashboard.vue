@@ -10,8 +10,7 @@
             </div>
             <div class="stat-info">
               <h3 class="stat-title">今日销售额</h3>
-              <p class="stat-number">¥{{ formatNumber(stats.today_sales || 12580) }}</p>
-              <span class="stat-change positive">+15.2%</span>
+              <p class="stat-number">¥{{ formatNumber(stats.today_sales) }}</p>
             </div>
           </div>
         </el-card>
@@ -25,7 +24,6 @@
             <div class="stat-info">
               <h3 class="stat-title">订单总数</h3>
               <p class="stat-number">{{ formatNumber(stats.total_orders) }}</p>
-              <span class="stat-change positive">+8.7%</span>
             </div>
           </div>
         </el-card>
@@ -39,7 +37,6 @@
             <div class="stat-info">
               <h3 class="stat-title">商品总数</h3>
               <p class="stat-number">{{ formatNumber(stats.total_products) }}</p>
-              <span class="stat-change neutral">0%</span>
             </div>
           </div>
         </el-card>
@@ -55,7 +52,6 @@
               <p class="stat-number" :class="{ 'warning': stats.low_stock_products > 0 }">
                 {{ formatNumber(stats.low_stock_products) }}
               </p>
-              <span class="stat-change negative">+5</span>
             </div>
           </div>
         </el-card>
@@ -80,15 +76,15 @@
             <div class="chart-data">
               <div class="data-item">
                 <span>本周销售额</span>
-                <span class="data-value">¥45,680</span>
+                <span class="data-value">¥{{ formatNumber(stats.week_sales) }}</span>
               </div>
               <div class="data-item">
                 <span>上周销售额</span>
-                <span class="data-value">¥42,150</span>
+                <span class="data-value">¥{{ formatNumber(stats.last_week_sales) }}</span>
               </div>
               <div class="data-item">
                 <span>本月销售额</span>
-                <span class="data-value">¥156,890</span>
+                <span class="data-value">¥{{ formatNumber(stats.month_sales) }}</span>
               </div>
             </div>
           </div>
@@ -151,7 +147,7 @@
 import { ref, onMounted, onActivated, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { statsAPI, systemAPI } from '../api'
+import { statsAPI, systemAPI, dashboardAPI } from '../api'
 
 const route = useRoute()
 
@@ -160,20 +156,17 @@ const stats = ref({
   total_orders: 0, 
   total_stock: 0, 
   low_stock_products: 0,
-  today_sales: 0
+  today_sales: 0,
+  week_sales: 0,
+  last_week_sales: 0,
+  month_sales: 0
 })
 const loading = ref(false)
 const chartLoading = ref(false)
 const apiStatus = ref('unknown')
 const lastUpdate = ref('')
 
-// 模拟数据
-const topProducts = ref([
-  { name: '可口可乐', sales: 156 },
-  { name: '薯片', sales: 89 },
-  { name: '牛奶', sales: 67 },
-  { name: '面包', sales: 45 }
-])
+const topProducts = ref([])
 
 function formatNumber(num) {
   if (num === null || num === undefined) return '0'
@@ -182,7 +175,6 @@ function formatNumber(num) {
 
 async function loadStats() {
   loading.value = true
-  
   try {
     // 检查 API 状态
     try {
@@ -191,33 +183,26 @@ async function loadStats() {
     } catch (error) {
       apiStatus.value = 'unhealthy'
     }
-    
     // 获取统计信息
     const response = await statsAPI.getStats()
-    
-    // 确保数据正确合并
-    stats.value = {
-      total_products: response.data.total_products || 0,
-      total_orders: response.data.total_orders || 0,
-      total_stock: response.data.total_stock || 0,
-      low_stock_products: response.data.low_stock_products || 0,
-      today_sales: stats.value.today_sales || 12580
-    }
-    
+    stats.value.total_products = response.data.total_products || 0
+    stats.value.total_orders = response.data.total_orders || 0
+    stats.value.total_stock = response.data.total_stock || 0
+    stats.value.low_stock_products = response.data.low_stock_products || 0
+    // 获取销售额信息
+    const salesRes = await dashboardAPI.getDashboardSales()
+    stats.value.today_sales = salesRes.data.today_sales || 0
+    stats.value.week_sales = salesRes.data.week_sales || 0
+    stats.value.last_week_sales = salesRes.data.last_week_sales || 0
+    stats.value.month_sales = salesRes.data.month_sales || 0
+    // 获取热销商品
+    const topRes = await dashboardAPI.getTopProducts(5)
+    topProducts.value = topRes.data
     lastUpdate.value = new Date().toLocaleString()
     ElMessage.success('数据加载成功')
   } catch (error) {
     console.error('加载统计信息失败:', error)
     ElMessage.error('加载统计信息失败: ' + (error.response?.data?.detail || error.message))
-    
-    // 如果API失败，使用默认值
-    stats.value = {
-      total_products: 0,
-      total_orders: 0,
-      total_stock: 0,
-      low_stock_products: 0,
-      today_sales: 12580
-    }
   } finally {
     loading.value = false
   }
@@ -231,17 +216,14 @@ function refreshCharts() {
   }, 1000)
 }
 
-// 组件挂载时加载数据
 onMounted(() => {
   loadStats()
 })
 
-// 当组件被激活时（keep-alive情况下）
 onActivated(() => {
   loadStats()
 })
 
-// 监听路由变化
 watch(
   () => route.path,
   (newPath) => {

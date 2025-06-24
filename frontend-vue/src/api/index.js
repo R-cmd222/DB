@@ -118,4 +118,16 @@ export const billAPI = {
   }
 }
 
+// 仪表盘相关 API
+export const dashboardAPI = {
+  // 获取仪表盘销售额
+  getDashboardSales() {
+    return api.get('/dashboard/sales')
+  },
+  // 获取热销商品
+  getTopProducts(limit = 5) {
+    return api.get('/dashboard/top-products', { params: { limit } })
+  }
+}
+
 export default api 

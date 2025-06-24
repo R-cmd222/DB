@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import uvicorn
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 import logging
@@ -273,6 +273,61 @@ def create_bill(
         logger.error(traceback.format_exc())
         db.rollback()
         raise HTTPException(status_code=500, detail=f"创建订单时出错: {str(e)}")
+
+@app.get("/dashboard/sales")
+def get_dashboard_sales(db: Session = Depends(get_db)):
+    now = datetime.now()
+    today_start = datetime(now.year, now.month, now.day)
+    week_start = today_start - timedelta(days=today_start.weekday())
+    month_start = datetime(now.year, now.month, 1)
+
+    # 今日销售额
+    today_sales = db.query(func.sum(Bill.TotalAmount)).filter(
+        Bill.BillDate >= today_start,
+        Bill.Status == '已完成'
+    ).scalar() or 0
+
+    # 本周销售额
+    week_sales = db.query(func.sum(Bill.TotalAmount)).filter(
+        Bill.BillDate >= week_start,
+        Bill.Status == '已完成'
+    ).scalar() or 0
+
+    # 上周销售额
+    last_week_start = week_start - timedelta(days=7)
+    last_week_end = week_start - timedelta(seconds=1)
+    last_week_sales = db.query(func.sum(Bill.TotalAmount)).filter(
+        Bill.BillDate >= last_week_start,
+        Bill.BillDate <= last_week_end,
+        Bill.Status == '已完成'
+    ).scalar() or 0
+
+    # 本月销售额
+    month_sales = db.query(func.sum(Bill.TotalAmount)).filter(
+        Bill.BillDate >= month_start,
+        Bill.Status == '已完成'
+    ).scalar() or 0
+
+    return {
+        "today_sales": float(today_sales),
+        "week_sales": float(week_sales),
+        "last_week_sales": float(last_week_sales),
+        "month_sales": float(month_sales)
+    }
+
+@app.get("/dashboard/top-products")
+def get_top_products(db: Session = Depends(get_db), limit: int = 5):
+    result = db.query(
+        Product.Name,
+        func.sum(BillItem.Quantity).label('sales')
+    ).join(BillItem, BillItem.ProductID == Product.ProductID
+    ).join(Bill, Bill.BillID == BillItem.BillID
+    ).filter(Bill.Status == '已完成'
+    ).group_by(Product.Name
+    ).order_by(func.sum(BillItem.Quantity).desc()
+    ).limit(limit).all()
+
+    return [{"name": r[0], "sales": int(r[1])} for r in result]
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9527) 
