@@ -82,9 +82,17 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template #default="scope">
-          <el-button size="small" @click="edit(scope.row)">编辑</el-button>
-          <el-button size="small" type="info" @click="viewDetails(scope.row)">详情</el-button>
-          <el-button size="small" type="danger" @click="deleteCustomer(scope.row.id)">删除</el-button>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <el-tooltip content="编辑" placement="top">
+              <el-button size="small" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip content="详情" placement="top">
+              <el-button size="small" type="info" icon="el-icon-document" @click="viewDetails(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip content="删除" placement="top">
+              <el-button size="small" type="danger" icon="el-icon-delete" @click="deleteCustomer(scope.row.id)"></el-button>
+            </el-tooltip>
+          </div>
         </template>
       </el-table-column>
     </el-table>

@@ -12,6 +12,11 @@
           </div>
         </template>
         
+        <!-- 操作说明 -->
+        <div style="margin-bottom: 8px; color: #888; font-size: 13px;">
+          可扫码或输入编号，或点击右上角手动添加
+        </div>
+        
         <!-- 扫描输入 -->
         <div class="scan-input">
           <el-input
@@ -272,7 +277,7 @@ function scanProduct() {
   setTimeout(() => {
     addProductToCart({
       id: scanCode.value,
-      name: `商品${scanCode.value}`,
+      name: scanCode.value,
       price: Math.random() * 100 + 10,
       stock: Math.floor(Math.random() * 50) + 10
     })

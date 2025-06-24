@@ -49,11 +49,11 @@ export const productAPI = {
   // 创建商品
   createProduct(product) {
     const productData = {
-      Name: product.name,
-      Price: product.price,
-      Stock: product.stock,
-      CategoryID: product.categoryId,
-      Unit: product.unit
+      Name: product.Name,
+      Price: product.Price,
+      Stock: product.Stock,
+      CategoryID: product.CategoryID,
+      Unit: product.Unit
     }
     return api.post('/products', productData)
   },
@@ -61,11 +61,11 @@ export const productAPI = {
   // 更新商品
   updateProduct(id, product) {
     const productData = {
-      Name: product.name,
-      Price: product.price,
-      Stock: product.stock,
-      CategoryID: product.categoryId,
-      Unit: product.unit
+      Name: product.Name,
+      Price: product.Price,
+      Stock: product.Stock,
+      CategoryID: product.CategoryID,
+      Unit: product.Unit
     }
     return api.put(`/products/${id}`, productData)
   },

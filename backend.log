@@ -1,73 +1,74 @@
 C:\Users\sdjf\AppData\Local\Programs\Python\Python312\Lib\site-packages\pydantic\_internal\_config.py:318: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [19436]
+INFO:     Started server process [48720]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:9527 (Press CTRL+C to quit)
-2025-06-24 14:36:22,620 INFO sqlalchemy.engine.Engine SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
+2025-06-24 15:52:01,926 INFO sqlalchemy.engine.Engine SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
 INFO:sqlalchemy.engine.Engine:SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
-2025-06-24 14:36:22,623 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-06-24 15:52:01,929 INFO sqlalchemy.engine.Engine [raw sql] ()
 INFO:sqlalchemy.engine.Engine:[raw sql] ()
-2025-06-24 14:36:22,624 INFO sqlalchemy.engine.Engine SELECT schema_name()
+2025-06-24 15:52:01,930 INFO sqlalchemy.engine.Engine SELECT schema_name()
 INFO:sqlalchemy.engine.Engine:SELECT schema_name()
-2025-06-24 14:36:22,624 INFO sqlalchemy.engine.Engine [generated in 0.00050s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00050s] ()
-2025-06-24 14:36:22,636 INFO sqlalchemy.engine.Engine SELECT CAST('test max support' AS NVARCHAR(max))
+2025-06-24 15:52:01,930 INFO sqlalchemy.engine.Engine [generated in 0.00060s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00060s] ()
+2025-06-24 15:52:01,942 INFO sqlalchemy.engine.Engine SELECT CAST('test max support' AS NVARCHAR(max))
 INFO:sqlalchemy.engine.Engine:SELECT CAST('test max support' AS NVARCHAR(max))
-2025-06-24 14:36:22,636 INFO sqlalchemy.engine.Engine [generated in 0.00054s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00054s] ()
-2025-06-24 14:36:22,636 INFO sqlalchemy.engine.Engine SELECT 1 FROM fn_listextendedproperty(default, default, default, default, default, default, default)
+2025-06-24 15:52:01,942 INFO sqlalchemy.engine.Engine [generated in 0.00051s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00051s] ()
+2025-06-24 15:52:01,942 INFO sqlalchemy.engine.Engine SELECT 1 FROM fn_listextendedproperty(default, default, default, default, default, default, default)
 INFO:sqlalchemy.engine.Engine:SELECT 1 FROM fn_listextendedproperty(default, default, default, default, default, default, default)
-2025-06-24 14:36:22,636 INFO sqlalchemy.engine.Engine [generated in 0.00046s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00046s] ()
-2025-06-24 14:36:22,683 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:52:01,942 INFO sqlalchemy.engine.Engine [generated in 0.00043s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00043s] ()
+2025-06-24 15:52:01,992 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:22,683 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:22,683 INFO sqlalchemy.engine.Engine [generated in 0.00063s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[generated in 0.00063s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-2025-06-24 14:36:22,699 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:22,699 INFO sqlalchemy.engine.Engine [generated in 0.00061s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[generated in 0.00061s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:36:22,699 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:52:01,996 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:52:02,000 INFO sqlalchemy.engine.Engine [generated in 0.00066s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00066s] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:52:02,005 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:52:02,015 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:52:02,016 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:52:02,017 INFO sqlalchemy.engine.Engine [cached since 0.01752s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 0.01752s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:52:02,020 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
 INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
-2025-06-24 14:36:26,359 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:52:05,471 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:26,364 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+2025-06-24 15:52:05,475 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
 FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]) AS anon_1
 INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
 FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]) AS anon_1
-2025-06-24 14:36:26,365 INFO sqlalchemy.engine.Engine [generated in 0.00052s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00052s] ()
-2025-06-24 14:36:26,370 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+2025-06-24 15:52:05,475 INFO sqlalchemy.engine.Engine [generated in 0.00066s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00066s] ()
+2025-06-24 15:52:05,475 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
 FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills]) AS anon_1
 INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
 FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills]) AS anon_1
-2025-06-24 14:36:26,371 INFO sqlalchemy.engine.Engine [generated in 0.00061s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00061s] ()
-2025-06-24 14:36:26,373 INFO sqlalchemy.engine.Engine SELECT sum([Products].[Stock]) AS sum_1 
+2025-06-24 15:52:05,475 INFO sqlalchemy.engine.Engine [generated in 0.00062s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00062s] ()
+2025-06-24 15:52:05,489 INFO sqlalchemy.engine.Engine SELECT sum([Products].[Stock]) AS sum_1 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT sum([Products].[Stock]) AS sum_1 
 FROM [Products]
-2025-06-24 14:36:26,376 INFO sqlalchemy.engine.Engine [generated in 0.00064s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00064s] ()
-2025-06-24 14:36:26,380 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+2025-06-24 15:52:05,490 INFO sqlalchemy.engine.Engine [generated in 0.00057s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00057s] ()
+2025-06-24 15:52:05,492 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
 FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products] 
 WHERE [Products].[Stock] < ?) AS anon_1
@@ -75,574 +76,473 @@ INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1
 FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products] 
 WHERE [Products].[Stock] < ?) AS anon_1
-2025-06-24 14:36:26,382 INFO sqlalchemy.engine.Engine [generated in 0.00057s] (10,)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00057s] (10,)
+2025-06-24 15:52:05,492 INFO sqlalchemy.engine.Engine [generated in 0.00060s] (10,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00060s] (10,)
 INFO:     None:0 - "GET /stats HTTP/1.1" 200 OK
-2025-06-24 14:36:26,385 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:52:05,499 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:26,704 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:52:05,819 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:26,705 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
+2025-06-24 15:52:05,822 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
 INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:26,705 INFO sqlalchemy.engine.Engine [generated in 0.00051s] (datetime.datetime(2025, 6, 24, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[generated in 0.00051s] (datetime.datetime(2025, 6, 24, 0, 0), '已完成')
-2025-06-24 14:36:26,710 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
+2025-06-24 15:52:05,822 INFO sqlalchemy.engine.Engine [generated in 0.00055s] (datetime.datetime(2025, 6, 24, 0, 0), '已结账')
+INFO:sqlalchemy.engine.Engine:[generated in 0.00055s] (datetime.datetime(2025, 6, 24, 0, 0), '已结账')
+2025-06-24 15:52:05,827 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
 INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:26,710 INFO sqlalchemy.engine.Engine [cached since 0.006016s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 0.006016s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已完成')
-2025-06-24 14:36:26,714 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
+2025-06-24 15:52:05,827 INFO sqlalchemy.engine.Engine [cached since 0.005292s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 0.005292s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已结账')
+2025-06-24 15:52:05,830 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
 INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:26,714 INFO sqlalchemy.engine.Engine [generated in 0.00055s] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[generated in 0.00055s] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-2025-06-24 14:36:26,718 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
+2025-06-24 15:52:05,830 INFO sqlalchemy.engine.Engine [generated in 0.00058s] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[generated in 0.00058s] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已结账')
+2025-06-24 15:52:05,834 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
 INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:26,722 INFO sqlalchemy.engine.Engine [cached since 0.01598s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 0.01598s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已完成')
+2025-06-24 15:52:05,834 INFO sqlalchemy.engine.Engine [cached since 0.01305s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 0.01305s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已结账')
 INFO:     None:0 - "GET /dashboard/sales HTTP/1.1" 200 OK
-2025-06-24 14:36:26,726 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:52:05,837 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:26,955 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:52:06,072 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:26,955 INFO sqlalchemy.engine.Engine SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
+2025-06-24 15:52:06,075 INFO sqlalchemy.engine.Engine SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
 WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
 INFO:sqlalchemy.engine.Engine:SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
 WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:26,955 INFO sqlalchemy.engine.Engine [generated in 0.00056s] ('已完成',)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00056s] ('已完成',)
+2025-06-24 15:52:06,076 INFO sqlalchemy.engine.Engine [generated in 0.00093s] ('已结账',)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00093s] ('已结账',)
 INFO:     None:0 - "GET /dashboard/top-products?limit=5 HTTP/1.1" 200 OK
-2025-06-24 14:36:26,971 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:52:06,083 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:29,348 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:52:14,628 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:29,349 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:29,349 INFO sqlalchemy.engine.Engine [cached since 6.657s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 6.657s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-2025-06-24 14:36:29,354 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:29,355 INFO sqlalchemy.engine.Engine [cached since 6.654s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 6.654s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:36:29,358 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:39,089 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:39,089 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:39,089 INFO sqlalchemy.engine.Engine [cached since 16.4s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 16.4s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-2025-06-24 14:36:39,097 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:39,097 INFO sqlalchemy.engine.Engine [cached since 16.4s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 16.4s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:     None:0 - "GET /report/sales?start=2025-06-22&end=2025-06-22&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:36:39,110 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:40,387 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:40,388 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:40,389 INFO sqlalchemy.engine.Engine [cached since 17.7s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 17.7s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-2025-06-24 14:36:40,394 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:40,395 INFO sqlalchemy.engine.Engine [cached since 17.69s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 17.69s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:     None:0 - "GET /report/sales?start=2025-06-22&end=2025-06-22&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:36:40,403 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:41,968 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:41,968 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:41,968 INFO sqlalchemy.engine.Engine [cached since 19.28s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 19.28s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-2025-06-24 14:36:41,976 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:41,976 INFO sqlalchemy.engine.Engine [cached since 19.28s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 19.28s ago] (datetime.datetime(2025, 6, 22, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:     None:0 - "GET /report/sales?start=2025-06-22&end=2025-06-22&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:36:41,985 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:45,910 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:45,911 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+2025-06-24 15:52:14,628 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
-2025-06-24 14:36:45,911 INFO sqlalchemy.engine.Engine [generated in 0.00068s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00068s] ()
+2025-06-24 15:52:14,629 INFO sqlalchemy.engine.Engine [cached since 12.63s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 12.63s ago] ()
 INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:36:45,911 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:52:14,634 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:52:15,775 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:52:15,775 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:52:15,775 INFO sqlalchemy.engine.Engine [cached since 13.78s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 13.78s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:52:15,779 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
 INFO:__main__:正在获取订单列表...
-2025-06-24 14:36:46,981 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:52:21,405 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:46,985 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+2025-06-24 15:52:21,407 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] ORDER BY [Bills].[BillDate] DESC
 INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] ORDER BY [Bills].[BillDate] DESC
-2025-06-24 14:36:46,985 INFO sqlalchemy.engine.Engine [generated in 0.00076s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00076s] ()
+2025-06-24 15:52:21,407 INFO sqlalchemy.engine.Engine [generated in 0.00048s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00048s] ()
 INFO:__main__:成功获取到 3 个订单
-2025-06-24 14:36:46,990 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+2025-06-24 15:52:21,416 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
-2025-06-24 14:36:46,990 INFO sqlalchemy.engine.Engine [generated in 0.00062s] (3,)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00062s] (3,)
-2025-06-24 14:36:46,994 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+2025-06-24 15:52:21,416 INFO sqlalchemy.engine.Engine [generated in 0.00066s] (3,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00066s] (3,)
+2025-06-24 15:52:21,416 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
-2025-06-24 14:36:46,994 INFO sqlalchemy.engine.Engine [cached since 0.004955s ago] (2,)
-INFO:sqlalchemy.engine.Engine:[cached since 0.004955s ago] (2,)
-2025-06-24 14:36:46,998 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+2025-06-24 15:52:21,416 INFO sqlalchemy.engine.Engine [cached since 0.00453s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.00453s ago] (2,)
+2025-06-24 15:52:21,416 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
-2025-06-24 14:36:46,998 INFO sqlalchemy.engine.Engine [cached since 0.007585s ago] (1,)
-INFO:sqlalchemy.engine.Engine:[cached since 0.007585s ago] (1,)
+2025-06-24 15:52:21,416 INFO sqlalchemy.engine.Engine [cached since 0.006472s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.006472s ago] (1,)
 INFO:     None:0 - "GET /bills HTTP/1.1" 200 OK
-2025-06-24 14:36:47,002 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:52:21,423 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:56,031 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:28,565 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:56,031 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+2025-06-24 15:53:28,565 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:36:56,032 INFO sqlalchemy.engine.Engine [cached since 33.34s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 33.34s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-2025-06-24 14:36:56,036 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
+2025-06-24 15:53:28,565 INFO sqlalchemy.engine.Engine [generated in 0.00059s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[generated in 0.00059s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+2025-06-24 15:53:28,576 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
 INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:36:56,036 INFO sqlalchemy.engine.Engine [cached since 33.34s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 33.34s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
+2025-06-24 15:53:28,576 INFO sqlalchemy.engine.Engine [generated in 0.00064s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[generated in 0.00064s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
 INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:36:56,043 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:28,581 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:36:57,923 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:31,234 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:36:57,923 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-2025-06-24 14:36:57,923 INFO sqlalchemy.engine.Engine [cached since 12.01s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 12.01s ago] ()
-INFO:     None:0 - "GET /report/inventory HTTP/1.1" 200 OK
-2025-06-24 14:36:57,927 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:37:02,415 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:37:02,415 INFO sqlalchemy.engine.Engine SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points] 
-FROM [Guests]
-INFO:sqlalchemy.engine.Engine:SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points] 
-FROM [Guests]
-2025-06-24 14:37:02,415 INFO sqlalchemy.engine.Engine [generated in 0.00067s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00067s] ()
-2025-06-24 14:37:02,456 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points] 
-FROM [Guests] 
-WHERE (EXISTS (SELECT 1 
-FROM [Bills] 
-WHERE [Guests].[GuestID] = [Bills].[GuestID] AND [Bills].[BillDate] >= ?)) AND (EXISTS (SELECT 1 
-FROM [Bills] 
-WHERE [Guests].[GuestID] = [Bills].[GuestID] AND [Bills].[BillDate] <= ?))) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points] 
-FROM [Guests] 
-WHERE (EXISTS (SELECT 1 
-FROM [Bills] 
-WHERE [Guests].[GuestID] = [Bills].[GuestID] AND [Bills].[BillDate] >= ?)) AND (EXISTS (SELECT 1 
-FROM [Bills] 
-WHERE [Guests].[GuestID] = [Bills].[GuestID] AND [Bills].[BillDate] <= ?))) AS anon_1
-2025-06-24 14:37:02,456 INFO sqlalchemy.engine.Engine [generated in 0.00096s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 0, 0))
-INFO:sqlalchemy.engine.Engine:[generated in 0.00096s] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 0, 0))
-INFO:     None:0 - "GET /report/customer?start=2025-05-25&end=2025-06-24 HTTP/1.1" 200 OK
-2025-06-24 14:37:02,506 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:37:05,415 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:37:05,415 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-2025-06-24 14:37:05,415 INFO sqlalchemy.engine.Engine [cached since 19.51s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 19.51s ago] ()
-2025-06-24 14:37:05,419 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:37:05,419 INFO sqlalchemy.engine.Engine [cached since 38.46s ago] ('已完成',)
-INFO:sqlalchemy.engine.Engine:[cached since 38.46s ago] ('已完成',)
-INFO:     None:0 - "GET /report/product HTTP/1.1" 200 OK
-2025-06-24 14:37:05,427 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:37:12,066 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:37:12,066 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-2025-06-24 14:37:12,066 INFO sqlalchemy.engine.Engine [cached since 26.16s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 26.16s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:37:12,071 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:37:22,265 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:37:22,265 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-2025-06-24 14:37:22,269 INFO sqlalchemy.engine.Engine [cached since 36.36s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 36.36s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:37:22,273 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:37:24,236 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:37:24,237 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-2025-06-24 14:37:24,237 INFO sqlalchemy.engine.Engine [cached since 38.33s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 38.33s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:37:24,240 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:37:27,503 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:37:27,507 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+2025-06-24 15:53:31,235 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:37:27,507 INFO sqlalchemy.engine.Engine [cached since 64.81s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 64.81s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-2025-06-24 14:37:27,507 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
+2025-06-24 15:53:31,235 INFO sqlalchemy.engine.Engine [cached since 2.668s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 2.668s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+2025-06-24 15:53:31,237 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
 INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:37:27,511 INFO sqlalchemy.engine.Engine [cached since 64.81s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 64.81s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已完成')
+2025-06-24 15:53:31,238 INFO sqlalchemy.engine.Engine [cached since 2.662s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 2.662s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
 INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
-2025-06-24 14:37:27,511 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
-2025-06-24 14:38:49,104 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:38:49,108 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]) AS anon_1
-2025-06-24 14:38:49,108 INFO sqlalchemy.engine.Engine [cached since 142.7s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 142.7s ago] ()
-2025-06-24 14:38:49,112 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills]) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills]) AS anon_1
-2025-06-24 14:38:49,112 INFO sqlalchemy.engine.Engine [cached since 142.7s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 142.7s ago] ()
-2025-06-24 14:38:49,112 INFO sqlalchemy.engine.Engine SELECT sum([Products].[Stock]) AS sum_1 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT sum([Products].[Stock]) AS sum_1 
-FROM [Products]
-2025-06-24 14:38:49,112 INFO sqlalchemy.engine.Engine [cached since 142.7s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 142.7s ago] ()
-2025-06-24 14:38:49,116 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products] 
-WHERE [Products].[Stock] < ?) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products] 
-WHERE [Products].[Stock] < ?) AS anon_1
-2025-06-24 14:38:49,116 INFO sqlalchemy.engine.Engine [cached since 142.7s ago] (10,)
-INFO:sqlalchemy.engine.Engine:[cached since 142.7s ago] (10,)
-INFO:     None:0 - "GET /stats HTTP/1.1" 200 OK
-2025-06-24 14:38:49,121 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:38:49,167 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:38:49,167 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:38:49,167 INFO sqlalchemy.engine.Engine [cached since 142.5s ago] (datetime.datetime(2025, 6, 24, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 142.5s ago] (datetime.datetime(2025, 6, 24, 0, 0), '已完成')
-2025-06-24 14:38:49,171 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:38:49,171 INFO sqlalchemy.engine.Engine [cached since 142.5s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 142.5s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已完成')
-2025-06-24 14:38:49,175 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:38:49,175 INFO sqlalchemy.engine.Engine [cached since 142.5s ago] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 142.5s ago] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-2025-06-24 14:38:49,175 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:38:49,179 INFO sqlalchemy.engine.Engine [cached since 142.5s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 142.5s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已完成')
-INFO:     None:0 - "GET /dashboard/sales HTTP/1.1" 200 OK
-2025-06-24 14:38:49,179 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:38:49,433 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:38:49,437 INFO sqlalchemy.engine.Engine SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
-FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:38:49,437 INFO sqlalchemy.engine.Engine [cached since 142.5s ago] ('已完成',)
-INFO:sqlalchemy.engine.Engine:[cached since 142.5s ago] ('已完成',)
-INFO:     None:0 - "GET /dashboard/top-products?limit=5 HTTP/1.1" 200 OK
-2025-06-24 14:38:49,446 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:50:17,799 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:17,799 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]
-2025-06-24 14:50:17,799 INFO sqlalchemy.engine.Engine [cached since 811.9s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 811.9s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:50:17,808 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:31,241 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
 INFO:__main__:正在获取订单列表...
-2025-06-24 14:50:18,310 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:33,173 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:18,310 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+2025-06-24 15:53:33,173 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] ORDER BY [Bills].[BillDate] DESC
 INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] ORDER BY [Bills].[BillDate] DESC
-2025-06-24 14:50:18,311 INFO sqlalchemy.engine.Engine [cached since 811.3s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 811.3s ago] ()
+2025-06-24 15:53:33,177 INFO sqlalchemy.engine.Engine [cached since 71.77s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 71.77s ago] ()
 INFO:__main__:成功获取到 3 个订单
-2025-06-24 14:50:18,315 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+2025-06-24 15:53:33,177 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
-2025-06-24 14:50:18,316 INFO sqlalchemy.engine.Engine [cached since 811.3s ago] (3,)
-INFO:sqlalchemy.engine.Engine:[cached since 811.3s ago] (3,)
-2025-06-24 14:50:18,317 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+2025-06-24 15:53:33,181 INFO sqlalchemy.engine.Engine [cached since 71.77s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 71.77s ago] (3,)
+2025-06-24 15:53:33,181 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
-2025-06-24 14:50:18,320 INFO sqlalchemy.engine.Engine [cached since 811.3s ago] (2,)
-INFO:sqlalchemy.engine.Engine:[cached since 811.3s ago] (2,)
-2025-06-24 14:50:18,320 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+2025-06-24 15:53:33,181 INFO sqlalchemy.engine.Engine [cached since 71.77s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 71.77s ago] (2,)
+2025-06-24 15:53:33,185 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
 INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
 FROM [BillItems] 
 WHERE [BillItems].[BillID] = ?
-2025-06-24 14:50:18,320 INFO sqlalchemy.engine.Engine [cached since 811.3s ago] (1,)
-INFO:sqlalchemy.engine.Engine:[cached since 811.3s ago] (1,)
+2025-06-24 15:53:33,185 INFO sqlalchemy.engine.Engine [cached since 71.77s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 71.77s ago] (1,)
 INFO:     None:0 - "GET /bills HTTP/1.1" 200 OK
-2025-06-24 14:50:18,324 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:33,185 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:50:19,341 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:34,049 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:19,341 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+2025-06-24 15:53:34,049 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
-2025-06-24 14:50:19,341 INFO sqlalchemy.engine.Engine [cached since 813.4s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 813.4s ago] ()
+2025-06-24 15:53:34,052 INFO sqlalchemy.engine.Engine [cached since 92.05s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 92.05s ago] ()
 INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:50:19,345 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:34,056 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:50:19,600 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:35,319 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:19,600 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+2025-06-24 15:53:35,319 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
-2025-06-24 14:50:19,600 INFO sqlalchemy.engine.Engine [cached since 813.7s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 813.7s ago] ()
+2025-06-24 15:53:35,323 INFO sqlalchemy.engine.Engine [cached since 93.32s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 93.32s ago] ()
 INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-24 14:50:19,603 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:35,328 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-INFO:     None:0 - "GET /health HTTP/1.1" 200 OK
-2025-06-24 14:50:22,828 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:36,244 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:22,829 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products]) AS anon_1
-2025-06-24 14:50:22,829 INFO sqlalchemy.engine.Engine [cached since 836.5s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 836.5s ago] ()
-2025-06-24 14:50:22,833 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills]) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
-FROM [Bills]) AS anon_1
-2025-06-24 14:50:22,833 INFO sqlalchemy.engine.Engine [cached since 836.5s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 836.5s ago] ()
-2025-06-24 14:50:22,833 INFO sqlalchemy.engine.Engine SELECT sum([Products].[Stock]) AS sum_1 
+2025-06-24 15:53:36,244 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT sum([Products].[Stock]) AS sum_1 
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
 FROM [Products]
-2025-06-24 14:50:22,836 INFO sqlalchemy.engine.Engine [cached since 836.5s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 836.5s ago] ()
-2025-06-24 14:50:22,837 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products] 
-WHERE [Products].[Stock] < ?) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
-FROM [Products] 
-WHERE [Products].[Stock] < ?) AS anon_1
-2025-06-24 14:50:22,837 INFO sqlalchemy.engine.Engine [cached since 836.5s ago] (10,)
-INFO:sqlalchemy.engine.Engine:[cached since 836.5s ago] (10,)
-INFO:     None:0 - "GET /stats HTTP/1.1" 200 OK
-2025-06-24 14:50:22,842 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:36,244 INFO sqlalchemy.engine.Engine [cached since 94.25s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 94.25s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:53:36,249 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:50:23,078 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-24 15:53:37,815 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:23,078 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:50:23,078 INFO sqlalchemy.engine.Engine [cached since 836.4s ago] (datetime.datetime(2025, 6, 24, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 836.4s ago] (datetime.datetime(2025, 6, 24, 0, 0), '已完成')
-2025-06-24 14:50:23,083 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:50:23,083 INFO sqlalchemy.engine.Engine [cached since 836.4s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 836.4s ago] (datetime.datetime(2025, 6, 23, 0, 0), '已完成')
-2025-06-24 14:50:23,087 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
+2025-06-24 15:53:37,815 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:53:37,815 INFO sqlalchemy.engine.Engine [cached since 95.82s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 95.82s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:53:37,823 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:53:57,340 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:53:57,340 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
 FROM [Bills] 
 WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
-2025-06-24 14:50:23,087 INFO sqlalchemy.engine.Engine [cached since 836.4s ago] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 836.4s ago] (datetime.datetime(2025, 6, 16, 0, 0), datetime.datetime(2025, 6, 22, 23, 59, 59), '已完成')
-2025-06-24 14:50:23,087 INFO sqlalchemy.engine.Engine SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-INFO:sqlalchemy.engine.Engine:SELECT sum([Bills].[TotalAmount]) AS sum_1 
-FROM [Bills] 
-WHERE [Bills].[BillDate] >= ? AND [Bills].[Status] = ?
-2025-06-24 14:50:23,091 INFO sqlalchemy.engine.Engine [cached since 836.4s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已完成')
-INFO:sqlalchemy.engine.Engine:[cached since 836.4s ago] (datetime.datetime(2025, 6, 1, 0, 0), '已完成')
-INFO:     None:0 - "GET /dashboard/sales HTTP/1.1" 200 OK
-2025-06-24 14:50:23,091 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-24 15:53:57,342 INFO sqlalchemy.engine.Engine [cached since 28.77s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 28.77s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+2025-06-24 15:53:57,347 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
+FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
+INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
+FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
+2025-06-24 15:53:57,347 INFO sqlalchemy.engine.Engine [cached since 28.77s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 28.77s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
+2025-06-24 15:53:57,356 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-24 14:50:23,162 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:__main__:正在获取订单列表...
+2025-06-24 15:53:58,177 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-24 14:50:23,165 INFO sqlalchemy.engine.Engine SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
+2025-06-24 15:53:58,177 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] ORDER BY [Bills].[BillDate] DESC
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] ORDER BY [Bills].[BillDate] DESC
+2025-06-24 15:53:58,181 INFO sqlalchemy.engine.Engine [cached since 96.77s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 96.77s ago] ()
+INFO:__main__:成功获取到 3 个订单
+2025-06-24 15:53:58,182 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:53:58,182 INFO sqlalchemy.engine.Engine [cached since 96.77s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 96.77s ago] (3,)
+2025-06-24 15:53:58,186 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:53:58,186 INFO sqlalchemy.engine.Engine [cached since 96.77s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 96.77s ago] (2,)
+2025-06-24 15:53:58,190 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:53:58,190 INFO sqlalchemy.engine.Engine [cached since 96.77s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 96.77s ago] (1,)
+INFO:     None:0 - "GET /bills HTTP/1.1" 200 OK
+2025-06-24 15:53:58,190 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:53:58,648 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:53:58,648 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:53:58,648 INFO sqlalchemy.engine.Engine [cached since 116.7s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 116.7s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:53:58,653 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:53:59,757 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:53:59,757 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:53:59,757 INFO sqlalchemy.engine.Engine [cached since 117.8s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 117.8s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:53:59,761 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:54:01,220 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:01,220 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:54:01,220 INFO sqlalchemy.engine.Engine [cached since 119.2s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 119.2s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:54:01,223 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:54:02,553 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:02,553 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:54:02,553 INFO sqlalchemy.engine.Engine [cached since 120.6s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 120.6s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:54:02,557 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:__main__:正在获取订单列表...
+2025-06-24 15:54:02,905 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:02,907 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] ORDER BY [Bills].[BillDate] DESC
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] ORDER BY [Bills].[BillDate] DESC
+2025-06-24 15:54:02,908 INFO sqlalchemy.engine.Engine [cached since 101.5s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 101.5s ago] ()
+INFO:__main__:成功获取到 3 个订单
+2025-06-24 15:54:02,910 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:54:02,910 INFO sqlalchemy.engine.Engine [cached since 101.5s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 101.5s ago] (3,)
+2025-06-24 15:54:02,912 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:54:02,912 INFO sqlalchemy.engine.Engine [cached since 101.5s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 101.5s ago] (2,)
+2025-06-24 15:54:02,912 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:54:02,915 INFO sqlalchemy.engine.Engine [cached since 101.5s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 101.5s ago] (1,)
+INFO:     None:0 - "GET /bills HTTP/1.1" 200 OK
+2025-06-24 15:54:02,915 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:54:04,494 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:04,494 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
+2025-06-24 15:54:04,494 INFO sqlalchemy.engine.Engine [cached since 35.93s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 35.93s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+2025-06-24 15:54:04,494 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-INFO:sqlalchemy.engine.Engine:SELECT TOP 5 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
+INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
 FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
-WHERE [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
-2025-06-24 14:50:23,166 INFO sqlalchemy.engine.Engine [cached since 836.2s ago] ('已完成',)
-INFO:sqlalchemy.engine.Engine:[cached since 836.2s ago] ('已完成',)
-INFO:     None:0 - "GET /dashboard/top-products?limit=5 HTTP/1.1" 200 OK
-2025-06-24 14:50:23,170 INFO sqlalchemy.engine.Engine ROLLBACK
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
+2025-06-24 15:54:04,494 INFO sqlalchemy.engine.Engine [cached since 35.92s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 35.92s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
+2025-06-24 15:54:04,502 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:54:06,218 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:06,219 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ?
+2025-06-24 15:54:06,219 INFO sqlalchemy.engine.Engine [cached since 37.65s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 37.65s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+2025-06-24 15:54:06,222 INFO sqlalchemy.engine.Engine SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
+FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
+INFO:sqlalchemy.engine.Engine:SELECT TOP 10 [Products].[Name] AS [Products_Name], sum([BillItems].[Quantity]) AS sales, sum([BillItems].[Price] * [BillItems].[Quantity]) AS revenue 
+FROM [Products] JOIN [BillItems] ON [BillItems].[ProductID] = [Products].[ProductID] JOIN [Bills] ON [Bills].[BillID] = [BillItems].[BillID] 
+WHERE [Bills].[BillDate] >= ? AND [Bills].[BillDate] <= ? AND [Bills].[Status] = ? GROUP BY [Products].[Name] ORDER BY sum([BillItems].[Quantity]) DESC
+2025-06-24 15:54:06,222 INFO sqlalchemy.engine.Engine [cached since 37.65s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:sqlalchemy.engine.Engine:[cached since 37.65s ago] (datetime.datetime(2025, 5, 25, 0, 0), datetime.datetime(2025, 6, 24, 23, 59, 59), '已结账')
+INFO:     None:0 - "GET /report/sales?start=2025-05-25&end=2025-06-24&unit=day HTTP/1.1" 200 OK
+2025-06-24 15:54:06,224 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:__main__:正在获取订单列表...
+2025-06-24 15:54:07,090 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:07,090 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] ORDER BY [Bills].[BillDate] DESC
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] ORDER BY [Bills].[BillDate] DESC
+2025-06-24 15:54:07,090 INFO sqlalchemy.engine.Engine [cached since 105.7s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 105.7s ago] ()
+INFO:__main__:成功获取到 3 个订单
+2025-06-24 15:54:07,094 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:54:07,094 INFO sqlalchemy.engine.Engine [cached since 105.7s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 105.7s ago] (3,)
+2025-06-24 15:54:07,094 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:54:07,094 INFO sqlalchemy.engine.Engine [cached since 105.7s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 105.7s ago] (2,)
+2025-06-24 15:54:07,098 INFO sqlalchemy.engine.Engine SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
+FROM [BillItems] 
+WHERE [BillItems].[BillID] = ?
+2025-06-24 15:54:07,098 INFO sqlalchemy.engine.Engine [cached since 105.7s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 105.7s ago] (1,)
+INFO:     None:0 - "GET /bills HTTP/1.1" 200 OK
+2025-06-24 15:54:07,098 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-24 15:54:07,521 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-24 15:54:07,523 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[CategoryID] AS [Products_CategoryID] 
+FROM [Products]
+2025-06-24 15:54:07,523 INFO sqlalchemy.engine.Engine [cached since 125.5s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 125.5s ago] ()
+INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
+2025-06-24 15:54:07,524 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [19436]
+INFO:     Finished server process [48720]
