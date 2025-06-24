@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -284,13 +284,13 @@ def get_dashboard_sales(db: Session = Depends(get_db)):
     # 今日销售额
     today_sales = db.query(func.sum(Bill.TotalAmount)).filter(
         Bill.BillDate >= today_start,
-        Bill.Status == '已完成'
+        (Bill.Status == '已结账')
     ).scalar() or 0
 
     # 本周销售额
     week_sales = db.query(func.sum(Bill.TotalAmount)).filter(
         Bill.BillDate >= week_start,
-        Bill.Status == '已完成'
+        (Bill.Status == '已结账')
     ).scalar() or 0
 
     # 上周销售额
@@ -299,13 +299,13 @@ def get_dashboard_sales(db: Session = Depends(get_db)):
     last_week_sales = db.query(func.sum(Bill.TotalAmount)).filter(
         Bill.BillDate >= last_week_start,
         Bill.BillDate <= last_week_end,
-        Bill.Status == '已完成'
+        (Bill.Status == '已结账')
     ).scalar() or 0
 
     # 本月销售额
     month_sales = db.query(func.sum(Bill.TotalAmount)).filter(
         Bill.BillDate >= month_start,
-        Bill.Status == '已完成'
+        (Bill.Status == '已结账')
     ).scalar() or 0
 
     return {
@@ -322,12 +322,137 @@ def get_top_products(db: Session = Depends(get_db), limit: int = 5):
         func.sum(BillItem.Quantity).label('sales')
     ).join(BillItem, BillItem.ProductID == Product.ProductID
     ).join(Bill, Bill.BillID == BillItem.BillID
-    ).filter(Bill.Status == '已完成'
+    ).filter((Bill.Status == '已结账')
     ).group_by(Product.Name
     ).order_by(func.sum(BillItem.Quantity).desc()
     ).limit(limit).all()
 
     return [{"name": r[0], "sales": int(r[1])} for r in result]
+
+@app.get("/report/sales")
+def report_sales(
+    db: Session = Depends(get_db),
+    start: str = Query(...),
+    end: str = Query(...),
+    unit: str = Query("day")
+):
+    from datetime import datetime, timedelta
+    start_date = datetime.strptime(start, "%Y-%m-%d")
+    end_date = datetime.strptime(end, "%Y-%m-%d") + timedelta(days=1) - timedelta(seconds=1)
+    orders = db.query(Bill).filter(
+        Bill.BillDate >= start_date,
+        Bill.BillDate <= end_date,
+        (Bill.Status == '已结账')
+    ).all()
+    total_sales = sum(float(o.TotalAmount) for o in orders)
+    order_count = len(orders)
+    avg_order_value = total_sales / order_count if order_count else 0
+    guest_ids = set(o.GuestID for o in orders if o.GuestID)
+    new_customers = len(guest_ids)
+    # 趋势数据
+    trend = []
+    if unit == "day":
+        delta = timedelta(days=1)
+        fmt = "%Y-%m-%d"
+    elif unit == "week":
+        delta = timedelta(weeks=1)
+        fmt = "%Y-%W"
+    else:
+        delta = None
+        fmt = "%Y-%m"
+    # 这里只返回空趋势，前端可扩展
+    # TOP商品
+    top_products = db.query(
+        Product.Name,
+        func.sum(BillItem.Quantity).label('sales'),
+        func.sum(BillItem.Price * BillItem.Quantity).label('revenue')
+    ).join(BillItem, BillItem.ProductID == Product.ProductID
+    ).join(Bill, Bill.BillID == BillItem.BillID
+    ).filter(
+        Bill.BillDate >= start_date,
+        Bill.BillDate <= end_date,
+        (Bill.Status == '已结账')
+    ).group_by(Product.Name
+    ).order_by(func.sum(BillItem.Quantity).desc()
+    ).limit(10).all()
+    return {
+        "totalSales": total_sales,
+        "orderCount": order_count,
+        "avgOrderValue": avg_order_value,
+        "newCustomers": new_customers,
+        "trend": trend,
+        "topProducts": [
+            {"rank": i+1, "name": r[0], "sales": int(r[1]), "revenue": float(r[2]), "percentage": 0} for i, r in enumerate(top_products)
+        ]
+    }
+
+@app.get("/report/inventory")
+def report_inventory(db: Session = Depends(get_db)):
+    products = db.query(Product).all()
+    total_value = sum(float(p.Price) * (p.Stock or 0) for p in products)
+    product_count = len(products)
+    low_stock = [
+        {"name": p.Name, "currentStock": p.Stock, "minStock": 10, "status": "critical" if (p.Stock or 0) <= 0 else "warning"}
+        for p in products if (p.Stock or 0) < 10
+    ]
+    low_stock_count = len(low_stock)
+    # 周转率、分布等可根据实际需求扩展
+    return {
+        "totalValue": total_value,
+        "productCount": product_count,
+        "lowStockCount": low_stock_count,
+        "turnoverRate": 0,
+        "lowStockProducts": low_stock
+    }
+
+@app.get("/report/customer")
+def report_customer(db: Session = Depends(get_db), start: str = Query(None), end: str = Query(None)):
+    from datetime import datetime
+    guests = db.query(Guest).all()
+    total_customers = len(guests)
+    # 新增客户
+    new_customers = 0
+    if start and end:
+        start_date = datetime.strptime(start, "%Y-%m-%d")
+        end_date = datetime.strptime(end, "%Y-%m-%d")
+        new_customers = db.query(Guest).filter(Guest.bills.any(Bill.BillDate >= start_date), Guest.bills.any(Bill.BillDate <= end_date)).count()
+    # 活跃客户、VIP、满意度等可根据实际需求扩展
+    return {
+        "totalCustomers": total_customers,
+        "newCustomers": new_customers,
+        "activeCustomers": 0,
+        "vipCustomers": 0,
+        "satisfaction": 100.0
+    }
+
+@app.get("/report/product")
+def report_product(db: Session = Depends(get_db), start: str = Query(None), end: str = Query(None)):
+    from datetime import datetime
+    products = db.query(Product).all()
+    total_products = len(products)
+    active_products = total_products
+    avg_price = sum(float(p.Price) for p in products) / total_products if total_products else 0
+    # 类别数
+    category_count = len(set(p.CategoryID for p in products))
+    # 销量排行
+    top_products = db.query(
+        Product.Name,
+        func.sum(BillItem.Quantity).label('sales')
+    ).join(BillItem, BillItem.ProductID == Product.ProductID
+    ).join(Bill, Bill.BillID == BillItem.BillID
+    ).filter((Bill.Status == '已结账')
+    ).group_by(Product.Name
+    ).order_by(func.sum(BillItem.Quantity).desc()
+    ).limit(10).all()
+    return {
+        "totalProducts": total_products,
+        "activeProducts": active_products,
+        "avgPrice": avg_price,
+        "categoryCount": category_count,
+        "topProducts": [
+            {"name": r[0], "sales": int(r[1])} for r in top_products
+        ]
+    }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9527) 

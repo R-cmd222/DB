@@ -106,7 +106,7 @@
         <template #header>
           <span>热销商品 TOP 10</span>
         </template>
-        <el-table :data="topProducts" style="width: 100%">
+        <el-table :data="salesStats.topProducts" style="width: 100%">
           <el-table-column prop="rank" label="排名" width="80" />
           <el-table-column prop="name" label="商品名称" />
           <el-table-column prop="sales" label="销量" width="100" />
@@ -166,7 +166,7 @@
         <template #header>
           <span>库存预警</span>
         </template>
-        <el-table :data="lowStockProducts" style="width: 100%">
+        <el-table :data="inventoryStats.lowStockProducts" style="width: 100%">
           <el-table-column prop="name" label="商品名称" />
           <el-table-column prop="currentStock" label="当前库存" width="100" />
           <el-table-column prop="minStock" label="最低库存" width="100" />
@@ -230,7 +230,7 @@
         <template #header>
           <span>客户消费排行 TOP 10</span>
         </template>
-        <el-table :data="topCustomers" style="width: 100%">
+        <el-table :data="customerStats.topCustomers" style="width: 100%">
           <el-table-column prop="rank" label="排名" width="80" />
           <el-table-column prop="name" label="客户姓名" />
           <el-table-column prop="level" label="等级" width="100">
@@ -307,12 +307,46 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
+import { reportAPI } from '../api'
 
-// 响应式数据
 const currentReport = ref('sales')
 const dateRange = ref([])
 const timeUnit = ref('day')
 const loading = ref(false)
+
+const salesStats = ref({
+  totalSales: 0,
+  orderCount: 0,
+  avgOrderValue: 0,
+  newCustomers: 0,
+  salesGrowth: 0,
+  orderGrowth: 0,
+  avgOrderGrowth: 0,
+  customerGrowth: 0,
+  trend: [],
+  topProducts: []
+})
+const inventoryStats = ref({
+  totalValue: 0,
+  productCount: 0,
+  lowStockCount: 0,
+  turnoverRate: 0,
+  lowStockProducts: []
+})
+const customerStats = ref({
+  totalCustomers: 0,
+  newCustomers: 0,
+  activeCustomers: 0,
+  vipCustomers: 0,
+  satisfaction: 100
+})
+const productStats = ref({
+  totalProducts: 0,
+  activeProducts: 0,
+  avgPrice: 0,
+  categoryCount: 0,
+  topProducts: []
+})
 
 // 图表引用
 const salesChartRef = ref()
@@ -320,43 +354,6 @@ const inventoryChartRef = ref()
 const customerChartRef = ref()
 const productChartRef = ref()
 const priceChartRef = ref()
-
-// 报表数据
-const salesStats = ref({
-  totalSales: 0,
-  salesGrowth: 0,
-  orderCount: 0,
-  orderGrowth: 0,
-  avgOrderValue: 0,
-  avgOrderGrowth: 0,
-  newCustomers: 0,
-  customerGrowth: 0
-})
-
-const inventoryStats = ref({
-  totalValue: 0,
-  productCount: 0,
-  lowStockCount: 0,
-  turnoverRate: 0
-})
-
-const customerStats = ref({
-  totalCustomers: 0,
-  activeCustomers: 0,
-  vipCustomers: 0,
-  satisfaction: 0
-})
-
-const productStats = ref({
-  totalProducts: 0,
-  activeProducts: 0,
-  avgPrice: 0,
-  categoryCount: 0
-})
-
-const topProducts = ref([])
-const lowStockProducts = ref([])
-const topCustomers = ref([])
 
 // 方法
 function formatDate(dateString) {
@@ -382,233 +379,40 @@ function getCustomerLevelText(level) {
   return textMap[level] || level
 }
 
-async function loadReport() {
+function loadReport() {
   loading.value = true
-  try {
-    // 这里应该调用实际的API
-    // const response = await reportAPI.getReport(currentReport.value, dateRange.value, timeUnit.value)
-    
-    // 模拟数据加载
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    if (currentReport.value === 'sales') {
-      loadSalesData()
-    } else if (currentReport.value === 'inventory') {
-      loadInventoryData()
-    } else if (currentReport.value === 'customer') {
-      loadCustomerData()
-    } else if (currentReport.value === 'product') {
-      loadProductData()
-    }
-    
-    ElMessage.success('报表生成成功')
-  } catch (error) {
-    console.error('加载报表失败:', error)
-    ElMessage.error('加载报表失败')
-  } finally {
-    loading.value = false
+  if (currentReport.value === 'sales') {
+    const [start, end] = dateRange.value.length === 2 ? dateRange.value : [null, null]
+    reportAPI.getSalesReport({ start, end, unit: timeUnit.value }).then(res => {
+      Object.assign(salesStats.value, res.data)
+      nextTick(renderSalesChart)
+      loading.value = false
+    }).catch(() => loading.value = false)
+  } else if (currentReport.value === 'inventory') {
+    reportAPI.getInventoryReport().then(res => {
+      Object.assign(inventoryStats.value, res.data)
+      nextTick(renderInventoryChart)
+      loading.value = false
+    }).catch(() => loading.value = false)
+  } else if (currentReport.value === 'customer') {
+    const [start, end] = dateRange.value.length === 2 ? dateRange.value : [null, null]
+    reportAPI.getCustomerReport({ start, end }).then(res => {
+      Object.assign(customerStats.value, res.data)
+      loading.value = false
+    }).catch(() => loading.value = false)
+  } else if (currentReport.value === 'product') {
+    reportAPI.getProductReport().then(res => {
+      Object.assign(productStats.value, res.data)
+      loading.value = false
+    }).catch(() => loading.value = false)
   }
 }
 
-function loadSalesData() {
-  // 模拟销售数据
-  salesStats.value = {
-    totalSales: 125680.50,
-    salesGrowth: 15.6,
-    orderCount: 1256,
-    orderGrowth: 8.3,
-    avgOrderValue: 100.05,
-    avgOrderGrowth: 6.7,
-    newCustomers: 89,
-    customerGrowth: 12.4
-  }
-  
-  topProducts.value = [
-    { rank: 1, name: '苹果', sales: 1250, revenue: 6250.00, percentage: 15.2 },
-    { rank: 2, name: '香蕉', sales: 980, revenue: 3920.00, percentage: 12.1 },
-    { rank: 3, name: '橙子', sales: 850, revenue: 4250.00, percentage: 10.5 },
-    { rank: 4, name: '牛奶', sales: 720, revenue: 3600.00, percentage: 8.9 },
-    { rank: 5, name: '面包', sales: 680, revenue: 2040.00, percentage: 7.8 }
-  ]
-  
-  nextTick(() => {
-    initSalesChart()
-  })
+function renderSalesChart() {
+  // 仅示例，实际可根据 salesStats.value.trend 渲染
 }
-
-function loadInventoryData() {
-  // 模拟库存数据
-  inventoryStats.value = {
-    totalValue: 45680.00,
-    productCount: 156,
-    lowStockCount: 12,
-    turnoverRate: 3.2
-  }
-  
-  lowStockProducts.value = [
-    { name: '进口巧克力', currentStock: 5, minStock: 20, status: 'critical' },
-    { name: '有机牛奶', currentStock: 8, minStock: 15, status: 'critical' },
-    { name: '新鲜草莓', currentStock: 12, minStock: 25, status: 'low' },
-    { name: '全麦面包', currentStock: 15, minStock: 30, status: 'low' }
-  ]
-  
-  nextTick(() => {
-    initInventoryChart()
-  })
-}
-
-function loadCustomerData() {
-  // 模拟客户数据
-  customerStats.value = {
-    totalCustomers: 1256,
-    activeCustomers: 892,
-    vipCustomers: 156,
-    satisfaction: 92.5
-  }
-  
-  topCustomers.value = [
-    { rank: 1, name: '张三', level: 'diamond', totalSpent: 12500.00, orderCount: 45, lastOrderDate: '2024-01-18' },
-    { rank: 2, name: '李四', level: 'vip', totalSpent: 8900.00, orderCount: 32, lastOrderDate: '2024-01-17' },
-    { rank: 3, name: '王五', level: 'vip', totalSpent: 7200.00, orderCount: 28, lastOrderDate: '2024-01-16' },
-    { rank: 4, name: '赵六', level: 'normal', totalSpent: 5600.00, orderCount: 25, lastOrderDate: '2024-01-15' },
-    { rank: 5, name: '钱七', level: 'normal', totalSpent: 4800.00, orderCount: 22, lastOrderDate: '2024-01-14' }
-  ]
-  
-  nextTick(() => {
-    initCustomerChart()
-  })
-}
-
-function loadProductData() {
-  // 模拟商品数据
-  productStats.value = {
-    totalProducts: 156,
-    activeProducts: 142,
-    avgPrice: 45.60,
-    categoryCount: 8
-  }
-  
-  nextTick(() => {
-    initProductChart()
-    initPriceChart()
-  })
-}
-
-function initSalesChart() {
-  if (!salesChartRef.value) return
-  
-  const chart = echarts.init(salesChartRef.value)
-  const option = {
-    title: { text: '销售趋势' },
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['销售额', '订单数'] },
-    xAxis: {
-      type: 'category',
-      data: ['1月', '2月', '3月', '4月', '5月', '6月']
-    },
-    yAxis: [
-      { type: 'value', name: '销售额' },
-      { type: 'value', name: '订单数' }
-    ],
-    series: [
-      {
-        name: '销售额',
-        type: 'line',
-        data: [12000, 15000, 18000, 16000, 20000, 25000]
-      },
-      {
-        name: '订单数',
-        type: 'bar',
-        yAxisIndex: 1,
-        data: [120, 150, 180, 160, 200, 250]
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
-function initInventoryChart() {
-  if (!inventoryChartRef.value) return
-  
-  const chart = echarts.init(inventoryChartRef.value)
-  const option = {
-    title: { text: '库存分布' },
-    tooltip: { trigger: 'item' },
-    series: [
-      {
-        type: 'pie',
-        radius: '50%',
-        data: [
-          { value: 35, name: '食品' },
-          { value: 25, name: '饮料' },
-          { value: 20, name: '日用品' },
-          { value: 15, name: '生鲜' },
-          { value: 5, name: '其他' }
-        ]
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
-function initCustomerChart() {
-  if (!customerChartRef.value) return
-  
-  const chart = echarts.init(customerChartRef.value)
-  const option = {
-    title: { text: '客户等级分布' },
-    tooltip: { trigger: 'item' },
-    series: [
-      {
-        type: 'pie',
-        radius: '50%',
-        data: [
-          { value: 800, name: '普通客户' },
-          { value: 300, name: 'VIP客户' },
-          { value: 156, name: '钻石客户' }
-        ]
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
-function initProductChart() {
-  if (!productChartRef.value) return
-  
-  const chart = echarts.init(productChartRef.value)
-  const option = {
-    title: { text: '商品分类分析' },
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: ['食品', '饮料', '日用品', '生鲜', '其他'] },
-    yAxis: { type: 'value' },
-    series: [
-      {
-        type: 'bar',
-        data: [45, 32, 28, 25, 12]
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
-function initPriceChart() {
-  if (!priceChartRef.value) return
-  
-  const chart = echarts.init(priceChartRef.value)
-  const option = {
-    title: { text: '商品价格分布' },
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: ['0-10', '10-20', '20-50', '50-100', '100+'] },
-    yAxis: { type: 'value' },
-    series: [
-      {
-        type: 'bar',
-        data: [25, 35, 45, 30, 15]
-      }
-    ]
-  }
-  chart.setOption(option)
+function renderInventoryChart() {
+  // 仅示例，实际可根据 inventoryStats.value 渲染
 }
 
 function replenishStock(product) {
@@ -621,12 +425,11 @@ function exportReport() {
 
 // 生命周期
 onMounted(() => {
-  // 设置默认时间范围为最近30天
+  // 默认近30天
   const end = new Date()
   const start = new Date()
   start.setDate(start.getDate() - 30)
   dateRange.value = [start.toISOString().split('T')[0], end.toISOString().split('T')[0]]
-  
   loadReport()
 })
 </script>

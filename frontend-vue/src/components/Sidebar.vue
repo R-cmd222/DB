@@ -22,7 +22,7 @@
     </el-menu-item>
     <el-menu-item index="/customers">
       <i class="fas fa-id-card"></i>
-      <span>会员管理</span>
+      <span>客户管理</span>
     </el-menu-item>
     <el-menu-item index="/reports">
       <i class="fas fa-chart-bar"></i>

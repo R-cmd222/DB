@@ -130,4 +130,19 @@ export const dashboardAPI = {
   }
 }
 
+export const reportAPI = {
+  getSalesReport(params) {
+    return api.get('/report/sales', { params })
+  },
+  getInventoryReport() {
+    return api.get('/report/inventory')
+  },
+  getCustomerReport(params) {
+    return api.get('/report/customer', { params })
+  },
+  getProductReport(params) {
+    return api.get('/report/product', { params })
+  }
+}
+
 export default api 
