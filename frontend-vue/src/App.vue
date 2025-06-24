@@ -30,4 +30,12 @@ watch(
   },
   { deep: true, immediate: true }
 )
-</script> 
+</script>
+
+<style>
+/* Global styles to remove default margin and prevent scrollbars */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+</style> 

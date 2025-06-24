@@ -62,15 +62,6 @@ class Guest(Base):
     
     bills = relationship("Bill", back_populates="guest")
 
-# 商品类别模型
-class Category(Base):
-    __tablename__ = "Categories"
-    
-    CategoryID = Column(Integer, primary_key=True)
-    Name = Column(String(100), nullable=False, unique=True)
-    
-    # products = relationship("Product", back_populates="category")  # 已无外键，注释掉
-
 # 商品模型
 class Product(Base):
     __tablename__ = "Products"
@@ -83,7 +74,6 @@ class Product(Base):
     LastInDate = Column(DateTime)
     Category = Column(String(50), nullable=False)
     
-    # category = relationship("Category", back_populates="products")
     bill_items = relationship("BillItem", back_populates="product")
 
 # 账单模型

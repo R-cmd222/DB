@@ -33,6 +33,8 @@ const menus = [
   { path: '/orders', label: '订单管理', icon: 'fa-list', roles: ['cashier','admin'] },
   { path: '/products', label: '商品管理', icon: 'fa-box', roles: ['stocker','admin'] },
   { path: '/inventory', label: '库存管理', icon: 'fa-warehouse', roles: ['warehouse','admin'] },
+  { path: '/customers', label: '客户管理', icon: 'fa-users', roles: ['admin'] },
+  { path: '/reports', label: '报表统计', icon: 'fa-chart-bar', roles: ['admin'] },
   { path: '/settings', label: '系统设置', icon: 'fa-cog', roles: ['cashier','stocker','warehouse','admin'] }
 ]
 

@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 import logging
 import traceback
-from models import SessionLocal, Category, Product, Employee, Guest, Bill, BillItem
+from models import SessionLocal, Product, Employee, Guest, Bill, BillItem
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +28,7 @@ class ProductBase(BaseModel):
     Name: str
     Price: float
     Stock: int
-    CategoryID: int
+    Category: str
     Unit: Optional[str] = None
 
 class ProductCreate(ProductBase):
@@ -38,16 +38,7 @@ class ProductResponse(ProductBase):
     ProductID: int
 
     class Config:
-        orm_mode = True
-
-class CategoryBase(BaseModel):
-    Name: str
-
-class CategoryResponse(CategoryBase):
-    CategoryID: int
-
-    class Config:
-        orm_mode = True
+        from_attributes = True
 
 # 简单的认证
 security = HTTPBearer()
@@ -140,12 +131,12 @@ def delete_product(
     db.commit()
     return {"message": "商品删除成功"}
 
-# 类别管理API
-@app.get("/categories", response_model=List[CategoryResponse])
+# 获取所有商品类别
+@app.get("/categories")
 def get_categories(db: Session = Depends(get_db)):
-    """获取所有类别"""
-    categories = db.query(Category).all()
-    return categories
+    """获取所有商品类别"""
+    categories = db.query(Product.Category).distinct().all()
+    return [{"CategoryID": i+1, "Name": cat[0]} for i, cat in enumerate(categories)]
 
 # 统计API
 @app.get("/stats")
@@ -361,7 +352,7 @@ def report_sales(
     total_sales = sum(float(o.TotalAmount) for o in orders)
     order_count = len(orders)
     avg_order_value = total_sales / order_count if order_count else 0
-    guest_ids = set(o.GuestID for o in orders if o.GuestID)
+    guest_ids = set(o.GuestID for o in orders if o.GuestID is not None)
     new_customers = len(guest_ids)
     # 趋势数据
     trend = []

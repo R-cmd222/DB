@@ -144,7 +144,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onActivated, watch } from 'vue'
+import { ref, onMounted, onActivated, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { statsAPI, systemAPI, dashboardAPI } from '../api'
@@ -176,29 +176,44 @@ function formatNumber(num) {
 async function loadStats() {
   loading.value = true
   try {
+    console.log('开始加载仪表板数据...')
+    
     // 检查 API 状态
     try {
       await systemAPI.healthCheck()
       apiStatus.value = 'healthy'
+      console.log('API 状态检查成功')
     } catch (error) {
+      console.error('API 状态检查失败:', error)
       apiStatus.value = 'unhealthy'
     }
+    
     // 获取统计信息
+    console.log('获取基础统计信息...')
     const response = await statsAPI.getStats()
+    console.log('基础统计信息:', response.data)
     stats.value.total_products = response.data.total_products || 0
     stats.value.total_orders = response.data.total_orders || 0
     stats.value.total_stock = response.data.total_stock || 0
     stats.value.low_stock_products = response.data.low_stock_products || 0
+    
     // 获取销售额信息
+    console.log('获取销售额信息...')
     const salesRes = await dashboardAPI.getDashboardSales()
+    console.log('销售额信息:', salesRes.data)
     stats.value.today_sales = salesRes.data.today_sales || 0
     stats.value.week_sales = salesRes.data.week_sales || 0
     stats.value.last_week_sales = salesRes.data.last_week_sales || 0
     stats.value.month_sales = salesRes.data.month_sales || 0
+    
     // 获取热销商品
+    console.log('获取热销商品...')
     const topRes = await dashboardAPI.getTopProducts(5)
+    console.log('热销商品:', topRes.data)
     topProducts.value = topRes.data
+    
     lastUpdate.value = new Date().toLocaleString()
+    console.log('仪表板数据加载完成')
     ElMessage.success('数据加载成功')
   } catch (error) {
     console.error('加载统计信息失败:', error)
@@ -216,22 +231,50 @@ function refreshCharts() {
   }, 1000)
 }
 
+// 组件挂载时加载数据
 onMounted(() => {
+  console.log('Dashboard 组件挂载')
   loadStats()
 })
 
+// 组件激活时重新加载数据（用于 keep-alive）
 onActivated(() => {
+  console.log('Dashboard 组件激活')
   loadStats()
 })
 
+// 监听路由变化
 watch(
   () => route.path,
-  (newPath) => {
+  (newPath, oldPath) => {
+    console.log('路由变化:', oldPath, '->', newPath)
     if (newPath === '/') {
-      loadStats()
+      console.log('检测到仪表板路由，重新加载数据')
+      nextTick(() => {
+        loadStats()
+      })
     }
-  }
+  },
+  { immediate: true }
 )
+
+// 监听组件可见性变化
+const handleVisibilityChange = () => {
+  if (!document.hidden && route.path === '/') {
+    console.log('页面重新可见，重新加载数据')
+    loadStats()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+})
+
+// 清理事件监听器
+import { onUnmounted } from 'vue'
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+})
 </script>
 
 <style scoped>
