@@ -1,16 +1,21 @@
 <template>
   <el-card>
-    <div style="margin-bottom: 20px;">
+    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
       <el-button type="primary" @click="showAdd = true" :loading="loading">
-        添加商品
+        <i class="fas fa-plus"></i> 添加商品
       </el-button>
       <el-button @click="loadProducts" :loading="loading">
-        刷新
+        <i class="fas fa-sync-alt"></i> 刷新
       </el-button>
     </div>
     
     <el-table :data="products" style="width: 100%" v-loading="loading">
       <el-table-column prop="ProductID" label="ID" width="60"/>
+      <el-table-column label="图片" width="60">
+        <template #default>
+          <i class="fas fa-box fa-lg" style="color:#667eea;"></i>
+        </template>
+      </el-table-column>
       <el-table-column prop="Name" label="商品名称"/>
       <el-table-column prop="Price" label="价格">
         <template #default="scope">
@@ -27,8 +32,12 @@
       <el-table-column prop="CategoryID" label="分类"/>
       <el-table-column label="操作" width="180">
         <template #default="scope">
-          <el-button size="small" @click="edit(scope.row)">编辑</el-button>
-          <el-button size="small" type="danger" @click="del(scope.row.ProductID)">删除</el-button>
+          <el-button size="small" @click="edit(scope.row)">
+            <i class="fas fa-edit"></i> 编辑
+          </el-button>
+          <el-button size="small" type="danger" @click="del(scope.row.ProductID)">
+            <i class="fas fa-trash"></i> 删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,8 +58,12 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="showAdd = false">取消</el-button>
-        <el-button type="primary" @click="addOrUpdate" :loading="submitting">确定</el-button>
+        <el-button @click="showAdd = false">
+          <i class="fas fa-times"></i> 取消
+        </el-button>
+        <el-button type="primary" @click="addOrUpdate" :loading="submitting">
+          <i class="fas fa-check"></i> 确定
+        </el-button>
       </template>
     </el-dialog>
   </el-card>
@@ -163,4 +176,11 @@ function resetForm() {
 }
 
 onMounted(loadProducts)
-</script> 
+</script>
+
+<style scoped>
+.el-table .fa-box {
+  margin: 0 auto;
+  display: block;
+}
+</style> 

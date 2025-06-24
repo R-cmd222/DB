@@ -152,11 +152,13 @@ def get_categories(db: Session = Depends(get_db)):
 def get_stats(db: Session = Depends(get_db)):
     """获取基础统计信息"""
     total_products = db.query(Product).count()
+    total_orders = db.query(Bill).count()
     total_stock = db.query(Product).with_entities(func.sum(Product.Stock)).scalar() or 0
     low_stock_products = db.query(Product).filter(Product.Stock < 10).count()
     
     return {
         "total_products": total_products,
+        "total_orders": total_orders,
         "total_stock": total_stock,
         "low_stock_products": low_stock_products
     }

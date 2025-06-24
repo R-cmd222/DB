@@ -9,14 +9,14 @@ import Reports from './views/Reports.vue'
 import Settings from './views/Settings.vue'
 
 const routes = [
-  { path: '/', component: Dashboard },
-  { path: '/cashier', component: Cashier },
-  { path: '/products', component: Products },
-  { path: '/orders', component: Orders },
-  { path: '/inventory', component: Inventory },
-  { path: '/customers', component: Customers },
-  { path: '/reports', component: Reports },
-  { path: '/settings', component: Settings }
+  { path: '/', name: 'Dashboard', component: Dashboard },
+  { path: '/cashier', name: 'Cashier', component: Cashier },
+  { path: '/products', name: 'Products', component: Products },
+  { path: '/orders', name: 'Orders', component: Orders },
+  { path: '/inventory', name: 'Inventory', component: Inventory },
+  { path: '/customers', name: 'Customers', component: Customers },
+  { path: '/reports', name: 'Reports', component: Reports },
+  { path: '/settings', name: 'Settings', component: Settings }
 ]
 
 export default createRouter({
