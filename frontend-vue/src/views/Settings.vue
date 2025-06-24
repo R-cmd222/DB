@@ -26,11 +26,33 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const theme = ref('light')
 const backingUp = ref(false)
+
+// 初始化主题
+onMounted(() => {
+  const saved = localStorage.getItem('theme')
+  if (saved === 'dark') {
+    theme.value = 'dark'
+    document.documentElement.classList.add('dark')
+  } else {
+    theme.value = 'light'
+    document.documentElement.classList.remove('dark')
+  }
+})
+
+// 监听主题切换
+watch(theme, (val) => {
+  if (val === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+  localStorage.setItem('theme', val)
+})
 
 function backupData() {
   backingUp.value = true

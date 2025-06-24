@@ -348,11 +348,12 @@ watch(
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background: #f8f9fa;
   border-radius: 10px;
   color: #95a5a6;
-  padding: 20px;
+  padding: 24px 16px 16px 16px;
+  box-sizing: border-box;
 }
 
 .chart-placeholder i {
@@ -386,15 +387,28 @@ watch(
 .top-products {
   width: 100%;
   margin-top: 15px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .product-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  padding: 8px;
-  background: white;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: #fff;
   border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(102,126,234,0.06);
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1px solid #f0f0f0;
+}
+.product-item:last-child {
+  margin-bottom: 0;
+}
+.product-item:hover {
+  box-shadow: 0 4px 12px rgba(102,126,234,0.12);
+  transform: translateY(-2px) scale(1.01);
 }
 
 .product-rank {
@@ -409,16 +423,22 @@ watch(
   font-size: 0.8rem;
   font-weight: bold;
   margin-right: 10px;
+  flex-shrink: 0;
 }
 
 .product-name {
   flex: 1;
   font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .product-sales {
   font-weight: 600;
   color: #667eea;
+  margin-left: 10px;
+  flex-shrink: 0;
 }
 
 .el-card {
