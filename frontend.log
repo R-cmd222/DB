@@ -87,27 +87,27 @@
 [2K[1A[2K[G[10%] building 
 [2K[1A[2K[G[10%] building (0/0 modules)
 [2K[1A[2K[G[10%] building (import loader vue-loader/dist/index.js)
-[2K[1A[2K[G[10%] building (0/19 modules)
-[2K[1A[2K[G[24%] building (2/29 modules)
+[2K[1A[2K[G[10%] building (1/17 modules)
+[2K[1A[2K[G[24%] building (6/19 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/pitcher.js)
+[2K[1A[2K[G[24%] building (12/296 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/templateLoader.js)
-[2K[1A[2K[G[24%] building (7/286 modules)
+[2K[1A[2K[G[24%] building (12/296 modules)
 [2K[1A[2K[G[24%] building (import loader vue-style-loader/index.js)
 [2K[1A[2K[G[24%] building (import loader css-loader/dist/cjs.js)
 [2K[1A[2K[G[24%] building (import loader postcss-loader/dist/cjs.js)
-[2K[1A[2K[G[24%] building (7/286 modules)
-[2K[1A[2K[G[24%] building (49/488 modules)
+[2K[1A[2K[G[24%] building (12/296 modules)
+[2K[1A[2K[G[24%] building (48/503 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/stylePostLoader.js)
-[2K[1A[2K[G[24%] building (51/518 modules)
-[2K[1A[2K[G[24%] building (72/572 modules)
-[2K[1A[2K[G[38%] building (79/578 modules)
-[2K[1A[2K[G[38%] building (174/672 modules)
-[2K[1A[2K[G[51%] building (218/760 modules)
-[2K[1A[2K[G[51%] building (463/981 modules)
-[2K[1A[2K[G[51%] building (600/1454 modules)
-[2K[1A[2K[G[51%] building (672/1652 modules)
-[2K[1A[2K[G[51%] building (961/1921 modules)
-[2K[1A[2K[G[51%] building (1376/2067 modules)
+[2K[1A[2K[G[24%] building (63/542 modules)
+[2K[1A[2K[G[38%] building (76/569 modules)
+[2K[1A[2K[G[38%] building (153/661 modules)
+[2K[1A[2K[G[51%] building (197/698 modules)
+[2K[1A[2K[G[51%] building (433/837 modules)
+[2K[1A[2K[G[51%] building (619/1381 modules)
+[2K[1A[2K[G[51%] building (782/1549 modules)
+[2K[1A[2K[G[51%] building (1236/1890 modules)
+[2K[1A[2K[G[51%] building (1391/2089 modules)
 [2K[1A[2K[G[65%] building (2158/2158 modules)
 [2K[1A[2K[G[65%] building 
 [2K[1A[2K[G[69%] building (finish)
@@ -188,12 +188,12 @@ onPlugin)
 [2K[1A[2K[G[94%] sealing (after seal)
 [2K[1A[2K[G[95%] emitting (emit)
 [2K[1A[2K[G[98%] emitting (after emit)
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[G DONE  Compiled successfully in 7841ms15:44:43
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[G DONE  Compiled successfully in 7807ms16:43:06
 
-Build finished at 15:44:43 by 0.000s
+Build finished at 16:43:06 by 0.000s
 [2K[1A[2K[G
   App running at:
   - Local:   http://localhost:9528/ 
@@ -202,17 +202,17 @@ Build finished at 15:44:43 by 0.000s
   Note that the development build is not optimized.
   To create a production build, run npm run build.
 
-Build finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:44:43 by 0.000s
-[2K[1A[2K[GBuild finished at 15:47:51 by 0.000s
-[2K[1A[2K[GBuild finished at 15:47:51 by 0.000s
-[2K[1A[2K[GBuild finished at 15:47:51 by 0.000s
-[2K[1A[2K[GBuild finished at 15:47:51 by 0.000s
-[2K[1A[2K[GBuild finished at 15:47:51 by 0.000s
-[2K[1A[2K[GÖÕÖ¹Åú´¦Àí²Ù×÷Âð(Y/N)? 
+Build finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GBuild finished at 16:43:06 by 0.000s
+[2K[1A[2K[GÖÕÖ¹Åú´¦Àí²Ù×÷Âð(Y/N)? Build finished at 16:44:07 by 0.000s
+[2K[1A[2K[GBuild finished at 16:44:07 by 0.000s
+[2K[1A[2K[GBuild finished at 16:44:07 by 0.000s
+[2K[1A[2K[GBuild finished at 16:44:07 by 0.000s
+[2K[1A[2K[GBuild finished at 16:44:07 by 0.000s
+[2K[1A[2K[G

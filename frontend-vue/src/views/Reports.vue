@@ -43,11 +43,6 @@
             生成报表
           </el-button>
         </el-col>
-        <el-col :span="4">
-          <el-button @click="exportReport">
-            导出报表
-          </el-button>
-        </el-col>
       </el-row>
     </el-card>
     
@@ -818,10 +813,6 @@ async function confirmReplenish() {
   } catch (e) {
     ElMessage.error('补货失败')
   }
-}
-
-function exportReport() {
-  ElMessage.success('报表导出成功')
 }
 
 // 生命周期
