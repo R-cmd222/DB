@@ -70,24 +70,7 @@
               </el-button>
             </div>
           </template>
-          <div class="chart-placeholder">
-            <i class="fas fa-chart-line"></i>
-            <p>销售数据图表</p>
-            <div class="chart-data">
-              <div class="data-item">
-                <span>本周销售额</span>
-                <span class="data-value">¥{{ formatNumber(stats.week_sales) }}</span>
-              </div>
-              <div class="data-item">
-                <span>上周销售额</span>
-                <span class="data-value">¥{{ formatNumber(stats.last_week_sales) }}</span>
-              </div>
-              <div class="data-item">
-                <span>本月销售额</span>
-                <span class="data-value">¥{{ formatNumber(stats.month_sales) }}</span>
-              </div>
-            </div>
-          </div>
+          <div ref="salesChartRef" style="height: 300px;"></div>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -97,17 +80,7 @@
               <span>热销商品</span>
             </div>
           </template>
-          <div class="chart-placeholder">
-            <i class="fas fa-chart-pie"></i>
-            <p>商品销售占比</p>
-            <div class="top-products">
-              <div class="product-item" v-for="(product, index) in topProducts" :key="index">
-                <span class="product-rank">{{ index + 1 }}</span>
-                <span class="product-name">{{ product.name }}</span>
-                <span class="product-sales">{{ product.sales }}件</span>
-              </div>
-            </div>
-          </div>
+          <div ref="topProductsChartRef" style="height: 300px;"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -147,6 +120,7 @@
 import { ref, onMounted, onActivated, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import * as echarts from 'echarts'
 import { statsAPI, systemAPI, dashboardAPI } from '../api'
 
 const route = useRoute()
@@ -167,6 +141,10 @@ const apiStatus = ref('unknown')
 const lastUpdate = ref('')
 
 const topProducts = ref([])
+
+// 图表引用
+const salesChartRef = ref()
+const topProductsChartRef = ref()
 
 function formatNumber(num) {
   if (num === null || num === undefined) return '0'
@@ -214,6 +192,13 @@ async function loadStats() {
     
     lastUpdate.value = new Date().toLocaleString()
     console.log('仪表板数据加载完成')
+    
+    // 渲染图表
+    nextTick(() => {
+      renderSalesChart()
+      renderTopProductsChart()
+    })
+    
     ElMessage.success('数据加载成功')
   } catch (error) {
     console.error('加载统计信息失败:', error)
@@ -223,12 +208,146 @@ async function loadStats() {
   }
 }
 
+function renderSalesChart() {
+  if (!salesChartRef.value) return
+  
+  const chart = echarts.init(salesChartRef.value)
+  
+  const option = {
+    title: {
+      text: '销售趋势对比',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {
+      data: ['本周', '上周', '本月'],
+      top: 30
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: ['销售额']
+    },
+    yAxis: {
+      type: 'value',
+      name: '销售额 (¥)'
+    },
+    series: [
+      {
+        name: '本周',
+        type: 'bar',
+        data: [stats.value.week_sales],
+        itemStyle: { color: '#409EFF' }
+      },
+      {
+        name: '上周',
+        type: 'bar',
+        data: [stats.value.last_week_sales],
+        itemStyle: { color: '#67C23A' }
+      },
+      {
+        name: '本月',
+        type: 'bar',
+        data: [stats.value.month_sales],
+        itemStyle: { color: '#E6A23C' }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
+}
+
+function renderTopProductsChart() {
+  if (!topProductsChartRef.value) return
+  
+  const chart = echarts.init(topProductsChartRef.value)
+  
+  const option = {
+    title: {
+      text: '热销商品排行',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: topProducts.value.map(item => item.name),
+      axisLabel: {
+        rotate: 45
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '销量'
+    },
+    series: [
+      {
+        name: '销量',
+        type: 'bar',
+        data: topProducts.value.map(item => item.sales),
+        itemStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#409EFF' },
+              { offset: 1, color: '#67C23A' }
+            ]
+          }
+        }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
+}
+
 function refreshCharts() {
   chartLoading.value = true
-  setTimeout(() => {
+  loadStats().finally(() => {
     chartLoading.value = false
-    ElMessage.success('图表数据已更新')
-  }, 1000)
+  })
 }
 
 // 组件挂载时加载数据

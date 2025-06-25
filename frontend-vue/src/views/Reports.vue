@@ -338,14 +338,17 @@ const customerStats = ref({
   newCustomers: 0,
   activeCustomers: 0,
   vipCustomers: 0,
-  satisfaction: 100
+  satisfaction: 100,
+  topCustomers: []
 })
 const productStats = ref({
   totalProducts: 0,
   activeProducts: 0,
   avgPrice: 0,
   categoryCount: 0,
-  topProducts: []
+  topProducts: [],
+  categorySales: [],
+  priceRanges: []
 })
 
 // 图表引用
@@ -398,11 +401,16 @@ function loadReport() {
     const [start, end] = dateRange.value.length === 2 ? dateRange.value : [null, null]
     statsAPI.getCustomerReport(start, end).then(res => {
       Object.assign(customerStats.value, res.data)
+      nextTick(renderCustomerChart)
       loading.value = false
     }).catch(() => loading.value = false)
   } else if (currentReport.value === 'product') {
     statsAPI.getProductReport().then(res => {
       Object.assign(productStats.value, res.data)
+      nextTick(() => {
+        renderProductChart()
+        renderPriceChart()
+      })
       loading.value = false
     }).catch(() => loading.value = false)
   }
@@ -634,7 +642,7 @@ function renderProductChart() {
   if (!productChartRef.value) return
   
   const chart = echarts.init(productChartRef.value)
-  const topProducts = productStats.value.topProducts || []
+  const categorySales = productStats.value.categorySales || []
   
   const option = {
     title: {
@@ -659,7 +667,7 @@ function renderProductChart() {
     },
     xAxis: {
       type: 'category',
-      data: topProducts.map(item => item.name),
+      data: categorySales.map(item => item.name),
       axisLabel: {
         rotate: 45
       }
@@ -672,7 +680,7 @@ function renderProductChart() {
       {
         name: '销量',
         type: 'bar',
-        data: topProducts.map(item => item.sales),
+        data: categorySales.map(item => item.sales),
         itemStyle: {
           color: {
             type: 'linear',
@@ -702,15 +710,7 @@ function renderPriceChart() {
   if (!priceChartRef.value) return
   
   const chart = echarts.init(priceChartRef.value)
-  
-  // 模拟价格分布数据
-  const priceRanges = [
-    { range: '0-10元', count: 15 },
-    { range: '10-20元', count: 25 },
-    { range: '20-50元', count: 30 },
-    { range: '50-100元', count: 20 },
-    { range: '100元以上', count: 10 }
-  ]
+  const priceRanges = productStats.value.priceRanges || []
   
   const option = {
     title: {

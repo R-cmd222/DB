@@ -635,14 +635,39 @@ def report_customer(db: Session = Depends(get_db), start: str = Query(None), end
     # 活跃客户（有订单的客户）
     active_customers = db.query(Guest).filter(Guest.bills.any()).count()
     
+    # 客户消费排行TOP 10
+    top_customers = db.query(
+        Guest.Name,
+        Guest.Level,
+        func.sum(Bill.TotalAmount).label('total_spent'),
+        func.count(Bill.BillID).label('order_count'),
+        func.max(Bill.BillDate).label('last_order_date')
+    ).join(Bill, Bill.GuestID == Guest.GuestID
+    ).filter(Bill.Status == '已结账'
+    ).group_by(Guest.GuestID, Guest.Name, Guest.Level
+    ).order_by(func.sum(Bill.TotalAmount).desc()
+    ).limit(10).all()
+    
+    top_customers_data = []
+    for i, customer in enumerate(top_customers):
+        top_customers_data.append({
+            "rank": i + 1,
+            "name": customer[0],
+            "level": customer[1] or 'normal',
+            "totalSpent": float(customer[2]),
+            "orderCount": int(customer[3]),
+            "lastOrderDate": customer[4].isoformat() if customer[4] else None
+        })
+    
     return {
         "totalCustomers": total_customers,
         "newCustomers": new_customers,
         "activeCustomers": active_customers,
-        "vipCustomers": vip_customers + diamond_customers,  # VIP和钻石客户总数
-        "diamondCustomers": diamond_customers,
         "normalCustomers": normal_customers,
-        "satisfaction": 100.0
+        "vipCustomers": vip_customers,
+        "diamondCustomers": diamond_customers,
+        "satisfaction": 100.0,
+        "topCustomers": top_customers_data
     }
 
 @app.get("/report/product")
@@ -654,7 +679,36 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
     avg_price = sum(float(p.Price) for p in products) / total_products if total_products else 0
     # 类别数
     category_count = len(set(p.Category for p in products))
-    # 销量排行
+    
+    # 价格分布统计
+    price_ranges = [
+        {'range': '0-10元', 'min': 0, 'max': 10, 'count': 0},
+        {'range': '10-20元', 'min': 10, 'max': 20, 'count': 0},
+        {'range': '20-50元', 'min': 20, 'max': 50, 'count': 0},
+        {'range': '50-100元', 'min': 50, 'max': 100, 'count': 0},
+        {'range': '100元以上', 'min': 100, 'max': float('inf'), 'count': 0}
+    ]
+    
+    for product in products:
+        price = float(product.Price)
+        for range_info in price_ranges:
+            if range_info['min'] <= price < range_info['max']:
+                range_info['count'] += 1
+                break
+    
+    # 按商品类别统计销量排行
+    category_sales = db.query(
+        Product.Category,
+        func.sum(BillItem.Quantity).label('sales'),
+        func.sum(BillItem.Price * BillItem.Quantity).label('revenue')
+    ).join(BillItem, BillItem.ProductID == Product.ProductID
+    ).join(Bill, Bill.BillID == BillItem.BillID
+    ).filter((Bill.Status == '已结账')
+    ).group_by(Product.Category
+    ).order_by(func.sum(BillItem.Quantity).desc()
+    ).all()
+    
+    # 商品销量排行（保留原来的功能）
     top_products = db.query(
         Product.Name,
         func.sum(BillItem.Quantity).label('sales')
@@ -664,6 +718,7 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
     ).group_by(Product.Name
     ).order_by(func.sum(BillItem.Quantity).desc()
     ).limit(10).all()
+    
     return {
         "totalProducts": total_products,
         "activeProducts": active_products,
@@ -671,6 +726,12 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
         "categoryCount": category_count,
         "topProducts": [
             {"name": r[0], "sales": int(r[1])} for r in top_products
+        ],
+        "categorySales": [
+            {"name": r[0], "sales": int(r[1]), "revenue": float(r[2])} for r in category_sales
+        ],
+        "priceRanges": [
+            {"range": r['range'], "count": r['count']} for r in price_ranges
         ]
     }
 
