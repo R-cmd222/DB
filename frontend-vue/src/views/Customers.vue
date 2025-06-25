@@ -37,13 +37,6 @@
             @keyup.enter="handleSearch"
           />
         </el-col>
-        <el-col :span="4">
-          <el-select v-model="searchForm.level" placeholder="客户等级" clearable>
-            <el-option label="普通客户" value="normal" />
-            <el-option label="VIP客户" value="vip" />
-            <el-option label="钻石客户" value="diamond" />
-          </el-select>
-        </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="resetSearch">重置</el-button>
@@ -56,28 +49,12 @@
       <el-table-column prop="id" label="ID" width="80"/>
       <el-table-column prop="name" label="客户姓名" width="120"/>
       <el-table-column prop="phone" label="电话" width="150"/>
-      <el-table-column prop="email" label="邮箱" width="200"/>
-      <el-table-column prop="level" label="等级" width="100">
-        <template #default="scope">
-          <el-tag :type="getLevelType(scope.row.level)">
-            {{ getLevelText(scope.row.level) }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="totalSpent" label="累计消费" width="120">
-        <template #default="scope">
-          ¥{{ Number(scope.row.totalSpent ?? 0).toFixed(2) }}
-        </template>
-      </el-table-column>
+      <el-table-column prop="membershipID" label="会员ID" width="120"/>
+      <el-table-column prop="points" label="积分" width="100"/>
       <el-table-column prop="orderCount" label="订单数" width="100"/>
       <el-table-column prop="lastOrderDate" label="最后购买" width="150">
         <template #default="scope">
           {{ formatDate(scope.row.lastOrderDate) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="createdAt" label="注册时间" width="150">
-        <template #default="scope">
-          {{ formatDate(scope.row.createdAt) }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
@@ -106,21 +83,11 @@
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入客户电话"/>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入客户邮箱"/>
+        <el-form-item label="会员ID">
+          <el-input v-model="form.membershipID" placeholder="请输入会员ID"/>
         </el-form-item>
-        <el-form-item label="客户等级" prop="level">
-          <el-select v-model="form.level" placeholder="请选择客户等级">
-            <el-option label="普通客户" value="normal" />
-            <el-option label="VIP客户" value="vip" />
-            <el-option label="钻石客户" value="diamond" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address" type="textarea" placeholder="请输入客户地址"/>
-        </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="form.notes" type="textarea" placeholder="请输入备注信息"/>
+        <el-form-item label="积分">
+          <el-input-number v-model="form.points" :min="0" placeholder="请输入积分"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -137,19 +104,11 @@
         <el-descriptions :column="2" border>
           <el-descriptions-item label="客户ID">{{ selectedCustomer.id }}</el-descriptions-item>
           <el-descriptions-item label="客户姓名">{{ selectedCustomer.name }}</el-descriptions-item>
-          <el-descriptions-item label="电话">{{ selectedCustomer.phone }}</el-descriptions-item>
-          <el-descriptions-item label="邮箱">{{ selectedCustomer.email }}</el-descriptions-item>
-          <el-descriptions-item label="客户等级">
-            <el-tag :type="getLevelType(selectedCustomer.level)">
-              {{ getLevelText(selectedCustomer.level) }}
-            </el-tag>
-          </el-descriptions-item>
-          <el-descriptions-item label="注册时间">{{ formatDate(selectedCustomer.createdAt) }}</el-descriptions-item>
-          <el-descriptions-item label="累计消费">¥{{ Number(selectedCustomer.totalSpent ?? 0).toFixed(2) }}</el-descriptions-item>
+          <el-descriptions-item label="电话">{{ selectedCustomer.phone || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="会员ID">{{ selectedCustomer.membershipID || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="积分">{{ selectedCustomer.points }}</el-descriptions-item>
           <el-descriptions-item label="订单数量">{{ selectedCustomer.orderCount }}</el-descriptions-item>
           <el-descriptions-item label="最后购买">{{ formatDate(selectedCustomer.lastOrderDate) }}</el-descriptions-item>
-          <el-descriptions-item label="地址" :span="2">{{ selectedCustomer.address || '未填写' }}</el-descriptions-item>
-          <el-descriptions-item label="备注" :span="2">{{ selectedCustomer.notes || '无' }}</el-descriptions-item>
         </el-descriptions>
         
         <!-- 订单历史 -->
@@ -190,7 +149,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import api, { billAPI } from '../api'
+import api, { billAPI, guestAPI } from '../api'
 
 // 响应式数据
 const customers = ref([])
@@ -206,8 +165,7 @@ const formRef = ref()
 // 搜索表单
 const searchForm = ref({
   name: '',
-  phone: '',
-  level: ''
+  phone: ''
 })
 
 // 客户表单
@@ -215,10 +173,8 @@ const form = ref({
   id: null,
   name: '',
   phone: '',
-  email: '',
-  level: 'normal',
-  address: '',
-  notes: ''
+  membershipID: '',
+  points: 0
 })
 
 const rules = {
@@ -227,14 +183,7 @@ const rules = {
     { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
   ],
   phone: [
-    { required: true, message: '请输入客户电话', trigger: 'blur' },
     { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码', trigger: 'blur' }
-  ],
-  email: [
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
-  ],
-  level: [
-    { required: true, message: '请选择客户等级', trigger: 'change' }
   ]
 }
 
@@ -249,11 +198,6 @@ const filteredCustomers = computed(() => {
   if (searchForm.value.phone) {
     result = result.filter(customer => 
       (customer.phone || '').includes(searchForm.value.phone)
-    )
-  }
-  if (searchForm.value.level) {
-    result = result.filter(customer => 
-      customer.level === searchForm.value.level
     )
   }
   return Array.isArray(result) ? result : []
@@ -304,7 +248,7 @@ function getOrderStatusText(status) {
 async function loadCustomers() {
   loading.value = true
   try {
-    const res = await api.get('/guests')
+    const res = await guestAPI.getGuests()
     customers.value = Array.isArray(res.data) ? res.data : []
     ElMessage.success('客户列表加载成功')
   } catch (error) {
@@ -323,8 +267,7 @@ function handleSearch() {
 function resetSearch() {
   searchForm.value = {
     name: '',
-    phone: '',
-    level: ''
+    phone: ''
   }
 }
 
@@ -376,29 +319,29 @@ async function saveCustomer() {
   try {
     if (isEdit.value) {
       // 更新客户
-      // await customerAPI.updateCustomer(form.value.id, form.value)
-      const index = customers.value.findIndex(c => c.id === form.value.id)
-      if (index !== -1) {
-        customers.value[index] = { ...customers.value[index], ...form.value }
+      const updateData = {
+        Name: form.value.name,
+        Phone: form.value.phone || None,
+        MembershipID: form.value.membershipID || None,
+        Points: form.value.points || 0
       }
+      await guestAPI.updateGuest(form.value.id, updateData)
       ElMessage.success('客户更新成功')
     } else {
       // 添加客户
-      const newCustomer = {
-        ...form.value,
-        id: Date.now(),
-        totalSpent: 0,
-        orderCount: 0,
-        lastOrderDate: null,
-        createdAt: new Date().toISOString()
+      const createData = {
+        Name: form.value.name,
+        Phone: form.value.phone || None,
+        MembershipID: form.value.membershipID || None,
+        Points: form.value.points || 0
       }
-      // await customerAPI.createCustomer(newCustomer)
-      customers.value.unshift(newCustomer)
+      await guestAPI.createGuest(createData)
       ElMessage.success('客户添加成功')
     }
     
     showAdd.value = false
     resetForm()
+    await loadCustomers() // 重新加载客户列表
   } catch (error) {
     console.error('保存客户失败:', error)
     ElMessage.error('保存客户失败: ' + (error.response?.data?.detail || error.message))
@@ -415,13 +358,9 @@ async function deleteCustomer(id) {
       type: 'warning'
     })
     
-    // await customerAPI.deleteCustomer(id)
-    const index = customers.value.findIndex(c => c.id === id)
-    if (index !== -1) {
-      customers.value.splice(index, 1)
-    }
-    
+    await guestAPI.deleteGuest(id)
     ElMessage.success('删除成功')
+    await loadCustomers() // 重新加载客户列表
   } catch (error) {
     if (error !== 'cancel') {
       console.error('删除失败:', error)
@@ -435,10 +374,8 @@ function resetForm() {
     id: null,
     name: '',
     phone: '',
-    email: '',
-    level: 'normal',
-    address: '',
-    notes: ''
+    membershipID: '',
+    points: 0
   })
   isEdit.value = false
   if (formRef.value) {

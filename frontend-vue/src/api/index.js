@@ -1,23 +1,22 @@
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
-// 创建 axios 实例
+// 创建axios实例
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? '/api' : 'http://localhost:9527',
-  timeout: 10000,
-  headers: { 
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer admin123' 
-  }
+  baseURL: 'http://localhost:9527',
+  timeout: 10000
 })
 
 // 请求拦截器
 api.interceptors.request.use(
   config => {
-    console.log('发送请求:', config.url)
+    const token = sessionStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   error => {
-    console.error('请求错误:', error)
     return Promise.reject(error)
   }
 )
@@ -25,55 +24,25 @@ api.interceptors.request.use(
 // 响应拦截器
 api.interceptors.response.use(
   response => {
-    console.log('收到响应:', response.data)
     return response
   },
   error => {
-    console.error('响应错误:', error.response?.data || error.message)
+    if (error.response?.status === 401) {
+      ElMessage.error('登录已过期，请重新登录')
+      sessionStorage.clear()
+      window.location.href = '/login'
+    }
     return Promise.reject(error)
   }
 )
 
-// 商品相关 API
+// 商品API
 export const productAPI = {
-  // 获取所有商品
-  getProducts() {
-    return api.get('/products')
-  },
-  
-  // 根据ID获取商品
-  getProduct(id) {
-    return api.get(`/products/${id}`)
-  },
-  
-  // 创建商品
-  createProduct(product) {
-    const productData = {
-      Name: product.Name,
-      Price: product.Price,
-      Stock: product.Stock,
-      Category: product.Category,
-      Unit: product.Unit
-    }
-    return api.post('/products', productData)
-  },
-  
-  // 更新商品
-  updateProduct(id, product) {
-    const productData = {
-      Name: product.Name,
-      Price: product.Price,
-      Stock: product.Stock,
-      Category: product.Category,
-      Unit: product.Unit
-    }
-    return api.put(`/products/${id}`, productData)
-  },
-  
-  // 删除商品
-  deleteProduct(id) {
-    return api.delete(`/products/${id}`)
-  }
+  getProducts: () => api.get('/products'),
+  getProduct: (id) => api.get(`/products/${id}`),
+  createProduct: (data) => api.post('/products', data),
+  updateProduct: (id, data) => api.put(`/products/${id}`, data),
+  deleteProduct: (id) => api.delete(`/products/${id}`)
 }
 
 // 类别相关 API
@@ -84,12 +53,13 @@ export const categoryAPI = {
   }
 }
 
-// 统计相关 API
+// 统计API
 export const statsAPI = {
-  // 获取统计信息
-  getStats() {
-    return api.get('/stats')
-  }
+  getStats: () => api.get('/stats'),
+  getSalesReport: (start, end, unit = 'day') => api.get('/report/sales', { params: { start, end, unit } }),
+  getInventoryReport: () => api.get('/report/inventory'),
+  getCustomerReport: (start, end) => api.get('/report/customer', { params: { start, end } }),
+  getProductReport: (start, end) => api.get('/report/product', { params: { start, end } })
 }
 
 // 系统相关 API
@@ -100,22 +70,11 @@ export const systemAPI = {
   }
 }
 
-// 订单相关 API
+// 订单API
 export const billAPI = {
-  // 获取所有订单
-  getBills() {
-    return api.get('/bills')
-  },
-  
-  // 获取单个订单
-  getBill(id) {
-    return api.get(`/bills/${id}`)
-  },
-  
-  // 创建订单
-  createBill(bill) {
-    return api.post('/bills', bill)
-  }
+  getBills: () => api.get('/bills'),
+  getBill: (id) => api.get(`/bills/${id}`),
+  createBill: (data) => api.post('/bills', data)
 }
 
 // 仪表盘相关 API
@@ -130,19 +89,18 @@ export const dashboardAPI = {
   }
 }
 
-export const reportAPI = {
-  getSalesReport(params) {
-    return api.get('/report/sales', { params })
-  },
-  getInventoryReport() {
-    return api.get('/report/inventory')
-  },
-  getCustomerReport(params) {
-    return api.get('/report/customer', { params })
-  },
-  getProductReport(params) {
-    return api.get('/report/product', { params })
-  }
+// 客户API
+export const guestAPI = {
+  getGuests: () => api.get('/guests'),
+  getGuest: (id) => api.get(`/guests/${id}`),
+  createGuest: (data) => api.post('/guests', data),
+  updateGuest: (id, data) => api.put(`/guests/${id}`, data),
+  deleteGuest: (id) => api.delete(`/guests/${id}`)
+}
+
+// 员工API
+export const employeeAPI = {
+  changePassword: (data) => api.post('/change_password', data)
 }
 
 export default api 

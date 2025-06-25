@@ -1,15 +1,28 @@
 <template>
   <el-card>
-    <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+    <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
       <el-button type="primary" @click="showAdd = true" :loading="loading">
         <i class="fas fa-plus"></i> 添加商品
       </el-button>
       <el-button @click="loadProducts" :loading="loading">
         <i class="fas fa-sync-alt"></i> 刷新
       </el-button>
+      
+      <!-- 搜索框 -->
+      <el-input
+        v-model="searchKeyword"
+        placeholder="搜索商品名称或类别"
+        style="width: 250px;"
+        clearable
+        @input="filterProducts"
+      >
+        <template #prefix>
+          <i class="fas fa-search"></i>
+        </template>
+      </el-input>
     </div>
     
-    <el-table :data="products" style="width: 100%" v-loading="loading">
+    <el-table :data="filteredProducts" style="width: 100%" v-loading="loading">
       <el-table-column prop="ProductID" label="ID" width="60"/>
       <el-table-column label="图片" width="60">
         <template #default>
@@ -49,6 +62,11 @@
         </template>
       </el-table-column>
     </el-table>
+    
+    <!-- 显示搜索结果统计 -->
+    <div v-if="searchKeyword && filteredProducts.length !== products.length" style="margin-top: 10px; color: #666;">
+      找到 {{ filteredProducts.length }} 个商品（共 {{ products.length }} 个）
+    </div>
     
     <el-dialog v-model="showAdd" title="添加/编辑商品" width="500px">
       <el-form :model="form" :rules="rules" ref="formRef" label-width="80px">
@@ -98,6 +116,8 @@ const showAdd = ref(false)
 const loading = ref(false)
 const submitting = ref(false)
 const formRef = ref()
+const searchKeyword = ref('')
+const filteredProducts = ref([])
 
 const form = ref({ 
   ProductID: null, 
@@ -130,6 +150,7 @@ async function loadProducts() {
   try {
     const response = await productAPI.getProducts()
     products.value = response.data
+    filteredProducts.value = response.data // 初始化过滤后的商品列表
     ElMessage.success('商品列表加载成功')
   } catch (error) {
     console.error('加载商品失败:', error)
@@ -159,15 +180,25 @@ async function addOrUpdate() {
       await productAPI.updateProduct(form.value.ProductID, form.value)
       ElMessage.success('商品更新成功')
     } else {
-      await productAPI.createProduct(form.value)
-      ElMessage.success('商品添加成功')
+      const response = await productAPI.createProduct(form.value)
+      // 检查返回的商品ID是否与表单中的ID不同，说明是更新了现有商品
+      if (response.data.ProductID !== form.value.ProductID) {
+        ElMessage({
+          message: `商品 "${form.value.Name}" 已存在，已更新为新的价格和库存信息`,
+          type: 'warning',
+          duration: 5000
+        })
+      } else {
+        ElMessage.success('商品添加成功')
+      }
     }
     showAdd.value = false
     resetForm()
     await loadProducts()
   } catch (error) {
     console.error('操作失败:', error)
-    ElMessage.error('操作失败: ' + (error.response?.data?.detail || error.message))
+    const errorMessage = error.response?.data?.detail || error.message
+    ElMessage.error('操作失败: ' + errorMessage)
   } finally {
     submitting.value = false
   }
@@ -246,6 +277,18 @@ function resetForm() {
   })
   if (formRef.value) {
     formRef.value.resetFields()
+  }
+}
+
+function filterProducts() {
+  if (!searchKeyword.value.trim()) {
+    filteredProducts.value = products.value
+  } else {
+    const keyword = searchKeyword.value.toLowerCase().trim()
+    filteredProducts.value = products.value.filter(product => {
+      return product.Name.toLowerCase().includes(keyword) || 
+             product.Category.toLowerCase().includes(keyword)
+    })
   }
 }
 

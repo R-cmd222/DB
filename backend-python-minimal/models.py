@@ -59,6 +59,7 @@ class Guest(Base):
     Name = Column(String(100), nullable=False)
     MembershipID = Column(String(50))
     Points = Column(Integer, default=0)
+    Phone = Column(String(20))
     
     bills = relationship("Bill", back_populates="guest")
 

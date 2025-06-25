@@ -86,29 +86,29 @@
 [2K[1A[2K[G[9%] setup (compilation)
 [2K[1A[2K[G[10%] building 
 [2K[1A[2K[G[10%] building (0/0 modules)
-[2K[1A[2K[G[10%] building (4/17 modules)
-[2K[1A[2K[G[24%] building (6/18 modules)
-[2K[1A[2K[G[24%] building (import loader vue-loader/dist/index.js)
-[2K[1A[2K[G[24%] building (6/18 modules)
+[2K[1A[2K[G[10%] building (import loader vue-loader/dist/index.js)
+[2K[1A[2K[G[10%] building (0/18 modules)
+[2K[1A[2K[G[24%] building (4/29 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/pitcher.js)
-[2K[1A[2K[G[24%] building (12/276 modules)
+[2K[1A[2K[G[24%] building (11/291 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/templateLoader.js)
-[2K[1A[2K[G[24%] building (12/276 modules)
+[2K[1A[2K[G[24%] building (11/291 modules)
 [2K[1A[2K[G[24%] building (import loader vue-style-loader/index.js)
 [2K[1A[2K[G[24%] building (import loader css-loader/dist/cjs.js)
 [2K[1A[2K[G[24%] building (import loader postcss-loader/dist/cjs.js)
-[2K[1A[2K[G[24%] building (12/276 modules)
-[2K[1A[2K[G[24%] building (50/494 modules)
+[2K[1A[2K[G[24%] building (11/291 modules)
+[2K[1A[2K[G[24%] building (47/498 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/stylePostLoader.js)
-[2K[1A[2K[G[24%] building (53/536 modules)
-[2K[1A[2K[G[38%] building (67/553 modules)
-[2K[1A[2K[G[38%] building (82/644 modules)
-[2K[1A[2K[G[51%] building (209/727 modules)
-[2K[1A[2K[G[51%] building (431/845 modules)
-[2K[1A[2K[G[51%] building (619/1453 modules)
-[2K[1A[2K[G[51%] building (666/1583 modules)
-[2K[1A[2K[G[51%] building (924/1896 modules)
-[2K[1A[2K[G[51%] building (1267/2059 modules)
+[2K[1A[2K[G[24%] building (53/542 modules)
+[2K[1A[2K[G[38%] building (75/565 modules)
+[2K[1A[2K[G[38%] building (82/646 modules)
+[2K[1A[2K[G[51%] building (216/752 modules)
+[2K[1A[2K[G[51%] building (449/838 modules)
+[2K[1A[2K[G[51%] building (591/1400 modules)
+[2K[1A[2K[G[51%] building (670/1494 modules)
+[2K[1A[2K[G[51%] building (890/1812 modules)
+[2K[1A[2K[G[51%] building (1017/2000 modules)
+[2K[1A[2K[G[51%] building (1573/2119 modules)
 [2K[1A[2K[G[65%] building (2158/2158 modules)
 [2K[1A[2K[G[65%] building 
 [2K[1A[2K[G[69%] building (finish)
@@ -189,16 +189,20 @@ onPlugin)
 [2K[1A[2K[G[94%] sealing (after seal)
 [2K[1A[2K[G[95%] emitting (emit)
 [2K[1A[2K[G[98%] emitting (after emit)
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[G WARNING  Compiled with 1 warning08:12:21
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[G WARNING  Compiled with 2 warnings09:49:02
 
  warning  in ./src/views/Cashier.vue?vue&type=script&setup=true&lang=js
 
-export 'orderAPI' (imported as 'orderAPI') was not found in '../api' (possible exports: billAPI, categoryAPI, dashboardAPI, default, productAPI, reportAPI, statsAPI, systemAPI)
+export 'orderAPI' (imported as 'orderAPI') was not found in '../api' (possible exports: billAPI, categoryAPI, dashboardAPI, default, employeeAPI, guestAPI, productAPI, statsAPI, systemAPI)
 
-Build finished at 08:12:21 by 0.000s
+ warning  in ./src/views/Reports.vue?vue&type=script&setup=true&lang=js
+
+export 'reportAPI' (imported as 'reportAPI') was not found in '../api' (possible exports: billAPI, categoryAPI, dashboardAPI, default, employeeAPI, guestAPI, productAPI, statsAPI, systemAPI)
+
+Build finished at 09:49:02 by 0.000s
 [2K[1A[2K[G
   App running at:
   - Local:   http://localhost:9528/ 
@@ -207,13 +211,17 @@ Build finished at 08:12:21 by 0.000s
   Note that the development build is not optimized.
   To create a production build, run npm run build.
 
-Build finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[GBuild finished at 08:12:21 by 0.000s
-[2K[1A[2K[G(node:5684) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
-(Use `node --trace-deprecation ...` to show where the warning was created)
+Build finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
+[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
+[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
+[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
+[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
+[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
+[2K[1A[2K[GTerminate batch job (Y/N)? 

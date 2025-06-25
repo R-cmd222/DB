@@ -92,11 +92,32 @@ def create_product(
     current_user: dict = Depends(get_current_user)
 ):
     """创建新商品"""
-    db_product = Product(**product.dict())
-    db.add(db_product)
-    db.commit()
-    db.refresh(db_product)
-    return db_product
+    # 检查是否已存在相同名称的商品（不考虑价格）
+    existing_product = db.query(Product).filter(
+        Product.Name == product.Name
+    ).first()
+    
+    if existing_product:
+        # 如果商品名称相同，更新现有商品的信息
+        logger.info(f"商品 '{product.Name}' 已存在，更新商品信息")
+        
+        # 更新商品信息（保留ID，更新其他字段）
+        existing_product.Price = product.Price
+        existing_product.Stock = product.Stock
+        existing_product.Category = product.Category
+        existing_product.Unit = product.Unit
+        
+        db.commit()
+        db.refresh(existing_product)
+        
+        return existing_product
+    else:
+        # 如果商品名称不存在，创建新商品
+        db_product = Product(**product.dict())
+        db.add(db_product)
+        db.commit()
+        db.refresh(db_product)
+        return db_product
 
 @app.put("/products/{product_id}", response_model=ProductResponse)
 def update_product(
@@ -532,7 +553,31 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
     }
 
 # 客户管理API
-@app.get("/guests")
+class GuestCreate(BaseModel):
+    Name: str
+    MembershipID: Optional[str] = None
+    Points: Optional[int] = 0
+    Phone: Optional[str] = None  # 添加电话号码字段
+
+class GuestUpdate(BaseModel):
+    Name: Optional[str] = None
+    MembershipID: Optional[str] = None
+    Points: Optional[int] = None
+    Phone: Optional[str] = None  # 添加电话号码字段
+
+class GuestResponse(BaseModel):
+    id: int
+    name: str
+    membershipID: Optional[str] = None
+    points: int
+    orderCount: int
+    lastOrderDate: Optional[str] = None
+    phone: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+@app.get("/guests", response_model=List[GuestResponse])
 def get_guests(db: Session = Depends(get_db)):
     """获取所有客户详细信息"""
     guests = db.query(Guest).all()
@@ -552,15 +597,141 @@ def get_guests(db: Session = Depends(get_db)):
             "points": getattr(g, 'Points', 0),
             "orderCount": order_count,
             "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
-            # 下面字段如有可补充
-            "phone": None,
-            "email": None,
-            "level": "normal",
-            "createdAt": None,
-            "address": None,
-            "notes": None
+            "phone": getattr(g, 'Phone', None)
         })
     return result
+
+@app.post("/guests", response_model=GuestResponse)
+def create_guest(
+    guest: GuestCreate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """创建新客户"""
+    # 检查是否已存在相同姓名和电话号码的客户
+    existing_guest = None
+    if guest.Phone:
+        # 如果有电话号码，检查姓名+电话号码的组合
+        existing_guest = db.query(Guest).filter(
+            Guest.Name == guest.Name,
+            Guest.Phone == guest.Phone
+        ).first()
+    else:
+        # 如果没有电话号码，只检查姓名
+        existing_guest = db.query(Guest).filter(
+            Guest.Name == guest.Name,
+            Guest.Phone.is_(None)
+        ).first()
+    
+    if existing_guest:
+        if guest.Phone:
+            raise HTTPException(
+                status_code=400,
+                detail=f"客户 '{guest.Name}' (电话: {guest.Phone}) 已存在"
+            )
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"客户 '{guest.Name}' 已存在"
+            )
+    
+    db_guest = Guest(
+        Name=guest.Name,
+        MembershipID=guest.MembershipID,
+        Points=guest.Points or 0,
+        Phone=guest.Phone  # 添加电话号码
+    )
+    db.add(db_guest)
+    db.commit()
+    db.refresh(db_guest)
+    
+    return {
+        "id": db_guest.GuestID,
+        "name": db_guest.Name,
+        "membershipID": db_guest.MembershipID,
+        "points": db_guest.Points,
+        "orderCount": 0,
+        "lastOrderDate": None,
+        "phone": db_guest.Phone
+    }
+
+@app.put("/guests/{guest_id}", response_model=GuestResponse)
+def update_guest(
+    guest_id: int,
+    guest: GuestUpdate,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """更新客户信息"""
+    db_guest = db.query(Guest).filter(Guest.GuestID == guest_id).first()
+    if not db_guest:
+        raise HTTPException(status_code=404, detail="客户不存在")
+    
+    # 更新字段
+    if guest.Name is not None:
+        db_guest.Name = guest.Name
+    if guest.MembershipID is not None:
+        db_guest.MembershipID = guest.MembershipID
+    if guest.Points is not None:
+        db_guest.Points = guest.Points
+    if guest.Phone is not None:
+        db_guest.Phone = guest.Phone  # 更新电话号码
+    
+    db.commit()
+    db.refresh(db_guest)
+    
+    # 计算订单统计
+    bills = list(getattr(db_guest, 'bills', []))
+    order_count = len(bills)
+    last_order_date = None
+    if bills:
+        bill_dates = [b.BillDate for b in bills if hasattr(b, 'BillDate') and b.BillDate]
+        if bill_dates:
+            last_order_date = max(bill_dates)
+    
+    return {
+        "id": db_guest.GuestID,
+        "name": db_guest.Name,
+        "membershipID": db_guest.MembershipID,
+        "points": db_guest.Points,
+        "orderCount": order_count,
+        "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
+        "phone": db_guest.Phone
+    }
+
+@app.delete("/guests/{guest_id}")
+def delete_guest(
+    guest_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """删除客户"""
+    db_guest = db.query(Guest).filter(Guest.GuestID == guest_id).first()
+    if not db_guest:
+        raise HTTPException(status_code=404, detail="客户不存在")
+    
+    # 检查客户是否有关联订单
+    bills_count = db.query(Bill).filter(Bill.GuestID == guest_id).count()
+    
+    if bills_count > 0:
+        raise HTTPException(
+            status_code=400,
+            detail=f"客户 '{db_guest.Name}' 有 {bills_count} 个关联订单，无法删除。请先删除相关订单。"
+        )
+    
+    try:
+        db.delete(db_guest)
+        db.commit()
+        return {
+            "message": f"客户 '{db_guest.Name}' 删除成功",
+            "action": "deleted"
+        }
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="删除客户时发生错误，请稍后重试。"
+        )
 
 class ChangePasswordRequest(BaseModel):
     id: int

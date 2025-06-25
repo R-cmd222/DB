@@ -1,147 +1,303 @@
-INFO:     Started server process [36068]
+INFO:     Started server process [82512]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:9527 (Press CTRL+C to quit)
-2025-06-25 08:12:23,758 INFO sqlalchemy.engine.Engine SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
+2025-06-25 09:49:05,199 INFO sqlalchemy.engine.Engine SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
 INFO:sqlalchemy.engine.Engine:SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
-2025-06-25 08:12:23,758 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-06-25 09:49:05,199 INFO sqlalchemy.engine.Engine [raw sql] ()
 INFO:sqlalchemy.engine.Engine:[raw sql] ()
-2025-06-25 08:12:23,758 INFO sqlalchemy.engine.Engine SELECT schema_name()
+2025-06-25 09:49:05,201 INFO sqlalchemy.engine.Engine SELECT schema_name()
 INFO:sqlalchemy.engine.Engine:SELECT schema_name()
-2025-06-25 08:12:23,758 INFO sqlalchemy.engine.Engine [generated in 0.00034s] ()
+2025-06-25 09:49:05,201 INFO sqlalchemy.engine.Engine [generated in 0.00034s] ()
 INFO:sqlalchemy.engine.Engine:[generated in 0.00034s] ()
-2025-06-25 08:12:23,776 INFO sqlalchemy.engine.Engine SELECT CAST('test max support' AS NVARCHAR(max))
+2025-06-25 09:49:05,214 INFO sqlalchemy.engine.Engine SELECT CAST('test max support' AS NVARCHAR(max))
 INFO:sqlalchemy.engine.Engine:SELECT CAST('test max support' AS NVARCHAR(max))
-2025-06-25 08:12:23,776 INFO sqlalchemy.engine.Engine [generated in 0.00040s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00040s] ()
-2025-06-25 08:12:23,776 INFO sqlalchemy.engine.Engine SELECT 1 FROM fn_listextendedproperty(default, default, default, default, default, default, default)
+2025-06-25 09:49:05,215 INFO sqlalchemy.engine.Engine [generated in 0.00047s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00047s] ()
+2025-06-25 09:49:05,215 INFO sqlalchemy.engine.Engine SELECT 1 FROM fn_listextendedproperty(default, default, default, default, default, default, default)
 INFO:sqlalchemy.engine.Engine:SELECT 1 FROM fn_listextendedproperty(default, default, default, default, default, default, default)
-2025-06-25 08:12:23,776 INFO sqlalchemy.engine.Engine [generated in 0.00031s] ()
+2025-06-25 09:49:05,216 INFO sqlalchemy.engine.Engine [generated in 0.00031s] ()
 INFO:sqlalchemy.engine.Engine:[generated in 0.00031s] ()
-2025-06-25 08:12:23,883 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:05,278 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:23,897 INFO sqlalchemy.engine.Engine SELECT DISTINCT [Products].[Category] AS [Products_Category] 
+2025-06-25 09:49:05,283 INFO sqlalchemy.engine.Engine SELECT DISTINCT [Products].[Category] AS [Products_Category] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT DISTINCT [Products].[Category] AS [Products_Category] 
 FROM [Products]
-2025-06-25 08:12:23,898 INFO sqlalchemy.engine.Engine [generated in 0.00043s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00043s] ()
-INFO:     None:0 - "GET /categories HTTP/1.1" 200 OK
-2025-06-25 08:12:23,901 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:23,911 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:05,283 INFO sqlalchemy.engine.Engine [generated in 0.00040s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00040s] ()
+2025-06-25 09:49:05,284 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:23,912 INFO sqlalchemy.engine.Engine SELECT DISTINCT [Products].[Category] AS [Products_Category] 
+2025-06-25 09:49:05,284 INFO sqlalchemy.engine.Engine SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests]
+INFO:sqlalchemy.engine.Engine:SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests]
+2025-06-25 09:49:05,288 INFO sqlalchemy.engine.Engine [generated in 0.00069s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00069s] ()
+INFO:     127.0.0.1:54954 - "GET /categories HTTP/1.1" 200 OK
+2025-06-25 09:49:05,288 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-25 09:49:05,295 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,295 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-25 09:49:05,295 INFO sqlalchemy.engine.Engine [generated in 0.00256s] (1,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00256s] (1,)
+2025-06-25 09:49:05,295 INFO sqlalchemy.engine.Engine SELECT DISTINCT [Products].[Category] AS [Products_Category] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT DISTINCT [Products].[Category] AS [Products_Category] 
 FROM [Products]
-2025-06-25 08:12:23,913 INFO sqlalchemy.engine.Engine [cached since 0.01529s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 0.01529s ago] ()
-INFO:     None:0 - "GET /categories HTTP/1.1" 200 OK
-2025-06-25 08:12:23,917 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-25 09:49:05,295 INFO sqlalchemy.engine.Engine [cached since 0.01382s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 0.01382s ago] ()
+INFO:     127.0.0.1:54954 - "GET /categories HTTP/1.1" 200 OK
+2025-06-25 09:49:05,299 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:23,917 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:05,301 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,301 INFO sqlalchemy.engine.Engine [cached since 0.008374s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.008374s ago] (2,)
+2025-06-25 09:49:05,304 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:23,917 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
+2025-06-25 09:49:05,304 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,304 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
 FROM [Products]
-2025-06-25 08:12:23,917 INFO sqlalchemy.engine.Engine [generated in 0.00044s] ()
-INFO:sqlalchemy.engine.Engine:[generated in 0.00044s] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-25 08:12:23,917 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-25 09:49:05,307 INFO sqlalchemy.engine.Engine [cached since 0.01299s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.01299s ago] (3,)
+2025-06-25 09:49:05,307 INFO sqlalchemy.engine.Engine [generated in 0.00067s] ()
+INFO:sqlalchemy.engine.Engine:[generated in 0.00067s] ()
+2025-06-25 09:49:05,308 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,309 INFO sqlalchemy.engine.Engine [cached since 0.01547s ago] (4,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.01547s ago] (4,)
+INFO:     127.0.0.1:54954 - "GET /products HTTP/1.1" 200 OK
+2025-06-25 09:49:05,312 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,312 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:23,955 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:05,312 INFO sqlalchemy.engine.Engine [cached since 0.01937s ago] (5,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.01937s ago] (5,)
+2025-06-25 09:49:05,316 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,316 INFO sqlalchemy.engine.Engine [cached since 0.02241s ago] (6,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.02241s ago] (6,)
+2025-06-25 09:49:05,317 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:23,955 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
+2025-06-25 09:49:05,317 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
 FROM [Products]
 INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
 FROM [Products]
-2025-06-25 08:12:23,955 INFO sqlalchemy.engine.Engine [cached since 0.02979s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 0.02979s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-25 08:12:23,955 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-25 09:49:05,317 INFO sqlalchemy.engine.Engine [cached since 0.01102s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 0.01102s ago] ()
+2025-06-25 09:49:05,318 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:05,318 INFO sqlalchemy.engine.Engine [cached since 0.02462s ago] (8,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.02462s ago] (8,)
+INFO:     127.0.0.1:54954 - "GET /products HTTP/1.1" 200 OK
+2025-06-25 09:49:05,321 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:24,212 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:24,212 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-2025-06-25 08:12:24,212 INFO sqlalchemy.engine.Engine [cached since 0.2932s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 0.2932s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-25 08:12:24,222 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:54956 - "GET /guests HTTP/1.1" 200 OK
+2025-06-25 09:49:05,321 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:24,227 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:32,525 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:24,227 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-2025-06-25 08:12:24,229 INFO sqlalchemy.engine.Engine [cached since 0.3029s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 0.3029s ago] ()
-INFO:     None:0 - "GET /products HTTP/1.1" 200 OK
-2025-06-25 08:12:24,232 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-25 09:49:32,525 INFO sqlalchemy.engine.Engine SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests]
+INFO:sqlalchemy.engine.Engine:SELECT [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests]
+2025-06-25 09:49:32,525 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] ()
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] ()
+2025-06-25 09:49:32,528 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,528 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (1,)
+2025-06-25 09:49:32,529 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,529 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (2,)
+2025-06-25 09:49:32,529 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,529 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (3,)
+2025-06-25 09:49:32,532 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,532 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (4,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (4,)
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (5,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (5,)
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (6,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (6,)
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine [cached since 27.24s ago] (8,)
+INFO:sqlalchemy.engine.Engine:[cached since 27.24s ago] (8,)
+INFO:     127.0.0.1:54991 - "GET /guests HTTP/1.1" 200 OK
+2025-06-25 09:49:32,533 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:51,911 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:34,570 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:51,911 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-2025-06-25 08:12:51,911 INFO sqlalchemy.engine.Engine [cached since 27.99s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 27.99s ago] ()
-INFO:     127.0.0.1:53208 - "GET /products HTTP/1.1" 200 OK
-2025-06-25 08:12:51,974 INFO sqlalchemy.engine.Engine ROLLBACK
-INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:54,032 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:54,032 INFO sqlalchemy.engine.Engine SELECT TOP 1 [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products] 
-WHERE [Products].[ProductID] = ?
-INFO:sqlalchemy.engine.Engine:SELECT TOP 1 [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products] 
-WHERE [Products].[ProductID] = ?
-2025-06-25 08:12:54,032 INFO sqlalchemy.engine.Engine [generated in 0.00045s] (1,)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00045s] (1,)
-2025-06-25 08:12:54,032 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
-FROM (SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
-FROM [BillItems] 
-WHERE [BillItems].[ProductID] = ?) AS anon_1
-INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
-FROM (SELECT [BillItems].[BillItemID] AS [BillItems_BillItemID], [BillItems].[BillID] AS [BillItems_BillID], [BillItems].[ProductID] AS [BillItems_ProductID], [BillItems].[Quantity] AS [BillItems_Quantity], [BillItems].[Price] AS [BillItems_Price] 
-FROM [BillItems] 
-WHERE [BillItems].[ProductID] = ?) AS anon_1
-2025-06-25 08:12:54,032 INFO sqlalchemy.engine.Engine [generated in 0.00039s] (1,)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00039s] (1,)
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine UPDATE [Products] SET [Stock]=? WHERE [Products].[ProductID] = ?
-INFO:sqlalchemy.engine.Engine:UPDATE [Products] SET [Stock]=? WHERE [Products].[ProductID] = ?
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine [generated in 0.00040s] (0, 1)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00040s] (0, 1)
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine COMMIT
+2025-06-25 09:49:34,575 INFO sqlalchemy.engine.Engine SELECT TOP 1 [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests] 
+WHERE [Guests].[Name] = ? AND [Guests].[Phone] = ?
+INFO:sqlalchemy.engine.Engine:SELECT TOP 1 [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests] 
+WHERE [Guests].[Name] = ? AND [Guests].[Phone] = ?
+2025-06-25 09:49:34,575 INFO sqlalchemy.engine.Engine [generated in 0.00055s] ('统一模型测试客户', '13800138003')
+INFO:sqlalchemy.engine.Engine:[generated in 0.00055s] ('统一模型测试客户', '13800138003')
+2025-06-25 09:49:34,582 INFO sqlalchemy.engine.Engine INSERT INTO [Guests] ([Name], [MembershipID], [Points], [Phone]) OUTPUT inserted.[GuestID] VALUES (?, ?, ?, ?)
+INFO:sqlalchemy.engine.Engine:INSERT INTO [Guests] ([Name], [MembershipID], [Points], [Phone]) OUTPUT inserted.[GuestID] VALUES (?, ?, ?, ?)
+2025-06-25 09:49:34,582 INFO sqlalchemy.engine.Engine [generated in 0.00040s] ('统一模型测试客户', 'TEST001', 500, '13800138003')
+INFO:sqlalchemy.engine.Engine:[generated in 0.00040s] ('统一模型测试客户', 'TEST001', 500, '13800138003')
+2025-06-25 09:49:34,585 INFO sqlalchemy.engine.Engine COMMIT
 INFO:sqlalchemy.engine.Engine:COMMIT
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:34,587 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products] 
-WHERE [Products].[ProductID] = ?
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products] 
-WHERE [Products].[ProductID] = ?
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (1,)
-INFO:sqlalchemy.engine.Engine:[generated in 0.00034s] (1,)
-INFO:     127.0.0.1:53210 - "DELETE /products/1 HTTP/1.1" 200 OK
-2025-06-25 08:12:54,048 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-25 09:49:34,588 INFO sqlalchemy.engine.Engine SELECT [Guests].[GuestID], [Guests].[Name], [Guests].[MembershipID], [Guests].[Points], [Guests].[Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Guests].[GuestID], [Guests].[Name], [Guests].[MembershipID], [Guests].[Points], [Guests].[Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+2025-06-25 09:49:34,588 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (12,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00034s] (12,)
+INFO:     127.0.0.1:54994 - "POST /guests HTTP/1.1" 200 OK
+2025-06-25 09:49:34,592 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
-2025-06-25 08:12:56,108 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-06-25 09:49:36,611 INFO sqlalchemy.engine.Engine BEGIN (implicit)
 INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
-2025-06-25 08:12:56,108 INFO sqlalchemy.engine.Engine SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-INFO:sqlalchemy.engine.Engine:SELECT [Products].[ProductID] AS [Products_ProductID], [Products].[Name] AS [Products_Name], [Products].[Price] AS [Products_Price], [Products].[Stock] AS [Products_Stock], [Products].[Unit] AS [Products_Unit], [Products].[LastInDate] AS [Products_LastInDate], [Products].[Category] AS [Products_Category] 
-FROM [Products]
-2025-06-25 08:12:56,108 INFO sqlalchemy.engine.Engine [cached since 32.18s ago] ()
-INFO:sqlalchemy.engine.Engine:[cached since 32.18s ago] ()
-INFO:     127.0.0.1:53212 - "GET /products HTTP/1.1" 200 OK
-2025-06-25 08:12:56,108 INFO sqlalchemy.engine.Engine ROLLBACK
+2025-06-25 09:49:37,807 INFO sqlalchemy.engine.Engine SELECT TOP 1 [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT TOP 1 [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+2025-06-25 09:49:37,807 INFO sqlalchemy.engine.Engine [generated in 0.00047s] (12,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00047s] (12,)
+2025-06-25 09:49:37,820 INFO sqlalchemy.engine.Engine UPDATE [Guests] SET [Name]=?, [Points]=? WHERE [Guests].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:UPDATE [Guests] SET [Name]=?, [Points]=? WHERE [Guests].[GuestID] = ?
+2025-06-25 09:49:37,820 INFO sqlalchemy.engine.Engine [generated in 0.00045s] ('统一模型测试客户(已更新)', 1000, 12)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00045s] ('统一模型测试客户(已更新)', 1000, 12)
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine COMMIT
+INFO:sqlalchemy.engine.Engine:COMMIT
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine SELECT [Guests].[GuestID], [Guests].[Name], [Guests].[MembershipID], [Guests].[Points], [Guests].[Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Guests].[GuestID], [Guests].[Name], [Guests].[MembershipID], [Guests].[Points], [Guests].[Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine [cached since 3.237s ago] (12,)
+INFO:sqlalchemy.engine.Engine:[cached since 3.237s ago] (12,)
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine [cached since 32.53s ago] (12,)
+INFO:sqlalchemy.engine.Engine:[cached since 32.53s ago] (12,)
+INFO:     127.0.0.1:54996 - "PUT /guests/12 HTTP/1.1" 200 OK
+2025-06-25 09:49:37,823 INFO sqlalchemy.engine.Engine ROLLBACK
 INFO:sqlalchemy.engine.Engine:ROLLBACK
+2025-06-25 09:49:39,861 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+2025-06-25 09:49:39,861 INFO sqlalchemy.engine.Engine SELECT TOP 1 [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT TOP 1 [Guests].[GuestID] AS [Guests_GuestID], [Guests].[Name] AS [Guests_Name], [Guests].[MembershipID] AS [Guests_MembershipID], [Guests].[Points] AS [Guests_Points], [Guests].[Phone] AS [Guests_Phone] 
+FROM [Guests] 
+WHERE [Guests].[GuestID] = ?
+2025-06-25 09:49:39,861 INFO sqlalchemy.engine.Engine [cached since 2.048s ago] (12,)
+INFO:sqlalchemy.engine.Engine:[cached since 2.048s ago] (12,)
+2025-06-25 09:49:39,864 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?) AS anon_1
+INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
+FROM (SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?) AS anon_1
+2025-06-25 09:49:39,864 INFO sqlalchemy.engine.Engine [generated in 0.00040s] (12,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00040s] (12,)
+2025-06-25 09:49:39,864 INFO sqlalchemy.engine.Engine SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:SELECT [Bills].[BillID] AS [Bills_BillID], [Bills].[TotalAmount] AS [Bills_TotalAmount], [Bills].[Status] AS [Bills_Status], [Bills].[PaymentMethod] AS [Bills_PaymentMethod], [Bills].[BillDate] AS [Bills_BillDate], [Bills].[EmployeeID] AS [Bills_EmployeeID], [Bills].[GuestID] AS [Bills_GuestID] 
+FROM [Bills] 
+WHERE [Bills].[GuestID] = ?
+2025-06-25 09:49:39,864 INFO sqlalchemy.engine.Engine [cached since 34.58s ago] (12,)
+INFO:sqlalchemy.engine.Engine:[cached since 34.58s ago] (12,)
+2025-06-25 09:49:39,880 INFO sqlalchemy.engine.Engine DELETE FROM [Guests] WHERE [Guests].[GuestID] = ?
+INFO:sqlalchemy.engine.Engine:DELETE FROM [Guests] WHERE [Guests].[GuestID] = ?
+2025-06-25 09:49:39,880 INFO sqlalchemy.engine.Engine [generated in 0.00037s] (12,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00037s] (12,)
+2025-06-25 09:49:39,880 INFO sqlalchemy.engine.Engine COMMIT
+INFO:sqlalchemy.engine.Engine:COMMIT
+INFO:     127.0.0.1:55000 - "DELETE /guests/12 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [82512]
