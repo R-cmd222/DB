@@ -24,19 +24,27 @@
       </el-table-column>
       <el-table-column prop="Stock" label="库存">
         <template #default="scope">
-          <el-tag :type="scope.row.Stock < 10 ? 'danger' : 'success'">
-            {{ scope.row.Stock }}
+          <el-tag 
+            :type="scope.row.Stock === 0 ? 'info' : (scope.row.Stock < 10 ? 'danger' : 'success')"
+            :effect="scope.row.Stock === 0 ? 'plain' : 'light'"
+          >
+            {{ scope.row.Stock === 0 ? '已下架' : scope.row.Stock }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="CategoryID" label="分类"/>
+      <el-table-column prop="Category" label="分类"/>
       <el-table-column label="操作" width="180">
         <template #default="scope">
           <el-button size="small" @click="edit(scope.row)">
             <i class="fas fa-edit"></i> 编辑
           </el-button>
-          <el-button size="small" type="danger" @click="del(scope.row.ProductID)">
-            <i class="fas fa-trash"></i> 删除
+          <el-button 
+            size="small" 
+            :type="scope.row.Stock === 0 ? 'success' : 'danger'"
+            @click="scope.row.Stock === 0 ? reStock(scope.row) : del(scope.row.ProductID)"
+          >
+            <i :class="scope.row.Stock === 0 ? 'fas fa-undo' : 'fas fa-trash'"></i> 
+            {{ scope.row.Stock === 0 ? '重新上架' : '删除' }}
           </el-button>
         </template>
       </el-table-column>
@@ -53,8 +61,18 @@
         <el-form-item label="库存" prop="Stock">
           <el-input v-model="form.Stock" type="number" placeholder="请输入库存"/>
         </el-form-item>
-        <el-form-item label="分类" prop="CategoryID">
-          <el-input v-model="form.CategoryID" type="number" placeholder="请输入分类ID"/>
+        <el-form-item label="分类" prop="Category">
+          <el-select v-model="form.Category" placeholder="请选择分类" style="width: 100%">
+            <el-option
+              v-for="category in categories"
+              :key="category.Name"
+              :label="category.Name"
+              :value="category.Name"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="单位" prop="Unit">
+          <el-input v-model="form.Unit" placeholder="请输入单位（如：个、瓶、包）"/>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -72,9 +90,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { productAPI } from '../api'
+import { productAPI, categoryAPI } from '../api'
 
 const products = ref([])
+const categories = ref([])
 const showAdd = ref(false)
 const loading = ref(false)
 const submitting = ref(false)
@@ -85,14 +104,25 @@ const form = ref({
   Name: '', 
   Price: 0, 
   Stock: 0, 
-  CategoryID: 1 
+  Category: '',
+  Unit: ''
 })
 
 const rules = {
   Name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
   Price: [{ required: true, message: '请输入价格', trigger: 'blur' }],
   Stock: [{ required: true, message: '请输入库存', trigger: 'blur' }],
-  CategoryID: [{ required: true, message: '请输入分类ID', trigger: 'blur' }]
+  Category: [{ required: true, message: '请选择分类', trigger: 'change' }]
+}
+
+async function loadCategories() {
+  try {
+    const response = await categoryAPI.getCategories()
+    categories.value = response.data
+  } catch (error) {
+    console.error('加载分类失败:', error)
+    ElMessage.error('加载分类失败: ' + (error.response?.data?.detail || error.message))
+  }
 }
 
 async function loadProducts() {
@@ -151,13 +181,56 @@ async function del(id) {
       type: 'warning'
     })
     
-    await productAPI.deleteProduct(id)
-    ElMessage.success('删除成功')
+    const response = await productAPI.deleteProduct(id)
+    const result = response.data
+    
+    if (result.action === 'stock_zero') {
+      // 商品被引用，库存设为0
+      ElMessage({
+        message: result.message,
+        type: 'warning',
+        duration: 5000
+      })
+    } else if (result.action === 'deleted') {
+      // 商品被完全删除
+      ElMessage.success(result.message)
+    } else {
+      // 默认成功消息
+      ElMessage.success('删除成功')
+    }
+    
     await loadProducts()
   } catch (error) {
     if (error !== 'cancel') {
       console.error('删除失败:', error)
       ElMessage.error('删除失败: ' + (error.response?.data?.detail || error.message))
+    }
+  }
+}
+
+async function reStock(product) {
+  try {
+    const { value: stock } = await ElMessageBox.prompt(
+      `请输入商品 "${product.Name}" 的新库存数量`,
+      '重新上架',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^[1-9]\d*$/,
+        inputErrorMessage: '库存数量必须是正整数'
+      }
+    )
+    
+    if (stock) {
+      const updatedProduct = { ...product, Stock: parseInt(stock) }
+      await productAPI.updateProduct(product.ProductID, updatedProduct)
+      ElMessage.success(`商品 "${product.Name}" 已重新上架，库存设为 ${stock}`)
+      await loadProducts()
+    }
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.error('重新上架失败:', error)
+      ElMessage.error('重新上架失败: ' + (error.response?.data?.detail || error.message))
     }
   }
 }
@@ -168,14 +241,18 @@ function resetForm() {
     Name: '', 
     Price: 0, 
     Stock: 0, 
-    CategoryID: 1 
+    Category: '',
+    Unit: ''
   })
   if (formRef.value) {
     formRef.value.resetFields()
   }
 }
 
-onMounted(loadProducts)
+onMounted(async () => {
+  await loadCategories()
+  await loadProducts()
+})
 </script>
 
 <style scoped>

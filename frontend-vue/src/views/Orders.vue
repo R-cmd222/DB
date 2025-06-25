@@ -21,7 +21,7 @@
       <el-table-column prop="PaymentMethod" label="支付方式" width="100"/>
       <el-table-column prop="Status" label="状态" width="100">
         <template #default="scope">
-          <el-tag :type="scope.row.Status === '已完成' ? 'success' : 'warning'">
+          <el-tag :type="scope.row.Status === '已结账' ? 'success' : 'warning'">
             {{ scope.row.Status }}
           </el-tag>
         </template>
@@ -41,7 +41,7 @@
     </el-table>
     
     <!-- 订单详情对话框 -->
-    <el-dialog v-model="showDetail" title="订单详情" width="600px">
+    <el-dialog v-model="showDetail" title="订单详情" width="700px">
       <div v-if="selectedOrder">
         <el-descriptions :column="2" border>
           <el-descriptions-item label="订单ID">{{ selectedOrder.BillID }}</el-descriptions-item>
@@ -56,7 +56,8 @@
         <div style="margin-top: 20px;">
           <h4>商品清单</h4>
           <el-table :data="selectedOrder.items || []" border>
-            <el-table-column prop="ProductID" label="商品ID"/>
+            <el-table-column prop="product_name" label="商品名称" min-width="120"/>
+            <el-table-column prop="product_category" label="商品类别" width="100"/>
             <el-table-column prop="Quantity" label="数量" width="80"/>
             <el-table-column prop="Price" label="单价" width="100">
               <template #default="scope">

@@ -52,7 +52,7 @@ export const productAPI = {
       Name: product.Name,
       Price: product.Price,
       Stock: product.Stock,
-      CategoryID: product.CategoryID,
+      Category: product.Category,
       Unit: product.Unit
     }
     return api.post('/products', productData)
@@ -64,7 +64,7 @@ export const productAPI = {
       Name: product.Name,
       Price: product.Price,
       Stock: product.Stock,
-      CategoryID: product.CategoryID,
+      Category: product.Category,
       Unit: product.Unit
     }
     return api.put(`/products/${id}`, productData)

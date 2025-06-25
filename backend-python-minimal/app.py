@@ -10,6 +10,7 @@ from sqlalchemy.sql import func
 import logging
 import traceback
 from models import SessionLocal, Product, Employee, Guest, Bill, BillItem
+from sqlalchemy.exc import IntegrityError
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -127,9 +128,33 @@ def delete_product(
     if not db_product:
         raise HTTPException(status_code=404, detail="商品不存在")
 
-    db.delete(db_product)
-    db.commit()
-    return {"message": "商品删除成功"}
+    # 检查商品是否被订单引用
+    bill_items_count = db.query(BillItem).filter(BillItem.ProductID == product_id).count()
+    
+    if bill_items_count > 0:
+        # 商品被订单引用，将库存设为0而不是删除
+        db_product.Stock = 0
+        db.commit()
+        return {
+            "message": f"商品 '{db_product.Name}' 已被 {bill_items_count} 个订单引用，已将库存设为0以保留订单历史。",
+            "action": "stock_zero",
+            "referenced_count": bill_items_count
+        }
+    else:
+        # 商品未被引用，可以安全删除
+        try:
+            db.delete(db_product)
+            db.commit()
+            return {
+                "message": f"商品 '{db_product.Name}' 删除成功",
+                "action": "deleted"
+            }
+        except IntegrityError:
+            db.rollback()
+            raise HTTPException(
+                status_code=400,
+                detail="删除商品时发生错误，请稍后重试。"
+            )
 
 # 获取所有商品类别
 @app.get("/categories")
@@ -165,6 +190,8 @@ class BillItemBase(BaseModel):
 class BillItemResponse(BillItemBase):
     BillItemID: int
     BillID: int
+    product_name: Optional[str] = None
+    product_category: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -202,11 +229,33 @@ def get_bills(db: Session = Depends(get_db)):
         logger.info(f"成功获取到 {len(bills)} 个订单")
         result = []
         for bill in bills:
+            # 为每个订单项添加商品信息
+            items_with_product_info = []
+            for item in bill.items:
+                # 获取商品信息
+                product = db.query(Product).filter(Product.ProductID == item.ProductID).first()
+                item_data = {
+                    "BillItemID": item.BillItemID,
+                    "BillID": item.BillID,
+                    "ProductID": item.ProductID,
+                    "Quantity": item.Quantity,
+                    "Price": float(item.Price),
+                    "product_name": product.Name if product else "未知商品",
+                    "product_category": product.Category if product else "未知类别"
+                }
+                items_with_product_info.append(item_data)
+            
             result.append({
-                **bill.__dict__,
+                "BillID": bill.BillID,
+                "GuestID": bill.GuestID,
+                "EmployeeID": bill.EmployeeID,
+                "TotalAmount": float(bill.TotalAmount),
+                "PaymentMethod": bill.PaymentMethod,
+                "Status": bill.Status,
+                "BillDate": bill.BillDate,
                 "guest_name": bill.guest.Name if bill.guest else "散客",
                 "employee_name": bill.employee.Name if bill.employee else "",
-                "items": bill.items
+                "items": items_with_product_info
             })
         return result
     except Exception as e:
@@ -224,11 +273,34 @@ def get_bill(bill_id: int, db: Session = Depends(get_db)):
             logger.warning(f"订单 {bill_id} 不存在")
             raise HTTPException(status_code=404, detail="订单不存在")
         logger.info(f"成功获取订单 {bill_id}")
+        
+        # 为订单项添加商品信息
+        items_with_product_info = []
+        for item in bill.items:
+            # 获取商品信息
+            product = db.query(Product).filter(Product.ProductID == item.ProductID).first()
+            item_data = {
+                "BillItemID": item.BillItemID,
+                "BillID": item.BillID,
+                "ProductID": item.ProductID,
+                "Quantity": item.Quantity,
+                "Price": float(item.Price),
+                "product_name": product.Name if product else "未知商品",
+                "product_category": product.Category if product else "未知类别"
+            }
+            items_with_product_info.append(item_data)
+        
         return {
-            **bill.__dict__,
+            "BillID": bill.BillID,
+            "GuestID": bill.GuestID,
+            "EmployeeID": bill.EmployeeID,
+            "TotalAmount": float(bill.TotalAmount),
+            "PaymentMethod": bill.PaymentMethod,
+            "Status": bill.Status,
+            "BillDate": bill.BillDate,
             "guest_name": bill.guest.Name if bill.guest else "散客",
             "employee_name": bill.employee.Name if bill.employee else "",
-            "items": bill.items
+            "items": items_with_product_info
         }
     except HTTPException:
         raise
