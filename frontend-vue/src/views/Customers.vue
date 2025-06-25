@@ -38,6 +38,14 @@
           />
         </el-col>
         <el-col :span="6">
+          <el-select v-model="searchForm.level" placeholder="选择客户等级" clearable>
+            <el-option label="全部等级" value="" />
+            <el-option label="普通客户" value="normal" />
+            <el-option label="VIP客户" value="vip" />
+            <el-option label="钻石客户" value="diamond" />
+          </el-select>
+        </el-col>
+        <el-col :span="6">
           <el-button type="primary" @click="handleSearch">搜索</el-button>
           <el-button @click="resetSearch">重置</el-button>
         </el-col>
@@ -49,8 +57,21 @@
       <el-table-column prop="id" label="ID" width="80"/>
       <el-table-column prop="name" label="客户姓名" width="120"/>
       <el-table-column prop="phone" label="电话" width="150"/>
-      <el-table-column prop="membershipID" label="会员ID" width="120"/>
-      <el-table-column prop="points" label="积分" width="100"/>
+      <el-table-column prop="level" label="客户等级" width="120">
+        <template #default="scope">
+          <el-tag :type="getLevelType(scope.row.level)">
+            {{ getLevelText(scope.row.level) }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="points" label="积分" width="100">
+        <template #default="scope">
+          <span>{{ scope.row.points }}</span>
+          <el-tooltip content="积分规则：消费1元获得10积分" placement="top">
+            <el-icon style="margin-left: 5px; color: #909399;"><QuestionFilled /></el-icon>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column prop="orderCount" label="订单数" width="100"/>
       <el-table-column prop="lastOrderDate" label="最后购买" width="150">
         <template #default="scope">
@@ -74,6 +95,30 @@
       </el-table-column>
     </el-table>
     
+    <!-- 积分规则说明 -->
+    <el-card style="margin-top: 20px;">
+      <template #header>
+        <span>积分规则说明</span>
+      </template>
+      <el-descriptions :column="3" border>
+        <el-descriptions-item label="积分获取">
+          消费1元获得10积分
+        </el-descriptions-item>
+        <el-descriptions-item label="普通客户">
+          0-1999积分
+        </el-descriptions-item>
+        <el-descriptions-item label="VIP客户">
+          2000-4999积分
+        </el-descriptions-item>
+        <el-descriptions-item label="钻石客户">
+          5000积分及以上
+        </el-descriptions-item>
+        <el-descriptions-item label="晋升条件">
+          消费200元晋升VIP，消费500元晋升钻石
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+    
     <!-- 添加/编辑客户对话框 -->
     <el-dialog v-model="showAdd" :title="isEdit ? '编辑客户' : '添加客户'" width="600px">
       <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
@@ -83,8 +128,12 @@
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入客户电话"/>
         </el-form-item>
-        <el-form-item label="会员ID">
-          <el-input v-model="form.membershipID" placeholder="请输入会员ID"/>
+        <el-form-item label="客户等级" prop="level">
+          <el-select v-model="form.level" placeholder="请选择客户等级">
+            <el-option label="普通客户" value="normal" />
+            <el-option label="VIP客户" value="vip" />
+            <el-option label="钻石客户" value="diamond" />
+          </el-select>
         </el-form-item>
         <el-form-item label="积分">
           <el-input-number v-model="form.points" :min="0" placeholder="请输入积分"/>
@@ -105,7 +154,11 @@
           <el-descriptions-item label="客户ID">{{ selectedCustomer.id }}</el-descriptions-item>
           <el-descriptions-item label="客户姓名">{{ selectedCustomer.name }}</el-descriptions-item>
           <el-descriptions-item label="电话">{{ selectedCustomer.phone || '无' }}</el-descriptions-item>
-          <el-descriptions-item label="会员ID">{{ selectedCustomer.membershipID || '无' }}</el-descriptions-item>
+          <el-descriptions-item label="客户等级">
+            <el-tag :type="getLevelType(selectedCustomer.level)">
+              {{ getLevelText(selectedCustomer.level) }}
+            </el-tag>
+          </el-descriptions-item>
           <el-descriptions-item label="积分">{{ selectedCustomer.points }}</el-descriptions-item>
           <el-descriptions-item label="订单数量">{{ selectedCustomer.orderCount }}</el-descriptions-item>
           <el-descriptions-item label="最后购买">{{ formatDate(selectedCustomer.lastOrderDate) }}</el-descriptions-item>
@@ -148,7 +201,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
+import { Search, QuestionFilled } from '@element-plus/icons-vue'
 import api, { billAPI, guestAPI } from '../api'
 
 // 响应式数据
@@ -165,7 +218,8 @@ const formRef = ref()
 // 搜索表单
 const searchForm = ref({
   name: '',
-  phone: ''
+  phone: '',
+  level: ''
 })
 
 // 客户表单
@@ -173,7 +227,7 @@ const form = ref({
   id: null,
   name: '',
   phone: '',
-  membershipID: '',
+  level: 'normal',
   points: 0
 })
 
@@ -198,6 +252,11 @@ const filteredCustomers = computed(() => {
   if (searchForm.value.phone) {
     result = result.filter(customer => 
       (customer.phone || '').includes(searchForm.value.phone)
+    )
+  }
+  if (searchForm.value.level) {
+    result = result.filter(customer => 
+      customer.level === searchForm.value.level
     )
   }
   return Array.isArray(result) ? result : []
@@ -267,7 +326,8 @@ function handleSearch() {
 function resetSearch() {
   searchForm.value = {
     name: '',
-    phone: ''
+    phone: '',
+    level: ''
   }
 }
 
@@ -322,7 +382,7 @@ async function saveCustomer() {
       const updateData = {
         Name: form.value.name,
         Phone: form.value.phone || None,
-        MembershipID: form.value.membershipID || None,
+        Level: form.value.level,
         Points: form.value.points || 0
       }
       await guestAPI.updateGuest(form.value.id, updateData)
@@ -332,7 +392,7 @@ async function saveCustomer() {
       const createData = {
         Name: form.value.name,
         Phone: form.value.phone || None,
-        MembershipID: form.value.membershipID || None,
+        Level: form.value.level,
         Points: form.value.points || 0
       }
       await guestAPI.createGuest(createData)
@@ -374,7 +434,7 @@ function resetForm() {
     id: null,
     name: '',
     phone: '',
-    membershipID: '',
+    level: 'normal',
     points: 0
   })
   isEdit.value = false

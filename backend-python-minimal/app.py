@@ -339,22 +339,41 @@ def create_bill(
     """创建新订单"""
     try:
         logger.info("正在创建新订单...")
+        
+        # 处理客户信息
+        guest_id = bill.GuestID
+        if not guest_id:
+            # 如果没有提供客户ID，需要创建或查找客户
+            # 这里假设前端会传递客户信息，我们需要创建一个新的客户处理逻辑
+            # 暂时使用默认客户ID为1
+            guest_id = 1
+            logger.info(f"使用默认客户ID: {guest_id}")
+        
+        # 验证库存
+        for item in bill.items:
+            product = db.query(Product).filter(Product.ProductID == item.ProductID).first()
+            if not product:
+                raise HTTPException(status_code=400, detail=f"商品ID {item.ProductID} 不存在")
+            if (product.Stock or 0) < item.Quantity:
+                raise HTTPException(status_code=400, detail=f"商品 {product.Name} 库存不足，当前库存: {product.Stock}，需要: {item.Quantity}")
+        
         # 创建订单
         db_bill = Bill(
-            GuestID=bill.GuestID,
-            EmployeeID=bill.EmployeeID,
+            GuestID=guest_id,
+            EmployeeID=current_user.get('id', 1),  # 使用当前登录员工ID
             TotalAmount=bill.TotalAmount,
             PaymentMethod=bill.PaymentMethod,
             Status=bill.Status,
             BillDate=datetime.now()
         )
         db.add(db_bill)
-        db.commit()
-        db.refresh(db_bill)
+        db.flush()  # 获取BillID但不提交事务
         
         logger.info(f"订单 {db_bill.BillID} 创建成功，正在添加订单项...")
-        # 创建订单项
+        
+        # 创建订单项并更新库存
         for item in bill.items:
+            # 创建订单项
             db_item = BillItem(
                 BillID=db_bill.BillID,
                 ProductID=item.ProductID,
@@ -362,10 +381,24 @@ def create_bill(
                 Price=item.Price
             )
             db.add(db_item)
+            
+            # 更新库存
+            product = db.query(Product).filter(Product.ProductID == item.ProductID).first()
+            product.Stock = (product.Stock or 0) - item.Quantity
+            logger.info(f"商品 {product.Name} 库存从 {product.Stock + item.Quantity} 更新为 {product.Stock}")
         
+        # 提交所有更改
         db.commit()
-        logger.info(f"订单 {db_bill.BillID} 及其订单项创建完成")
-        return db_bill
+        db.refresh(db_bill)
+        
+        logger.info(f"订单 {db_bill.BillID} 及其订单项创建完成，库存已更新")
+        
+        # 返回完整的订单信息
+        return get_bill(db_bill.BillID, db)
+        
+    except HTTPException:
+        db.rollback()
+        raise
     except Exception as e:
         logger.error(f"创建订单时出错: {str(e)}")
         logger.error(traceback.format_exc())
@@ -437,28 +470,90 @@ def report_sales(
     from datetime import datetime, timedelta
     start_date = datetime.strptime(start, "%Y-%m-%d")
     end_date = datetime.strptime(end, "%Y-%m-%d") + timedelta(days=1) - timedelta(seconds=1)
+    
+    # 获取订单数据
     orders = db.query(Bill).filter(
         Bill.BillDate >= start_date,
         Bill.BillDate <= end_date,
         (Bill.Status == '已结账')
     ).all()
+    
     total_sales = sum(float(o.TotalAmount) for o in orders)
     order_count = len(orders)
     avg_order_value = total_sales / order_count if order_count else 0
     guest_ids = set(o.GuestID for o in orders if o.GuestID is not None)
     new_customers = len(guest_ids)
-    # 趋势数据
+    
+    # 生成趋势数据
     trend = []
     if unit == "day":
         delta = timedelta(days=1)
         fmt = "%Y-%m-%d"
+        current = start_date
+        while current <= end_date:
+            day_end = current + timedelta(days=1) - timedelta(seconds=1)
+            day_orders = [o for o in orders if current <= o.BillDate <= day_end]
+            day_sales = sum(float(o.TotalAmount) for o in day_orders)
+            day_count = len(day_orders)
+            trend.append({
+                "date": current.strftime(fmt),
+                "sales": float(day_sales),
+                "orders": day_count
+            })
+            current += delta
     elif unit == "week":
         delta = timedelta(weeks=1)
-        fmt = "%Y-%W"
-    else:
-        delta = None
-        fmt = "%Y-%m"
-    # 这里只返回空趋势，前端可扩展
+        fmt = "%Y-W%W"
+        current = start_date
+        while current <= end_date:
+            week_end = current + timedelta(weeks=1) - timedelta(seconds=1)
+            week_orders = [o for o in orders if current <= o.BillDate <= week_end]
+            week_sales = sum(float(o.TotalAmount) for o in week_orders)
+            week_count = len(week_orders)
+            trend.append({
+                "date": current.strftime(fmt),
+                "sales": float(week_sales),
+                "orders": week_count
+            })
+            current += delta
+    else:  # month
+        current = start_date
+        while current <= end_date:
+            if current.month == 12:
+                next_month = datetime(current.year + 1, 1, 1)
+            else:
+                next_month = datetime(current.year, current.month + 1, 1)
+            month_end = next_month - timedelta(seconds=1)
+            month_orders = [o for o in orders if current <= o.BillDate <= month_end]
+            month_sales = sum(float(o.TotalAmount) for o in month_orders)
+            month_count = len(month_orders)
+            trend.append({
+                "date": current.strftime("%Y-%m"),
+                "sales": float(month_sales),
+                "orders": month_count
+            })
+            current = next_month
+    
+    # 计算增长率（与上一个周期比较）
+    sales_growth = 0
+    order_growth = 0
+    avg_order_growth = 0
+    customer_growth = 0
+    
+    if len(trend) >= 2:
+        current_period = trend[-1]
+        previous_period = trend[-2]
+        
+        if previous_period["sales"] > 0:
+            sales_growth = ((current_period["sales"] - previous_period["sales"]) / previous_period["sales"]) * 100
+        if previous_period["orders"] > 0:
+            order_growth = ((current_period["orders"] - previous_period["orders"]) / previous_period["orders"]) * 100
+        if previous_period["orders"] > 0 and current_period["orders"] > 0:
+            current_avg = current_period["sales"] / current_period["orders"]
+            previous_avg = previous_period["sales"] / previous_period["orders"]
+            if previous_avg > 0:
+                avg_order_growth = ((current_avg - previous_avg) / previous_avg) * 100
+    
     # TOP商品
     top_products = db.query(
         Product.Name,
@@ -473,15 +568,31 @@ def report_sales(
     ).group_by(Product.Name
     ).order_by(func.sum(BillItem.Quantity).desc()
     ).limit(10).all()
+    
+    # 计算商品占比
+    total_revenue = sum(float(r[2]) for r in top_products)
+    top_products_with_percentage = []
+    for i, r in enumerate(top_products):
+        percentage = (float(r[2]) / total_revenue * 100) if total_revenue > 0 else 0
+        top_products_with_percentage.append({
+            "rank": i+1, 
+            "name": r[0], 
+            "sales": int(r[1]), 
+            "revenue": float(r[2]), 
+            "percentage": percentage
+        })
+    
     return {
         "totalSales": total_sales,
         "orderCount": order_count,
         "avgOrderValue": avg_order_value,
         "newCustomers": new_customers,
+        "salesGrowth": sales_growth,
+        "orderGrowth": order_growth,
+        "avgOrderGrowth": avg_order_growth,
+        "customerGrowth": customer_growth,
         "trend": trend,
-        "topProducts": [
-            {"rank": i+1, "name": r[0], "sales": int(r[1]), "revenue": float(r[2]), "percentage": 0} for i, r in enumerate(top_products)
-        ]
+        "topProducts": top_products_with_percentage
     }
 
 @app.get("/report/inventory")
@@ -508,18 +619,29 @@ def report_customer(db: Session = Depends(get_db), start: str = Query(None), end
     from datetime import datetime
     guests = db.query(Guest).all()
     total_customers = len(guests)
+    
+    # 统计各等级客户数量
+    vip_customers = db.query(Guest).filter(Guest.Level == 'vip').count()
+    diamond_customers = db.query(Guest).filter(Guest.Level == 'diamond').count()
+    normal_customers = db.query(Guest).filter(Guest.Level == 'normal').count()
+    
     # 新增客户
     new_customers = 0
     if start and end:
         start_date = datetime.strptime(start, "%Y-%m-%d")
         end_date = datetime.strptime(end, "%Y-%m-%d")
         new_customers = db.query(Guest).filter(Guest.bills.any(Bill.BillDate >= start_date), Guest.bills.any(Bill.BillDate <= end_date)).count()
-    # 活跃客户、VIP、满意度等可根据实际需求扩展
+    
+    # 活跃客户（有订单的客户）
+    active_customers = db.query(Guest).filter(Guest.bills.any()).count()
+    
     return {
         "totalCustomers": total_customers,
         "newCustomers": new_customers,
-        "activeCustomers": 0,
-        "vipCustomers": 0,
+        "activeCustomers": active_customers,
+        "vipCustomers": vip_customers + diamond_customers,  # VIP和钻石客户总数
+        "diamondCustomers": diamond_customers,
+        "normalCustomers": normal_customers,
         "satisfaction": 100.0
     }
 
@@ -555,20 +677,20 @@ def report_product(db: Session = Depends(get_db), start: str = Query(None), end:
 # 客户管理API
 class GuestCreate(BaseModel):
     Name: str
-    MembershipID: Optional[str] = None
+    Level: Optional[str] = 'normal'  # normal, vip, diamond
     Points: Optional[int] = 0
-    Phone: Optional[str] = None  # 添加电话号码字段
+    Phone: Optional[str] = None
 
 class GuestUpdate(BaseModel):
     Name: Optional[str] = None
-    MembershipID: Optional[str] = None
+    Level: Optional[str] = None  # normal, vip, diamond
     Points: Optional[int] = None
-    Phone: Optional[str] = None  # 添加电话号码字段
+    Phone: Optional[str] = None
 
 class GuestResponse(BaseModel):
     id: int
     name: str
-    membershipID: Optional[str] = None
+    level: str  # normal, vip, diamond
     points: int
     orderCount: int
     lastOrderDate: Optional[str] = None
@@ -593,7 +715,7 @@ def get_guests(db: Session = Depends(get_db)):
         result.append({
             "id": g.GuestID,
             "name": g.Name,
-            "membershipID": getattr(g, 'MembershipID', None),
+            "level": getattr(g, 'Level', 'normal'),
             "points": getattr(g, 'Points', 0),
             "orderCount": order_count,
             "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
@@ -637,7 +759,7 @@ def create_guest(
     
     db_guest = Guest(
         Name=guest.Name,
-        MembershipID=guest.MembershipID,
+        Level=guest.Level,
         Points=guest.Points or 0,
         Phone=guest.Phone  # 添加电话号码
     )
@@ -648,7 +770,7 @@ def create_guest(
     return {
         "id": db_guest.GuestID,
         "name": db_guest.Name,
-        "membershipID": db_guest.MembershipID,
+        "level": db_guest.Level,
         "points": db_guest.Points,
         "orderCount": 0,
         "lastOrderDate": None,
@@ -670,8 +792,8 @@ def update_guest(
     # 更新字段
     if guest.Name is not None:
         db_guest.Name = guest.Name
-    if guest.MembershipID is not None:
-        db_guest.MembershipID = guest.MembershipID
+    if guest.Level is not None:
+        db_guest.Level = guest.Level
     if guest.Points is not None:
         db_guest.Points = guest.Points
     if guest.Phone is not None:
@@ -692,7 +814,7 @@ def update_guest(
     return {
         "id": db_guest.GuestID,
         "name": db_guest.Name,
-        "membershipID": db_guest.MembershipID,
+        "level": db_guest.Level,
         "points": db_guest.Points,
         "orderCount": order_count,
         "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
@@ -762,6 +884,122 @@ def login(data: dict = Body(...), db: Session = Depends(get_db)):
             "position": user.Position
         }
     }
+
+# 收银台结算API
+class CashierCheckoutRequest(BaseModel):
+    customer_name: str
+    customer_phone: str
+    items: List[BillItemBase]
+    total_amount: float
+    payment_method: str = '现金'
+    discount: float = 0
+
+@app.post("/cashier/checkout", response_model=BillResponse)
+def cashier_checkout(
+    checkout_data: CashierCheckoutRequest,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    """收银台结算"""
+    try:
+        logger.info("开始收银台结算...")
+        
+        # 1. 处理客户信息 - 查找或创建客户
+        guest = db.query(Guest).filter(
+            Guest.Name == checkout_data.customer_name,
+            Guest.Phone == checkout_data.customer_phone
+        ).first()
+        
+        if not guest:
+            # 创建新客户
+            guest = Guest(
+                Name=checkout_data.customer_name,
+                Phone=checkout_data.customer_phone,
+                Level='normal',
+                Points=0
+            )
+            db.add(guest)
+            db.flush()  # 获取GuestID
+            logger.info(f"创建新客户: {guest.Name} (ID: {guest.GuestID})")
+        else:
+            logger.info(f"找到现有客户: {guest.Name} (ID: {guest.GuestID})")
+        
+        # 2. 验证库存
+        for item in checkout_data.items:
+            product = db.query(Product).filter(Product.ProductID == item.ProductID).first()
+            if not product:
+                raise HTTPException(status_code=400, detail=f"商品ID {item.ProductID} 不存在")
+            if (product.Stock or 0) < item.Quantity:
+                raise HTTPException(status_code=400, detail=f"商品 {product.Name} 库存不足，当前库存: {product.Stock}，需要: {item.Quantity}")
+        
+        # 3. 创建订单
+        db_bill = Bill(
+            GuestID=guest.GuestID,
+            EmployeeID=current_user.get('id', 1),
+            TotalAmount=checkout_data.total_amount,
+            PaymentMethod=checkout_data.payment_method,
+            Status='已结账',
+            BillDate=datetime.now()
+        )
+        db.add(db_bill)
+        db.flush()  # 获取BillID
+        
+        logger.info(f"创建订单: {db_bill.BillID}")
+        
+        # 4. 创建订单项并更新库存
+        total_points = 0
+        for item in checkout_data.items:
+            # 创建订单项
+            db_item = BillItem(
+                BillID=db_bill.BillID,
+                ProductID=item.ProductID,
+                Quantity=item.Quantity,
+                Price=item.Price
+            )
+            db.add(db_item)
+            
+            # 更新库存
+            product = db.query(Product).filter(Product.ProductID == item.ProductID).first()
+            old_stock = product.Stock or 0
+            product.Stock = old_stock - item.Quantity
+            logger.info(f"商品 {product.Name} 库存: {old_stock} -> {product.Stock}")
+        
+        # 5. 计算积分（支付金额的10倍）
+        total_points = int(checkout_data.total_amount * 10)
+        
+        # 6. 更新客户积分
+        old_points = guest.Points or 0
+        guest.Points = old_points + total_points
+        
+        # 7. 根据积分更新客户等级
+        old_level = guest.Level
+        if guest.Points >= 5000:  # 5000积分 = 500元消费 = 钻石客户
+            guest.Level = 'diamond'
+        elif guest.Points >= 2000:  # 2000积分 = 200元消费 = VIP客户
+            guest.Level = 'vip'
+        else:  # 2000积分以下 = 普通客户
+            guest.Level = 'normal'
+        
+        logger.info(f"客户 {guest.Name} 积分: {old_points} -> {guest.Points} (+{total_points})")
+        logger.info(f"客户等级: {old_level} -> {guest.Level}")
+        
+        # 8. 提交所有更改
+        db.commit()
+        db.refresh(db_bill)
+        
+        logger.info(f"收银台结算完成，订单ID: {db_bill.BillID}")
+        
+        # 9. 返回完整的订单信息
+        return get_bill(db_bill.BillID, db)
+        
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        logger.error(f"收银台结算失败: {str(e)}")
+        logger.error(traceback.format_exc())
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"收银台结算失败: {str(e)}")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=9527) 

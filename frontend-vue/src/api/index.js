@@ -89,6 +89,11 @@ export const dashboardAPI = {
   }
 }
 
+// 收银台API
+export const cashierAPI = {
+  checkout: (data) => api.post('/cashier/checkout', data)
+}
+
 // 客户API
 export const guestAPI = {
   getGuests: () => api.get('/guests'),

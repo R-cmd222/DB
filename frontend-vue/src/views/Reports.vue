@@ -307,7 +307,7 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
-import { reportAPI } from '../api'
+import { statsAPI } from '../api'
 
 const currentReport = ref('sales')
 const dateRange = ref([])
@@ -383,25 +383,25 @@ function loadReport() {
   loading.value = true
   if (currentReport.value === 'sales') {
     const [start, end] = dateRange.value.length === 2 ? dateRange.value : [null, null]
-    reportAPI.getSalesReport({ start, end, unit: timeUnit.value }).then(res => {
+    statsAPI.getSalesReport(start, end, timeUnit.value).then(res => {
       Object.assign(salesStats.value, res.data)
       nextTick(renderSalesChart)
       loading.value = false
     }).catch(() => loading.value = false)
   } else if (currentReport.value === 'inventory') {
-    reportAPI.getInventoryReport().then(res => {
+    statsAPI.getInventoryReport().then(res => {
       Object.assign(inventoryStats.value, res.data)
       nextTick(renderInventoryChart)
       loading.value = false
     }).catch(() => loading.value = false)
   } else if (currentReport.value === 'customer') {
     const [start, end] = dateRange.value.length === 2 ? dateRange.value : [null, null]
-    reportAPI.getCustomerReport({ start, end }).then(res => {
+    statsAPI.getCustomerReport(start, end).then(res => {
       Object.assign(customerStats.value, res.data)
       loading.value = false
     }).catch(() => loading.value = false)
   } else if (currentReport.value === 'product') {
-    reportAPI.getProductReport().then(res => {
+    statsAPI.getProductReport().then(res => {
       Object.assign(productStats.value, res.data)
       loading.value = false
     }).catch(() => loading.value = false)
@@ -409,10 +409,366 @@ function loadReport() {
 }
 
 function renderSalesChart() {
-  // 仅示例，实际可根据 salesStats.value.trend 渲染
+  if (!salesChartRef.value) return
+  
+  const chart = echarts.init(salesChartRef.value)
+  const trend = salesStats.value.trend || []
+  
+  const option = {
+    title: {
+      text: '销售趋势',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross'
+      }
+    },
+    legend: {
+      data: ['销售额', '订单数'],
+      top: 30
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: trend.map(item => item.date),
+      axisLabel: {
+        rotate: 45
+      }
+    },
+    yAxis: [
+      {
+        type: 'value',
+        name: '销售额 (¥)',
+        position: 'left'
+      },
+      {
+        type: 'value',
+        name: '订单数',
+        position: 'right'
+      }
+    ],
+    series: [
+      {
+        name: '销售额',
+        type: 'line',
+        data: trend.map(item => item.sales),
+        smooth: true,
+        itemStyle: {
+          color: '#409EFF'
+        },
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(64,158,255,0.3)' },
+              { offset: 1, color: 'rgba(64,158,255,0.1)' }
+            ]
+          }
+        }
+      },
+      {
+        name: '订单数',
+        type: 'bar',
+        yAxisIndex: 1,
+        data: trend.map(item => item.orders),
+        itemStyle: {
+          color: '#67C23A'
+        }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
 }
+
 function renderInventoryChart() {
-  // 仅示例，实际可根据 inventoryStats.value 渲染
+  if (!inventoryChartRef.value) return
+  
+  const chart = echarts.init(inventoryChartRef.value)
+  const products = inventoryStats.value.lowStockProducts || []
+  
+  const option = {
+    title: {
+      text: '库存分布',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: ['正常库存', '库存不足', '严重不足']
+    },
+    series: [
+      {
+        name: '库存状态',
+        type: 'pie',
+        radius: '50%',
+        data: [
+          {
+            value: inventoryStats.value.productCount - inventoryStats.value.lowStockCount,
+            name: '正常库存',
+            itemStyle: { color: '#67C23A' }
+          },
+          {
+            value: products.filter(p => p.status === 'warning').length,
+            name: '库存不足',
+            itemStyle: { color: '#E6A23C' }
+          },
+          {
+            value: products.filter(p => p.status === 'critical').length,
+            name: '严重不足',
+            itemStyle: { color: '#F56C6C' }
+          }
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
+}
+
+function renderCustomerChart() {
+  if (!customerChartRef.value) return
+  
+  const chart = echarts.init(customerChartRef.value)
+  
+  const option = {
+    title: {
+      text: '客户等级分布',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: ['普通客户', 'VIP客户', '钻石客户']
+    },
+    series: [
+      {
+        name: '客户等级',
+        type: 'pie',
+        radius: '50%',
+        data: [
+          {
+            value: customerStats.value.normalCustomers || 0,
+            name: '普通客户',
+            itemStyle: { color: '#909399' }
+          },
+          {
+            value: customerStats.value.vipCustomers || 0,
+            name: 'VIP客户',
+            itemStyle: { color: '#E6A23C' }
+          },
+          {
+            value: customerStats.value.diamondCustomers || 0,
+            name: '钻石客户',
+            itemStyle: { color: '#409EFF' }
+          }
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
+}
+
+function renderProductChart() {
+  if (!productChartRef.value) return
+  
+  const chart = echarts.init(productChartRef.value)
+  const topProducts = productStats.value.topProducts || []
+  
+  const option = {
+    title: {
+      text: '商品分类分析',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: topProducts.map(item => item.name),
+      axisLabel: {
+        rotate: 45
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '销量'
+    },
+    series: [
+      {
+        name: '销量',
+        type: 'bar',
+        data: topProducts.map(item => item.sales),
+        itemStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#409EFF' },
+              { offset: 1, color: '#67C23A' }
+            ]
+          }
+        }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
+}
+
+function renderPriceChart() {
+  if (!priceChartRef.value) return
+  
+  const chart = echarts.init(priceChartRef.value)
+  
+  // 模拟价格分布数据
+  const priceRanges = [
+    { range: '0-10元', count: 15 },
+    { range: '10-20元', count: 25 },
+    { range: '20-50元', count: 30 },
+    { range: '50-100元', count: 20 },
+    { range: '100元以上', count: 10 }
+  ]
+  
+  const option = {
+    title: {
+      text: '商品价格分布',
+      left: 'center',
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'normal'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      data: priceRanges.map(item => item.range)
+    },
+    yAxis: {
+      type: 'value',
+      name: '商品数量'
+    },
+    series: [
+      {
+        name: '商品数量',
+        type: 'bar',
+        data: priceRanges.map(item => item.count),
+        itemStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: '#F56C6C' },
+              { offset: 1, color: '#E6A23C' }
+            ]
+          }
+        }
+      }
+    ]
+  }
+  
+  chart.setOption(option)
+  
+  // 响应式处理
+  window.addEventListener('resize', () => {
+    chart.resize()
+  })
 }
 
 function replenishStock(product) {

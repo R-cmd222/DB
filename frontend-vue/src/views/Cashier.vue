@@ -124,15 +124,17 @@
         
         <!-- 客户信息 -->
         <div class="customer-section">
-          <h4>客户信息</h4>
+          <h4>客户信息 <span style="color: red;">*</span></h4>
           <el-input
             v-model="customerName"
-            placeholder="客户姓名（可选）"
+            placeholder="客户姓名（必填）"
             style="margin-bottom: 10px;"
+            required
           />
           <el-input
             v-model="customerPhone"
-            placeholder="客户电话（可选）"
+            placeholder="客户电话（必填）"
+            required
           />
         </div>
         
@@ -206,6 +208,9 @@
           <p><strong>应付金额：</strong>¥{{ finalTotal.toFixed(2) }}</p>
           <p><strong>支付方式：</strong>{{ getPaymentMethodText(paymentMethod) }}</p>
           <p v-if="customerName"><strong>客户姓名：</strong>{{ customerName }}</p>
+          <p v-if="customerPhone"><strong>客户电话：</strong>{{ customerPhone }}</p>
+          <p><strong>获得积分：</strong>{{ Math.floor(finalTotal * 10) }} 积分</p>
+          <p style="color: #909399; font-size: 12px;">积分规则：消费1元获得10积分</p>
         </div>
         
         <div class="confirm-actions">
@@ -223,7 +228,7 @@
 import { ref, computed, onMounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
-import { productAPI, orderAPI, billAPI } from '../api'
+import { productAPI, cashierAPI } from '../api'
 
 // 响应式数据
 const scanCode = ref('')
@@ -379,6 +384,17 @@ function checkout() {
     return
   }
   
+  // 验证客户信息
+  if (!customerName.value.trim()) {
+    ElMessage.error('请输入客户姓名')
+    return
+  }
+  
+  if (!customerPhone.value.trim()) {
+    ElMessage.error('请输入客户电话')
+    return
+  }
+  
   showPaymentConfirm.value = true
 }
 
@@ -396,27 +412,25 @@ async function confirmPayment() {
   processingPayment.value = true
   
   try {
-    // 创建订单数据
-    const orderData = {
-      customer_name: customerName.value || '匿名客户',
+    // 创建收银台结算数据
+    const checkoutData = {
+      customer_name: customerName.value,
       customer_phone: customerPhone.value,
       items: cartItems.value.map(item => ({
-        product_id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity
+        ProductID: item.id,
+        Quantity: item.quantity,
+        Price: item.price
       })),
-      total: finalTotal.value,
-      discount: discount.value,
-      payment_method: paymentMethod.value,
-      status: 'completed'
+      total_amount: finalTotal.value,
+      payment_method: getPaymentMethodText(paymentMethod.value),
+      discount: discount.value
     }
     
-    // 提交订单
-    await billAPI.createBill(orderData)
+    // 调用收银台结算API
+    const response = await cashierAPI.checkout(checkoutData)
     
     // 模拟支付过程
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 1000))
     
     ElMessage.success('支付成功！')
     
@@ -428,10 +442,11 @@ async function confirmPayment() {
     showPaymentConfirm.value = false
     
     // 打印小票（这里可以调用打印机API）
-    printReceipt(orderData)
+    printReceipt(response.data)
     
   } catch (error) {
-    ElMessage.error('支付失败，请重试')
+    console.error('支付失败:', error)
+    ElMessage.error('支付失败，请重试: ' + (error.response?.data?.detail || error.message))
   } finally {
     processingPayment.value = false
   }

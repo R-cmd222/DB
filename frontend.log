@@ -86,29 +86,44 @@
 [2K[1A[2K[G[9%] setup (compilation)
 [2K[1A[2K[G[10%] building 
 [2K[1A[2K[G[10%] building (0/0 modules)
+[2K[1A[2K[G[10%] building (0/4 modules)
 [2K[1A[2K[G[10%] building (import loader vue-loader/dist/index.js)
-[2K[1A[2K[G[10%] building (0/18 modules)
-[2K[1A[2K[G[24%] building (4/29 modules)
+[2K[1A[2K[G[10%] building (0/8 modules)
+[2K[1A[2K[G[24%] building (2/29 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/pitcher.js)
-[2K[1A[2K[G[24%] building (11/291 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/templateLoader.js)
-[2K[1A[2K[G[24%] building (11/291 modules)
+[2K[1A[2K[G[24%] building (5/31 modules)
 [2K[1A[2K[G[24%] building (import loader vue-style-loader/index.js)
 [2K[1A[2K[G[24%] building (import loader css-loader/dist/cjs.js)
 [2K[1A[2K[G[24%] building (import loader postcss-loader/dist/cjs.js)
-[2K[1A[2K[G[24%] building (11/291 modules)
-[2K[1A[2K[G[24%] building (47/498 modules)
+[2K[1A[2K[G[24%] building (7/305 modules)
+[2K[1A[2K[G[24%] building (29/383 modules)
+[2K[1A[2K[G[24%] building (46/500 modules)
 [2K[1A[2K[G[24%] building (import loader vue-loader/dist/stylePostLoader.js)
-[2K[1A[2K[G[24%] building (53/542 modules)
-[2K[1A[2K[G[38%] building (75/565 modules)
-[2K[1A[2K[G[38%] building (82/646 modules)
-[2K[1A[2K[G[51%] building (216/752 modules)
-[2K[1A[2K[G[51%] building (449/838 modules)
-[2K[1A[2K[G[51%] building (591/1400 modules)
-[2K[1A[2K[G[51%] building (670/1494 modules)
-[2K[1A[2K[G[51%] building (890/1812 modules)
-[2K[1A[2K[G[51%] building (1017/2000 modules)
-[2K[1A[2K[G[51%] building (1573/2119 modules)
+[2K[1A[2K[G[24%] building (56/548 modules)
+[2K[1A[2K[G[24%] building (61/557 modules)
+[2K[1A[2K[G[38%] building (71/565 modules)
+[2K[1A[2K[G[38%] building (81/626 modules)
+[2K[1A[2K[G[38%] building (164/671 modules)
+[2K[1A[2K[G[51%] building (214/759 modules)
+[2K[1A[2K[G[51%] building (338/815 modules)
+[2K[1A[2K[G[51%] building (469/1122 modules)
+[2K[1A[2K[G[51%] building (542/1256 modules)
+[2K[1A[2K[G[51%] building (565/1388 modules)
+[2K[1A[2K[G[51%] building (583/1441 modules)
+[2K[1A[2K[G[51%] building (638/1457 modules)
+[2K[1A[2K[G[51%] building (661/1512 modules)
+[2K[1A[2K[G[51%] building (700/1728 modules)
+[2K[1A[2K[G[51%] building (746/1791 modules)
+[2K[1A[2K[G[51%] building (883/1813 modules)
+[2K[1A[2K[G[51%] building (986/1919 modules)
+[2K[1A[2K[G[51%] building (1022/1984 modules)
+[2K[1A[2K[G[51%] building (1100/2055 modules)
+[2K[1A[2K[G[51%] building (1369/2066 modules)
+[2K[1A[2K[G[51%] building (1433/2074 modules)
+[2K[1A[2K[G[51%] building (1500/2098 modules)
+[2K[1A[2K[G[51%] building (1633/2119 modules)
+[2K[1A[2K[G[51%] building (1900/2151 modules)
 [2K[1A[2K[G[65%] building (2158/2158 modules)
 [2K[1A[2K[G[65%] building 
 [2K[1A[2K[G[69%] building (finish)
@@ -189,20 +204,12 @@ onPlugin)
 [2K[1A[2K[G[94%] sealing (after seal)
 [2K[1A[2K[G[95%] emitting (emit)
 [2K[1A[2K[G[98%] emitting (after emit)
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[G WARNING  Compiled with 2 warnings09:49:02
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[G DONE  Compiled successfully in 23915ms11:38:07
 
- warning  in ./src/views/Cashier.vue?vue&type=script&setup=true&lang=js
-
-export 'orderAPI' (imported as 'orderAPI') was not found in '../api' (possible exports: billAPI, categoryAPI, dashboardAPI, default, employeeAPI, guestAPI, productAPI, statsAPI, systemAPI)
-
- warning  in ./src/views/Reports.vue?vue&type=script&setup=true&lang=js
-
-export 'reportAPI' (imported as 'reportAPI') was not found in '../api' (possible exports: billAPI, categoryAPI, dashboardAPI, default, employeeAPI, guestAPI, productAPI, statsAPI, systemAPI)
-
-Build finished at 09:49:02 by 0.000s
+Build finished at 11:38:07 by 0.000s
 [2K[1A[2K[G
   App running at:
   - Local:   http://localhost:9528/ 
@@ -211,17 +218,17 @@ Build finished at 09:49:02 by 0.000s
   Note that the development build is not optimized.
   To create a production build, run npm run build.
 
-Build finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:49:02 by 0.000s
-[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
-[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
-[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
-[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
-[2K[1A[2K[GBuild finished at 09:52:34 by 0.000s
-[2K[1A[2K[GTerminate batch job (Y/N)? 
+Build finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GBuild finished at 11:38:07 by 0.000s
+[2K[1A[2K[GÖÕÖ¹Åú´¦Àí²Ù×÷Âð(Y/N)? Build finished at 11:39:21 by 0.000s
+[2K[1A[2K[GBuild finished at 11:39:21 by 0.000s
+[2K[1A[2K[GBuild finished at 11:39:21 by 0.000s
+[2K[1A[2K[GBuild finished at 11:39:21 by 0.000s
+[2K[1A[2K[GBuild finished at 11:39:21 by 0.000s
+[2K[1A[2K[G

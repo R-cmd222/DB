@@ -57,7 +57,7 @@ class Guest(Base):
     
     GuestID = Column(Integer, primary_key=True)
     Name = Column(String(100), nullable=False)
-    MembershipID = Column(String(50))
+    Level = Column(String(20), default='normal')  # normal, vip, diamond
     Points = Column(Integer, default=0)
     Phone = Column(String(20))
     
