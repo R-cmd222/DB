@@ -188,7 +188,13 @@
             ¥{{ scope.row.price.toFixed(2) }}
           </template>
         </el-table-column>
-        <el-table-column prop="stock" label="库存" width="80" />
+        <el-table-column prop="stock" label="库存" width="80">
+          <template #default="scope">
+            <span :class="{ 'low-stock': scope.row.stock <= 0 }">
+              {{ scope.row.stock <= 0 ? '已下架' : scope.row.stock }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="100">
           <template #default="scope">
             <el-button size="small" @click="selectProduct(scope.row)">
@@ -282,6 +288,8 @@ async function scanProduct() {
     const product = res.data
     if (!product || !product.ProductID) {
       ElMessage.error('未找到该商品')
+    } else if (product.Stock <= 0) {
+      ElMessage.error(`商品 "${product.Name}" 已下架，库存不足`)
     } else {
       addProductToCart({
         id: product.ProductID,
@@ -291,20 +299,34 @@ async function scanProduct() {
       })
     }
   } catch (error) {
-    ElMessage.error('未找到该商品')
+    console.error('扫描商品失败:', error)
+    ElMessage.error('未找到该商品或商品已下架')
   } finally {
     scanCode.value = ''
     scanning.value = false
     nextTick(() => {
-      scanInputRef.value?.focus()
+      if (scanInputRef.value) {
+        scanInputRef.value.focus()
+      }
     })
   }
 }
 
 function addProductToCart(product) {
+  // 检查库存
+  if (product.stock <= 0) {
+    ElMessage.error(`商品 "${product.name}" 库存不足，无法添加`)
+    return
+  }
+  
   // 检查是否已在购物车中
   const existingItem = cartItems.value.find(item => item.id === product.id)
   if (existingItem) {
+    // 检查增加数量后是否超过库存
+    if (existingItem.quantity + 1 > product.stock) {
+      ElMessage.warning(`商品 "${product.name}" 库存不足，当前库存: ${product.stock}`)
+      return
+    }
     existingItem.quantity += 1
     ElMessage.success(`已增加 ${product.name} 的数量`)
   } else {
@@ -355,18 +377,25 @@ async function searchProducts() {
   try {
     // 通过API搜索商品
     const res = await productAPI.getProducts()
-    // 支持名称或编号模糊搜索
+    // 支持名称或编号模糊搜索，并过滤掉库存为0的商品
     searchResults.value = res.data.filter(item =>
-      (item.Name && item.Name.includes(searchKeyword.value)) ||
-      (item.ProductID && item.ProductID.toString().includes(searchKeyword.value))
+      ((item.Name && item.Name.includes(searchKeyword.value)) ||
+       (item.ProductID && item.ProductID.toString().includes(searchKeyword.value))) &&
+      item.Stock > 0  // 只显示有库存的商品
     ).map(item => ({
       id: item.ProductID,
       name: item.Name,
       price: item.Price,
       stock: item.Stock
     }))
+    
+    if (searchResults.value.length === 0) {
+      ElMessage.info('未找到符合条件的商品或商品已下架')
+    }
   } catch (error) {
-    ElMessage.error('搜索失败')
+    console.error('搜索商品失败:', error)
+    ElMessage.error('搜索失败: ' + (error.response?.data?.detail || error.message))
+    searchResults.value = []
   } finally {
     searching.value = false
   }
@@ -576,5 +605,10 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+}
+
+.low-stock {
+  color: #F56C6C;
+  font-weight: bold;
 }
 </style> 

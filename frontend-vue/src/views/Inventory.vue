@@ -21,7 +21,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="CategoryID" label="分类" width="120"/>
+      <el-table-column prop="Category" label="分类" width="120"/>
       <el-table-column label="状态" width="120">
         <template #default="scope">
           <el-tag v-if="scope.row.Stock === 0" type="danger">缺货</el-tag>
@@ -160,7 +160,7 @@ async function confirmStockAdjust() {
         Name: product.Name,
         Price: product.Price,
         Stock: newStock,
-        CategoryID: product.CategoryID,
+        Category: product.Category,
         Unit: product.Unit
       }
       await productAPI.updateProduct(stockForm.value.id, updateData)
