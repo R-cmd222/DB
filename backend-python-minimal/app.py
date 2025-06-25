@@ -12,8 +12,15 @@ import traceback
 from models import SessionLocal, Product, Employee, Guest, Bill, BillItem
 from sqlalchemy.exc import IntegrityError
 
-# 配置日志
-logging.basicConfig(level=logging.INFO)
+# 日志同时输出到控制台和文件
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    handlers=[
+        logging.StreamHandler(),  # 控制台
+        logging.FileHandler("backend.log", encoding="utf-8")  # 文件
+    ]
+)
 logger = logging.getLogger(__name__)
 
 # 依赖项
@@ -983,6 +990,7 @@ class CashierCheckoutRequest(BaseModel):
     total_amount: float
     payment_method: str = '现金'
     discount: float = 0
+    employee_id: Optional[int] = None  # 新增
 
 @app.post("/cashier/checkout", response_model=BillResponse)
 def cashier_checkout(
@@ -992,7 +1000,7 @@ def cashier_checkout(
 ):
     """收银台结算"""
     try:
-        logger.info("开始收银台结算...")
+        logger.info(f"收到结算请求: {checkout_data.dict()}")
         
         # 1. 处理客户信息 - 查找或创建客户
         guest = db.query(Guest).filter(
@@ -1022,10 +1030,18 @@ def cashier_checkout(
             if (product.Stock or 0) < item.Quantity:
                 raise HTTPException(status_code=400, detail=f"商品 {product.Name} 库存不足，当前库存: {product.Stock}，需要: {item.Quantity}")
         
-        # 3. 创建订单
+        # 3. 获取员工ID
+        employee_id = getattr(checkout_data, 'employee_id', None)
+        emp = db.query(Employee).filter(Employee.EmployeeID == employee_id).first()
+        if not emp:
+            logger.error(f"结算失败：找不到员工ID {employee_id}")
+            raise HTTPException(status_code=400, detail=f"找不到员工ID {employee_id}，请重新登录")
+        logger.info(f"收银台结算 employee_id={employee_id}, employee_name={emp.Name}")
+        
+        # 4. 创建订单
         db_bill = Bill(
             GuestID=guest.GuestID,
-            EmployeeID=current_user.get('id', 1),
+            EmployeeID=employee_id,
             TotalAmount=checkout_data.total_amount,
             PaymentMethod=checkout_data.payment_method,
             Status='已结账',

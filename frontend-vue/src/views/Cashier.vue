@@ -236,6 +236,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Search } from '@element-plus/icons-vue'
 import { productAPI, cashierAPI } from '../api'
 
+// 获取当前登录员工信息
+const employee = JSON.parse(sessionStorage.getItem('employee') || '{}')
+
 // 响应式数据
 const scanCode = ref('')
 const cartItems = ref([])
@@ -452,8 +455,11 @@ async function confirmPayment() {
       })),
       total_amount: finalTotal.value,
       payment_method: getPaymentMethodText(paymentMethod.value),
-      discount: discount.value
+      discount: discount.value,
+      employee_id: Number(employee.id) || 1
     }
+    console.log('结算 employee:', employee)
+    console.log('结算 checkoutData:', checkoutData)
     
     // 调用收银台结算API
     const response = await cashierAPI.checkout(checkoutData)

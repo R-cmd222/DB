@@ -128,13 +128,6 @@
         <el-form-item label="电话" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入客户电话"/>
         </el-form-item>
-        <el-form-item label="客户等级" prop="level">
-          <el-select v-model="form.level" placeholder="请选择客户等级">
-            <el-option label="普通客户" value="normal" />
-            <el-option label="VIP客户" value="vip" />
-            <el-option label="钻石客户" value="diamond" />
-          </el-select>
-        </el-form-item>
         <el-form-item label="积分">
           <el-input-number 
             v-model="form.points" 
@@ -199,7 +192,40 @@
             </el-table-column>
             <el-table-column label="操作" width="100">
               <template #default="scope">
-                <el-button size="small" @click="viewOrder(scope.row)">查看</el-button>
+                <el-button size="small" @click="viewOrderDetail(scope.row.id)">查看</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </el-dialog>
+    
+    <!-- 订单详情对话框 -->
+    <el-dialog v-model="showOrderDetailDialog" title="订单详情" width="700px">
+      <div v-if="selectedOrderDetail">
+        <el-descriptions :column="2" border>
+          <el-descriptions-item label="订单ID">{{ selectedOrderDetail.BillID }}</el-descriptions-item>
+          <el-descriptions-item label="客户姓名">{{ selectedOrderDetail.guest_name }}</el-descriptions-item>
+          <el-descriptions-item label="员工姓名">{{ selectedOrderDetail.employee_name }}</el-descriptions-item>
+          <el-descriptions-item label="总价">¥{{ selectedOrderDetail.TotalAmount.toFixed(2) }}</el-descriptions-item>
+          <el-descriptions-item label="支付方式">{{ selectedOrderDetail.PaymentMethod }}</el-descriptions-item>
+          <el-descriptions-item label="状态">{{ selectedOrderDetail.Status }}</el-descriptions-item>
+          <el-descriptions-item label="下单时间">{{ formatDate(selectedOrderDetail.BillDate) }}</el-descriptions-item>
+        </el-descriptions>
+        <div style="margin-top: 20px;">
+          <h4>商品清单</h4>
+          <el-table :data="selectedOrderDetail.items || []" border>
+            <el-table-column prop="product_name" label="商品名称" min-width="120"/>
+            <el-table-column prop="product_category" label="商品类别" width="100"/>
+            <el-table-column prop="Quantity" label="数量" width="80"/>
+            <el-table-column prop="Price" label="单价" width="100">
+              <template #default="scope">
+                ¥{{ scope.row.Price.toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="小计" width="100">
+              <template #default="scope">
+                ¥{{ (scope.row.Price * scope.row.Quantity).toFixed(2) }}
               </template>
             </el-table-column>
           </el-table>
@@ -225,6 +251,8 @@ const isEdit = ref(false)
 const selectedCustomer = ref(null)
 const customerOrders = ref([])
 const formRef = ref()
+const showOrderDetailDialog = ref(false)
+const selectedOrderDetail = ref(null)
 
 // 搜索表单
 const searchForm = ref({
@@ -388,9 +416,19 @@ async function loadCustomerOrders(customerId) {
   }
 }
 
+async function viewOrderDetail(orderId) {
+  try {
+    const res = await billAPI.getBill(orderId)
+    selectedOrderDetail.value = res.data
+    showOrderDetailDialog.value = true
+  } catch (error) {
+    ElMessage.error('加载订单详情失败: ' + (error.response?.data?.detail || error.message))
+  }
+}
+
 function viewOrder(order) {
   // 这里可以跳转到订单详情页面
-  ElMessage.info(`查看订单 ${order.id}`)
+  // ElMessage.info(`查看订单 ${order.id}`)
 }
 
 async function saveCustomer() {

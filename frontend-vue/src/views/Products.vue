@@ -24,11 +24,6 @@
     
     <el-table :data="filteredProducts" style="width: 100%" v-loading="loading">
       <el-table-column prop="ProductID" label="ID" width="60"/>
-      <el-table-column label="图片" width="60">
-        <template #default>
-          <i class="fas fa-box fa-lg" style="color:#667eea;"></i>
-        </template>
-      </el-table-column>
       <el-table-column prop="Name" label="商品名称"/>
       <el-table-column prop="Price" label="价格">
         <template #default="scope">

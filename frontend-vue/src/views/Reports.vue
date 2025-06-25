@@ -300,6 +300,24 @@
         <div ref="priceChartRef" style="height: 400px;"></div>
       </el-card>
     </div>
+
+    <el-dialog v-model="showReplenishDialog" title="补货" width="400px">
+      <div v-if="replenishProduct">
+        <p>商品名称：{{ replenishProduct.name }}</p>
+        <el-form label-width="80px">
+          <el-form-item label="补货数量">
+            <el-input-number v-model="replenishAmount" :min="1" />
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="replenishRemark" type="textarea" placeholder="补货备注（选填）" />
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <el-button @click="showReplenishDialog = false">取消</el-button>
+        <el-button type="primary" @click="confirmReplenish" :disabled="replenishAmount <= 0">确定补货</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -307,7 +325,7 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
-import { statsAPI } from '../api'
+import { statsAPI, productAPI } from '../api'
 
 const currentReport = ref('sales')
 const dateRange = ref([])
@@ -357,6 +375,11 @@ const inventoryChartRef = ref()
 const customerChartRef = ref()
 const productChartRef = ref()
 const priceChartRef = ref()
+
+const showReplenishDialog = ref(false)
+const replenishProduct = ref(null)
+const replenishAmount = ref(0)
+const replenishRemark = ref('')
 
 // 方法
 function formatDate(dateString) {
@@ -772,7 +795,29 @@ function renderPriceChart() {
 }
 
 function replenishStock(product) {
-  ElMessage.info(`为 ${product.name} 补货`)
+  replenishProduct.value = product
+  replenishAmount.value = 0
+  replenishRemark.value = ''
+  showReplenishDialog.value = true
+}
+
+async function confirmReplenish() {
+  if (!replenishProduct.value) return
+  const id = replenishProduct.value.id || replenishProduct.value.ProductID
+  const newStock = (replenishProduct.value.currentStock || 0) + replenishAmount.value
+  try {
+    await productAPI.updateProduct(id, {
+      Name: replenishProduct.value.name,
+      Price: replenishProduct.value.price || 0,
+      Stock: newStock,
+      Category: replenishProduct.value.category || '',
+    })
+    ElMessage.success('补货成功')
+    showReplenishDialog.value = false
+    loadReport()
+  } catch (e) {
+    ElMessage.error('补货失败')
+  }
 }
 
 function exportReport() {
