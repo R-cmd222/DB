@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 // 创建axios实例
 const api = axios.create({
   baseURL: 'http://localhost:9527',
-  timeout: 10000
+  timeout: 30000
 })
 
 // 请求拦截器

@@ -785,41 +785,70 @@ def update_guest(
     current_user: dict = Depends(get_current_user)
 ):
     """更新客户信息"""
-    db_guest = db.query(Guest).filter(Guest.GuestID == guest_id).first()
-    if not db_guest:
-        raise HTTPException(status_code=404, detail="客户不存在")
-    
-    # 更新字段
-    if guest.Name is not None:
-        db_guest.Name = guest.Name
-    if guest.Level is not None:
-        db_guest.Level = guest.Level
-    if guest.Points is not None:
-        db_guest.Points = guest.Points
-    if guest.Phone is not None:
-        db_guest.Phone = guest.Phone  # 更新电话号码
-    
-    db.commit()
-    db.refresh(db_guest)
-    
-    # 计算订单统计
-    bills = list(getattr(db_guest, 'bills', []))
-    order_count = len(bills)
-    last_order_date = None
-    if bills:
-        bill_dates = [b.BillDate for b in bills if hasattr(b, 'BillDate') and b.BillDate]
-        if bill_dates:
-            last_order_date = max(bill_dates)
-    
-    return {
-        "id": db_guest.GuestID,
-        "name": db_guest.Name,
-        "level": db_guest.Level,
-        "points": db_guest.Points,
-        "orderCount": order_count,
-        "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
-        "phone": db_guest.Phone
-    }
+    try:
+        db_guest = db.query(Guest).filter(Guest.GuestID == guest_id).first()
+        if not db_guest:
+            raise HTTPException(status_code=404, detail="客户不存在")
+        
+        # 更新字段
+        if guest.Name is not None:
+            db_guest.Name = guest.Name
+        if guest.Phone is not None:
+            db_guest.Phone = guest.Phone
+        
+        # 处理积分和等级更新
+        points_updated = False
+        if guest.Points is not None:
+            old_points = db_guest.Points or 0
+            db_guest.Points = guest.Points
+            points_updated = True
+            logger.info(f"客户 {db_guest.Name} 积分更新: {old_points} -> {guest.Points}")
+        
+        # 如果手动设置了等级，使用手动设置的等级
+        if guest.Level is not None:
+            db_guest.Level = guest.Level
+            logger.info(f"客户 {db_guest.Name} 等级手动设置为: {guest.Level}")
+        elif points_updated:
+            # 如果积分更新了但没有手动设置等级，根据积分自动更新等级
+            old_level = db_guest.Level
+            if db_guest.Points >= 5000:
+                db_guest.Level = 'diamond'
+            elif db_guest.Points >= 2000:
+                db_guest.Level = 'vip'
+            else:
+                db_guest.Level = 'normal'
+            
+            if old_level != db_guest.Level:
+                logger.info(f"客户 {db_guest.Name} 等级自动更新: {old_level} -> {db_guest.Level}")
+        
+        db.commit()
+        db.refresh(db_guest)
+        
+        # 简化订单统计计算，使用数据库查询而不是加载所有关联对象
+        order_count = db.query(Bill).filter(Bill.GuestID == guest_id).count()
+        
+        # 获取最后订单日期
+        last_order = db.query(Bill).filter(
+            Bill.GuestID == guest_id
+        ).order_by(Bill.BillDate.desc()).first()
+        
+        last_order_date = last_order.BillDate if last_order else None
+        
+        return {
+            "id": db_guest.GuestID,
+            "name": db_guest.Name,
+            "level": db_guest.Level,
+            "points": db_guest.Points,
+            "orderCount": order_count,
+            "lastOrderDate": last_order_date.isoformat() if last_order_date else None,
+            "phone": db_guest.Phone
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"更新客户失败: {e}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail="更新客户时发生错误，请稍后重试")
 
 @app.delete("/guests/{guest_id}")
 def delete_guest(

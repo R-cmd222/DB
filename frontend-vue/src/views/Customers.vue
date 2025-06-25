@@ -136,7 +136,18 @@
           </el-select>
         </el-form-item>
         <el-form-item label="积分">
-          <el-input-number v-model="form.points" :min="0" placeholder="请输入积分"/>
+          <el-input-number 
+            v-model="form.points" 
+            :min="0" 
+            placeholder="请输入积分"
+            @change="onPointsChange"
+          />
+          <div style="margin-top: 5px; font-size: 12px; color: #909399;">
+            当前等级: {{ getLevelText(form.level) }}
+            <el-tooltip content="积分规则：0-1999=普通，2000-4999=VIP，5000+=钻石" placement="top">
+              <el-icon style="margin-left: 5px;"><QuestionFilled /></el-icon>
+            </el-tooltip>
+          </div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -230,6 +241,22 @@ const form = ref({
   level: 'normal',
   points: 0
 })
+
+// 计算客户等级的函数
+function calculateLevel(points) {
+  if (points >= 5000) return 'diamond'
+  if (points >= 2000) return 'vip'
+  return 'normal'
+}
+
+// 监听积分变化，自动更新等级
+function onPointsChange(points) {
+  const calculatedLevel = calculateLevel(points)
+  if (form.value.level !== calculatedLevel) {
+    form.value.level = calculatedLevel
+    ElMessage.info(`积分 ${points} 对应等级: ${getLevelText(calculatedLevel)}`)
+  }
+}
 
 const rules = {
   name: [
@@ -376,38 +403,62 @@ async function saveCustomer() {
   }
   
   submitting.value = true
-  try {
-    if (isEdit.value) {
-      // 更新客户
-      const updateData = {
-        Name: form.value.name,
-        Phone: form.value.phone || None,
-        Level: form.value.level,
-        Points: form.value.points || 0
+  let retryCount = 0
+  const maxRetries = 2
+  
+  while (retryCount <= maxRetries) {
+    try {
+      // 根据积分自动计算等级（如果用户没有手动选择）
+      const calculatedLevel = calculateLevel(form.value.points)
+      const finalLevel = form.value.level || calculatedLevel
+      
+      if (isEdit.value) {
+        // 更新客户 - 不传递Level字段，让后端根据积分自动计算
+        const updateData = {
+          Name: form.value.name,
+          Phone: form.value.phone || null,
+          Points: form.value.points || 0
+          // 不传递Level，让后端根据积分自动更新
+        }
+        await guestAPI.updateGuest(form.value.id, updateData)
+        ElMessage.success('客户更新成功，等级已根据积分自动调整')
+      } else {
+        // 添加客户
+        const createData = {
+          Name: form.value.name,
+          Phone: form.value.phone || null,
+          Level: finalLevel,
+          Points: form.value.points || 0
+        }
+        await guestAPI.createGuest(createData)
+        ElMessage.success('客户添加成功')
       }
-      await guestAPI.updateGuest(form.value.id, updateData)
-      ElMessage.success('客户更新成功')
-    } else {
-      // 添加客户
-      const createData = {
-        Name: form.value.name,
-        Phone: form.value.phone || None,
-        Level: form.value.level,
-        Points: form.value.points || 0
+      
+      showAdd.value = false
+      resetForm()
+      await loadCustomers() // 重新加载客户列表
+      break // 成功，跳出重试循环
+      
+    } catch (error) {
+      retryCount++
+      console.error(`保存客户失败 (尝试 ${retryCount}/${maxRetries + 1}):`, error)
+      
+      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+        if (retryCount <= maxRetries) {
+          ElMessage.warning(`请求超时，正在重试 (${retryCount}/${maxRetries + 1})...`)
+          await new Promise(resolve => setTimeout(resolve, 1000)) // 等待1秒后重试
+          continue
+        } else {
+          ElMessage.error('保存失败：请求超时，请检查网络连接或稍后重试')
+        }
+      } else {
+        ElMessage.error('保存客户失败: ' + (error.response?.data?.detail || error.message))
+        break // 非超时错误，不重试
       }
-      await guestAPI.createGuest(createData)
-      ElMessage.success('客户添加成功')
     }
-    
-    showAdd.value = false
-    resetForm()
-    await loadCustomers() // 重新加载客户列表
-  } catch (error) {
-    console.error('保存客户失败:', error)
-    ElMessage.error('保存客户失败: ' + (error.response?.data?.detail || error.message))
-  } finally {
-    submitting.value = false
   }
+  
+  submitting.value = false
 }
 
 async function deleteCustomer(id) {
